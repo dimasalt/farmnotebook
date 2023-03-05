@@ -1,0 +1,44 @@
+
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Farm and Beef cattle management software">
+    <meta name="author" content="Dmitri Saltanovich from Northern Farm">
+    <meta name="generator" content="">
+    <title>{% block title %}{% endblock %}</title>
+
+    {% include 'Shared/_header.liquid' %}
+
+    <link rel="icon" type="image/png" href="images/cow-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="images/cow-32x32.png" sizes="32x32">
+
+    {% block header_scripts %} {% endblock %}
+
+</head>
+
+
+<body>
+
+    {% include 'Shared/_navbar.liquid' %}
+
+    <!-- main body -->
+    <main role="main" class="d-flex">        
+
+        <!-- page content -->
+        {% block body %}{% endblock %}  
+        
+    </main>
+
+
+<!-- footer -->
+<div>
+      {% include 'Shared/_footer.liquid' %}
+</div>
+
+    <!-- custom scripts -->
+    {% block custom_scripts %} {% endblock %}
+
+</body>
+</html>

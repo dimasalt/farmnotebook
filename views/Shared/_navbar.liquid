@@ -1,0 +1,102 @@
+<!-- top navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid pl-0">
+        <div class="col-2 pl-0 pr-0">
+             <div class="brand-text d-none d-md-inline-block">
+                <span class="brand-text-name fs-6">Farm Notebook</span>
+                <strong class="text-primary brand-text">Dashboard</strong>
+            </div>
+        </div>    
+
+        <div class="col-8 pl-0">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active me-3">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house-door-fill"></i>
+                            Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <ul class="navbar-nav me-3">                    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-stack me-1"></i>Inventory</a>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/inventory/livestock">Livestock</a></li>                               
+                                <li><a class="dropdown-item" href="/inventory/groups">Groups</a></li>                      
+                                <li><a class="dropdown-item" href="/inventory/types">Types</a></li>        
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Events</a></li>                                  
+                            </ul>
+                        </li>                      
+                    </ul>                 
+                   
+                    <ul class="navbar-nav me-2">                    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-circle-square me-1"></i>Ration</a>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/ration/ration_calculator">Feed Calculator</a></li>
+                                <li><a class="dropdown-item" href="/ration/feed_requirements">Feed Requirements</a></li>                
+                                <li><hr class="dropdown-divider"></li>                    
+                                <li><a class="dropdown-item" href="/ration/feeds">Feeds</a></li>                                                                                      
+                            </ul>
+                        </li>                      
+                    </ul>                           
+                 
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="/medication"><i class="bi bi-clipboard2-pulse me-1"></i>Medication</a>
+                    </li>                  
+                    <ul class="navbar-nav me-2">                    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-currency-dollar me-1"></i>Accounting</a>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="/bookkeeping/records">Records</a></li>
+                                <li><a class="dropdown-item" href="/bookkeeping/reports">Reports</a></li>
+                                <li><a class="dropdown-item" href="/bookkeeping/categories">Types</a></li>
+                              
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/bookkeeping/vehiclelogbook">Vehicle Logbook</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/bookkeeping/budget">Budget Planning</a></li>
+                            </ul>
+                        </li>                      
+                    </ul>                 
+
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#"><i class="bi bi-calendar me-1"></i></i>Events</a>
+                    </li>                  
+
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="/contacts"><i class="bi bi-person-lines-fill me-1"></i>Contacts</a>
+                    </li>                   
+                </ul>                
+            </div>
+        </div>
+
+    {% if page != "/login" %}
+        <div class="col-2">
+            <div class="collapse navbar-collapse float-end" id="navbarNavDropdown">
+                <ul class="navbar-nav">                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear-fill me-1"></i></a>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Upload</a></li>
+                            <li><a class="dropdown-item" href="#">Users action</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                      <li class="nav-item me-3">
+                        <a class="nav-link" href="#"></i>Logout</a>
+                    </li>                  
+
+                </ul>
+            </div>                       
+        </div>
+    {% endif %}
+</nav>
