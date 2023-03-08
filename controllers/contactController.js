@@ -7,7 +7,6 @@ const pool = require('../services/mysql');
 */
 exports.getIndex = (req, res) => {
     res.status(200).render('contacts/index', {});
-
 };
 
 
@@ -28,11 +27,10 @@ exports.contactsGetAll = (req, res) => {
             req.body.limit
         ], 
         function(err, results, fields) {
-                // let contact_order_by = req.body.contact_order_by;
-                // console.log(contact_order_by);
-                return res.json(results[0]);
+              
+            return res.json(results[0]);
         }
-    );     
+    );  
 };
 
 
@@ -98,7 +96,7 @@ exports.contactUpdate = (req, res) => {
  * @access private
  */
 exports.deleteContact = (req, res) => {
-    pool.query('call contactDeleteOne(?)', 
+    pool.query('call contactDeleteOne()', 
         [ 
             req.body.id          
         ], 
@@ -114,10 +112,18 @@ exports.deleteContact = (req, res) => {
 
 
 /**
- * @description gets vendors list from contacts
- * @route /api/get/vendors
- * @access private
+ * @description: gets vendors list from contacts
+ * @route: /api/get/vendors
+ * @params: none
+ * @access: private
  */
 exports.getVendorList = (req, res) => {
+    pool.query('call contactVendorsGetAll()', [], 
+        function(err, results, fields) {                 
 
+            if(err) throw err;           
+
+            return res.json(results[0]);
+        }
+    );        
 };

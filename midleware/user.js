@@ -5,7 +5,7 @@ const hasAccess = (req, res, next) =>{
     if(is_valid) {
         res.status(200);
          
-        console.log('middleware');
+        //console.log('middleware');
         next();
     }
 };
