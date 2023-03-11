@@ -1,0 +1,262 @@
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Livestock {% endblock %}
+
+{% block header_scripts %}
+    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
+ {% endblock %}
+
+{% block body %}
+    
+<!-- side nav menu -->
+{# {% include '/Inventory/_sidenav.twig' %} #}
+{{ include('Inventory/_sidenav.twig') }}
+
+<!-- page content -->
+<div class="container-fluid" id="livestock" v-cloak>
+    <div class="pt-4" >      
+         <!-- csrf protection -->
+        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+
+        <div class="row mb-2">
+            <div class="col-8 border-bottom">
+                <h1 class="text-dark mb-4">Inventory</h1>        
+            </div>               
+             
+
+            <!-- date selection -->
+            <div class="col-2 border-bottom p-1">        
+                <div class="input-group">                                       
+                    <input type="date" class="form-control" placeholder="date yyyy-mm-dd" aria-label="Start date" aria-describedby="button-addon4" v-model="start_date" v-on:change="onYearChange()">                   
+                </div>               
+            </div>           
+            <div class="col-2 border-bottom p-1">        
+                <div class="input-group">                                       
+                    <input type="date" class="form-control" placeholder="date yyyy-mm-dd" aria-label="End date" aria-describedby="button-addon4" v-model="end_date" v-on:change="onYearChange()">                   
+                </div>               
+            </div>           
+        </div>        
+    </div>    
+
+    <!-- list of livestock -->
+    <div class="row">
+       
+            <!-- livestock stats -->
+        <div class="col-3">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Active</strong> </li>                       
+            </ul>
+        </div>       
+        <div class="col-3">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Inactive</strong> </li>                                          
+            </ul>
+        </div>      
+        <div class="col-3">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Spent</strong> </li>
+                
+            </ul>
+        </div>  
+        <div class="col-3">
+            <ul class="list-group shadow-sm">             
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Sales</strong> </li>    
+            </ul>
+        </div>                          
+    </div>
+
+    <!-- livestock search and other selections to narrow down search -->
+    <div class="row g-0 mt-5">
+        <div class="col-3">
+            <h4>
+                Livestock
+                    <a href="#" v-on:click="addNewShow()">
+                    <i class="far fa-plus-square btn-sm text-success ml-1 align-middle"
+                        data-toggle="tooltip" data-placement="top" title="Add project"></i>
+                </a>
+            </h4>        
+        </div>
+        <div class="col-1">            
+            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="group_selected">
+                <option value=""></option>
+                <option v-for="item in livestock_groups" v-bind:value="item.group_name">
+                    {{ '{{ item.group_name }}' }}
+                </option>            
+            </select>
+        </div>
+        <div class="col-2">            
+            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="category_selected" v-on:change="categoryChanged()">
+                <option value=""></option>
+                <option v-for="item in livestock_types" v-bind:value="item.category_name">
+                    {{ '{{ item.category_name }}' }}
+                </option>            
+            </select>
+        </div>
+        <div class="col-1">
+            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" aria-label="Select sub group" v-model="sub_category_selected" v-bind:disabled="sub_category_disabled">
+                <option v-for="item in livestock_subtypes" v-bind:value="item.category_name">
+                    {{ '{{ item.category_name }}' }}
+                </option>            
+            </select>
+        </div>
+        <div class="col-2 pe-2">
+            <div class="has-search rounded-0 w-100">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input type="text" class="form-control w-100 form-control-sm shadow-sm rounded-0"  placeholder="Search" v-model="search_term" v-on:keyup="goSearch()">
+            </div>
+        </div>       
+    </div>
+
+
+    <!-- livestock list -->
+    <div class="row mt-1">
+        <div class="col-9"> 
+
+            <table class="table bg-white table-borderless shadow-sm table-hover">                
+                <thead class="bg-secondary-light">
+                    <tr>                                         
+                        <th scope="col"  class="w-70">Tag #</th>                                  
+                        <th scope="col"  class="w-10">Group</th>     
+                        <th scope="col"  class="w-10">Price C$</th>     
+                        <th scope="col" class="w-10">#</th>                                            
+                    </tr>
+                </thead>
+                <tbody v-for="(item, index) in livestock">
+                    <tr class="border">                                           
+                        <td class="pl-4" v-bind:class="item.class">        
+                            <span class="float-start me-2"><input type="checkbox" class="form-check-input" id="exampleCheck1"></span>
+                            <span class="float-start me-3">{{ '{{item.tag}}' }}</span>                            
+                            <span class="badge badge-pill bg-secondary me-1 float-end shadow-sm">{{ '{{item.livestock_subtype}}' }}</span>      
+                            <span class="badge badge-pill bg-success me-1 float-end shadow-sm">{{ '{{item.livestock_type}}' }}</span>                                                                                            
+                        </td>
+                        <td> </td>                         
+                        <td v-bind:class="item.class">${{ '{{item.price}}' }} </td>                  
+                        <td>
+                            <a href="#">
+                                <i data-toggle="tooltip" data-placement="top" title="View animal" class="far fa-eye text-small text-info float-left mx-1 pt-1"></i>
+                            </a>                             
+                            <a href="#" v-on:click="editShow(index)">
+                                <i class="fa fa-edit text-small text-warning align-middle mx-1 float-left"
+                                    data-toggle="tooltip" data-placement="top" title="edit animal"></i>
+                            </a>
+                            <a href="#" v-on:click.prevent="delOneShow(item.id, item.trans_name)">
+                                <i class="far fa-trash-alt text-small text-danger align-middle float-left"
+                                data-toggle="tooltip" data-placement="top" title="remove animal"></i>
+                            </a>
+                        </td>                      
+                    </tr>    
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <!-- right side -->
+        <!-- transaction record form/ new or edit -->
+        <div class="col-3 mt-0" >
+            <div class="card col-12 bg-dark text-white rounded shadow-sm">
+                <h5 class="mt-3 ms-3">    
+                    <span v-if="action.new==true">New</span>
+                    <span v-if="action.edit==true">Edit</span>            
+                    Livestock
+                </h5>
+                <hr class="bg-secondary my-2" />
+                <form class="mt-0 mb-3 mx-3">                  
+                     <div class="row">                     
+                        <div class="col">
+                            <label for="txt_tag">Tag</label>                            
+                            <textarea class="form-control rounded-0" id="txt_tag" rows="3" v-model="livestock_item.tag" v-on:input="tagChange()"></textarea>
+                            <small id="txt_tag_warrning" class="form-text text-warning float-end">Use (,) character to seperate between tags</small>
+                        </div>    
+                    </div>       
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="category_select">Category</label>
+                            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" id="category_select" aria-label="Select sub group" v-model="livestock_item.livestock_type" 
+                                v-on:change="livestockItemCategoryChanged()">
+                                <option v-for="item in livestock_item.livestock_types" v-bind:value="item.category_name">
+                                    {{ '{{ item.category_name }}' }}
+                                </option>            
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="subcategory_select">Sub Category</label>
+                            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" id="subcategory_select" aria-label="Select sub group" v-model="livestock_item.livestock_subtype" 
+                                v-bind:disabled="sub_category_disabled">
+                                <option v-for="item in livestock_item.livestock_subtypes" v-bind:value="item.category_name">
+                                    {{ '{{ item.category_name }}' }}
+                                </option>            
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- groups -->
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <label for="category_select">Groups</label>
+                            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" id="category_select" aria-label="Select sub group" v-model="livestock_item.livestock_type" 
+                                v-on:change="livestockItemCategoryChanged()">
+                                <option v-for="item in livestock_item.livestock_types" v-bind:value="item.category_name">
+                                    {{ '{{ item.category_name }}' }}
+                                </option>            
+                            </select>
+                        </div>   
+                         <div class="col-6">
+                            <label for="txt_date">Date</label>
+                            <input type="date" class="form-control form-control-sm bg-secondary text-white border-dark" id="txt_date" aria-describedby="txt_date" v-model="livestock_item.current_date">                            
+                        </div>                        
+                    </div>                      
+                                   
+                    <!-- basic events , weight, purchace date, and price -->
+                    <div class="row mt-3">         
+                        <div class="col-6" v-if="livestock_item.is_events_visible == true">
+                            <label for="txt_weight">Weight (lb)</label>
+                            <input type="text" class="form-control form-control-sm bg-secondary text-white border-dark" id="trans_desc" aria-describedby="txt_weight" v-model="livestock_item.weight">                            
+                        </div>
+                        <div class="col-6" v-if="livestock_item.is_events_visible == true">
+                            <label for="txt_price">Purchase Price</label>
+                            <input type="text" class="form-control form-control-sm bg-secondary text-white border-dark" id="txt_price" aria-describedby="txt_price" v-model="livestock_item.price">                            
+                        </div>        
+                        
+                    </div>
+
+                    <!-- action buttons -->                
+                    <div class="row my-3 mb-0">
+                        <hr class="bg-secondary" />                        
+                        <div class="col d-flex justify-content-end">                                   
+                            <a href="#" class="btn btn-warning rounded-0" v-on:click="resetVariables()">
+                                <i class="fas fa-times-circle text-small me-1"></i>
+                                Cancel           
+                            </a>    
+                            <a href="#" class="btn btn-success rounded-0" v-on:click="transactionEdit" v-if="action.edit == true" >
+                                <i class="far fa-plus-square text-small text-white me-1" title="Add starting finance point"></i>
+                                Update              
+                            </a>                                                     
+                            <a href="#" class="btn btn-success rounded-0" v-on:click="transactionAdd" v-if="action.new == true" >
+                                <i class="far fa-plus-square text-small text-white me-1" title="Add starting finance point"></i>
+                                Save           
+                            </a>               
+                        </div>
+                    </div>                                
+                </form>
+            </div> 
+        </div>  
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_scripts %}
+
+    <script src="/assets/components/toastr/toastr.min.js"></script>
+
+    <script src="/assets/js/vue/inventory/livestock/index.js"></script>
+
+
+     <script type="application/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+{% endblock %}

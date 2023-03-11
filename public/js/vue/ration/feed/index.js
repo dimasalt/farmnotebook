@@ -26,15 +26,11 @@ const Feed = {
             let data = {};
 
             //reset variables
-            self.feeds = [];           
-           
-            //prepare data for php          
-            data = JSON.stringify(data);
+            self.feeds = [];                            
 
-            var result = $.post("/ration/feeds/get/all", data);
+            var result = $.post("/ration/feeds/api/get/all", data);
 
             result.done(function (data) {                     
-               data = JSON.parse(data);
 
                 //if successfully added 
                if(data.length > 0){  
@@ -64,25 +60,21 @@ const Feed = {
                 return;
             }
                         
-            let data = {
-                csrf : $('#csrf').val(),
+            let data = {               
                 feed_item : self.feed_item
-            };              
-        
-            //prepare data for php          
-            data = JSON.stringify(data);
+            };                       
     
-            var result = $.post("/ration/feeds/create", data);
+            var result = $.post("/ration/feeds/api/add", data);
     
-            result.done(function (data) {                     
-                data = JSON.parse(data);
+            result.done(function (data) {                                   
     
                 if(data == true){
                     //Display a success toast, with a title
                     toastr.success("You have successfully created new feed item");  
                     
-                    //reload feeds
+                    // //reload feeds
                     self.getFeeds();
+                    //self.feeds.push(Object.assign({}, self.feed_item));
                 }
                 else if(data == false){
                     // Display an error toast, with a title
@@ -117,7 +109,7 @@ const Feed = {
             };
 
              //asing result to the result array object
-             self.feed_item = Object.assign({}, self.feeds[index]);                 
+             self.feed_item = Object.assign({}, self.feeds[index]);              
         }, 
          /**
          * ----------------------------------------------
@@ -127,25 +119,21 @@ const Feed = {
         feedUpdate(){
             var self = this;         
                         
-            let data = {
-                csrf : $('#csrf').val(),
+            let data = {                
                 feed_item : self.feed_item
-            };              
-        
-            //prepare data for php          
-            data = JSON.stringify(data);
+            };                         
     
-            var result = $.post("/ration/feeds/update", data);
+            var result = $.post("/ration/feeds/api/update", data);
     
-            result.done(function (data) {                     
-                data = JSON.parse(data);
-    
+            result.done(function (data) {                                    
                 if(data == true){
                     //Display a success toast, with a title
                     toastr.success("You have successfully updates the feed item");  
                     
-                    //reload feeds
-                    self.getFeeds();
+                    //assing updated feed item
+                    for(var i = 0; i < self.feeds.length; i++)
+                        if(self.feeds[i].id == self.feed_item.id)
+                            self.feeds[i] = Object.assign({}, self.feed_item );
                 }
                 else if(data == false){
                     // Display an error toast, with a title
@@ -221,24 +209,27 @@ const Feed = {
              var self = this;
                          
              let data = {
-                csrf : $('#csrf').val(),
                 id : self.feed_item.id
-             };              
-            
-             //prepare data for php          
-             data = JSON.stringify(data);
+             };                                  
  
-            var result = $.post("/ration/feeds/delete", data);
+            var result = $.post("/ration/feeds/api/delete", data);
  
-            result.done(function (data) {                     
-                data = JSON.parse(data);
+            result.done(function (data) {                                    
  
                 if(data == true){
                     //Display a success toast, with a title
                     toastr.success("You have successfully removed feed item");  
-                    
-                    //reload feeds
-                    self.getFeeds();
+
+                    //remove item from the array
+                    let index = -1;
+                    for(var i=0; i < self.feeds.length; i++)
+                        if(self.feeds[i].id == self.feed_item.id) {
+                            index = i;
+                            break;
+                        }
+                  
+                    if(index > -1) 
+                        self.feeds.splice(index, 1);
                 }
                 else if(data == false){
                     // Display an error toast, with a title

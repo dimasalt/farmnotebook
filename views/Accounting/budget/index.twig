@@ -1,0 +1,255 @@
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Budget Planner {% endblock %}
+
+{% block header_scripts %}
+    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
+ {% endblock %}
+
+
+{% block body %}       
+<!-- side nav menu -->
+{# {% include '/Bookkeeping/_sidenav.twig' %} #}
+{{ include('Accounting/_sidenav.twig') }}
+
+<!-- page content -->
+<div class="container-fluid" id="budget" v-cloak>
+    <div class=" pt-4 h-100" >                
+        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">       
+
+        <!-- planning start point -->
+        <div class="row">
+            <div class="col-10 border-bottom">
+                   <h2 class="text-dark">Budget Planner
+                    <a href="#" v-if='Object.keys(budget_start_item).length > 0' v-on:click="budgetDeleteModalShow(budget_start_item)">
+                        <i class="bi bi-trash3 text-danger ms-1 me-2 fs-4"
+                            data-toggle="tooltip" data-placement="top" title="remove starting finance point"></i>
+                    </a>                       
+                </h2>                                     
+            </div>
+
+            <!-- budget list drop down -->
+            <div class="col-2 border-bottom">
+                <select class="form-select" aria-label="Budget selection" v-model="budget_selected" v-on:change="budgetSelectionChange">
+                    <option value="0"></option>                
+                    <option v-for="item in budget_drpdown" v-bind:value="item.id">{{ '{{ item.budget_name }}' }}</option>                       
+                </select>                          
+            </div>       
+            <!-- //end of budget dropdown -->   
+        </div>
+        <div class="row" >
+            <div class="col-12 mt-2" v-if='Object.keys(budget_start_item).length > 0'>
+                <table class="table bg-secondary-light border-secondary rounded-1 shadow-sm">              
+                    <tbody>
+                        <tr v-bind:class='budget_start_item.class' >
+                            <td scope="row" style="width:90%">{{ '{{budget_start_item.budget_name}}' }}</td>                                                             
+                            <td>{{ '{{budget_start_item.budget_date}}' }}</td>
+                        </tr>                                   
+                    </tbody>
+                </table>
+            </div>    
+
+            <div class="col-12 mb-3" v-if='Object.keys(budget_start_item).length === 0'>
+                <div class="alert alert-warning shadow-sm mt-2">
+                    <i class="bi bi-exclamation-triangle-fill me-1 fs-4"></i>
+                    Please add starting budget point.
+                </div>                          
+            </div>                       
+        </div>   
+    
+        <div class="row mt-0 pt-0" v-if='Object.keys(budget_start_item).length === 0'>
+            <div class="col-9 pe-0">
+                <input type="text" class="form-control col-9" placeholder="Name" aria-label="Name" aria-describedby="button-addon4" v-model="budget_item.budget_name">                                              
+                <input type="hidden" aria-describedby="button-addon4" v-model="budget_item.budget_amount">
+                <input type="hidden" aria-describedby="button-addon4" v-model="budget_item.budget_amount_actual">           
+                <input type="hidden" aria-describedby="button-addon4" v-model="budget_item.is_done">      
+            </div>      
+            <div class="col-2 px-0">
+                 <input type="date" class="form-control col-2" placeholder="date yyyy-mm-dd" aria-label="Start date" aria-describedby="button-addon4" v-model="budget_item.budget_date">
+            </div>           
+            <div class="col-1 px-0" id="button-addon4">                       
+                <button class="btn btn-success rounded-0 shadow-sm" type="button" v-on:click="budgetCreateItem(1)">
+                    <i class="bi bi-check2-circle text-white me-1 fs-6" title="Add starting finance point"></i>
+                    Add           
+                </button>                        
+            </div>
+        </div>     
+        
+      
+
+        <!-- planning items income and expences -->
+        <div class="row mt-4" v-if='Object.keys(budget_start_item).length > 0'>           
+            <div class="col-6">
+                <h4>Milestones
+                     <a href="#" v-on:click="budget_item.is_new = true">
+                        <i class="bi bi-plus-square text-success ms-1 align-middle fs-4"
+                           data-toggle="tooltip" data-placement="top" title="Add budget item"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-3" v-if="budget_item.is_new == true" >               
+                <div class="input-group">
+                    <input type="text" class="form-control col-6 rounded-0 shadow-sm" placeholder="Item name" aria-label="Item name" aria-describedby="button-addon4" v-model="budget_item.budget_name" required>
+                    <input type="text" class="form-control col-2  rounded-0 shadow-sm" placeholder="Projected amount" aria-label="Projected amount" aria-describedby="button-addon4" v-model="budget_item.budget_amount" required>
+                    <input type="text" class="form-control col-2  rounded-0 shadow-sm" placeholder="Actual Amount" aria-label="Actual amount" aria-describedby="button-addon4" v-model="budget_item.budget_amount_actual" required>
+                    <input type="date" class="form-control col-2  rounded-0 shadow-sm" placeholder="date yyyy-mm-dd" aria-label="Start date" aria-describedby="button-addon4" v-model="budget_item.budget_date">
+                    <div class="input-group-append" id="button-addon4">     
+                         <button class="btn btn-warning  rounded-0 shadow-sm" type="button" v-on:click="budget_item.is_new = false">
+                             <i class="bi bi-x-circle-fill me-1"></i>
+                            Cancel           
+                        </button>                  
+                        <button class="btn btn-success  rounded-0 shadow-sm" type="button" v-on:click="budgetCreateItem(0)">
+                            <i class="bi bi-check2-circle btn-sm text-white ps-0" title="Add budget item"></i>
+                            Add           
+                        </button>                       
+                    </div>
+                </div>
+            </div>    
+        </div>
+
+        <div class="row">
+            <div class="col-xl-8 col-lg-12 mt-2" id="budgets_table">              
+                <table class="table bg-white table-borderless rounded-0 shadow-sm" >              
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width:78%">Name</th>
+                            <th scope="col">Projected</th>
+                            <th scope="col">Actual</th>                       
+                        </tr>
+                    </thead>
+                    <tbody v-for="(item, index) in budgets">
+                        <tr class="border" v-bind:class="item.class" >
+                            <td scope="row">
+                                <input type="checkbox" v-model="item.checked" v-on:change.prevent="budgetUpdateStatus(item.id, index)" />
+                            </td>
+                            <td>
+                                {{ '{{item.budget_name}}' }}
+                                <a href="#" v-on:click.stop="budgetDeleteModalShow(item)">
+                                    <i class="bi bi-trash3 text-dark align-middle me-1 ps-2 pe-0"
+                                        data-toggle="tooltip" data-placement="top" title="remove expence point"></i>
+                                </a>
+                                 <a href="#" v-on:click="budgetUpdateFormShow(index)">
+                                    <i class="bi bi-pencil-square text-warning align-middle ps-1"
+                                        data-toggle="tooltip" data-placement="top" title="edit expence point"></i>
+                                </a>
+                            </td>                                   
+                            <td>{{ '{{item.budget_amount_formated}}' }} </td>
+                            <td>{{ '{{item.budget_amount_actual_formated}}' }} </td>
+                        </tr>    
+                        <tr v-if="item.is_edit == true">
+                            <td colspan="4">
+                                  <div class="input-group">
+                                    <input type="hidden" v-model="budget_item.id" />
+                                    <input type="text" class="form-control col-6" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon4" v-model="budget_item.budget_name" required>
+                                    <input type="text" class="form-control col-2" placeholder="Projected expence" aria-label="Projected expence" aria-describedby="button-addon4" v-model="budget_item.budget_amount" required>
+                                    <input type="text" class="form-control col-2" placeholder="Actual expence" aria-label="Actual expence" aria-describedby="button-addon4" v-model="budget_item.budget_amount_actual" required>
+                                    <input type="date" class="form-control col-2" placeholder="date yyyy-mm-dd" aria-label="Start date" aria-describedby="button-addon4" v-model="budget_item.budget_date">
+                                    <div class="input-group-append" id="button-addon4">     
+                                        <a href="#" class="btn btn-warning rounded-0" v-on:click="budgets[index].is_edit = false">
+                                            <i class="bi bi-x-circle-fill mr-1"></i>
+                                            Cancel           
+                                        </a>                  
+                                        <a href="#" class="btn btn-success rounded-0" v-on:click="budgetUpdate()">
+                                            <i class="bi bi-check2-circle text-white pl-0" title="Save item update"></i>
+                                            Save           
+                                        </a>                       
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>                       
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Charts -->       
+            <div class="col-xl-4 col-lg-12" >         
+                <div class="col" id="chart_wrapper" v-show="chart_data.length > 0"></div>     
+            
+
+            <!-- final result -->
+            <div class="row mt-3">
+                <div class=" col-lg-6 col-md-12" >
+                    <!-- small box -->
+                    <div class="small-box bg-secondary bg-gradient text-white rounded-0 shadow-sm">
+                        <div class="inner shadow-sm">
+                            <h3 class="pt-3 text-center">{{ '{{budget_total.predicted_expences_formated}}' }}</h3>
+
+                            <p class="pb-3 text-center text-uppercase">Total projected</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>            
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 col-md-12">
+                    <!-- small box -->
+                    <div class="small-box bg-success bg-gradient text-white rounded-0 shadow-sm">
+                    <div class="inner shadow-sm">
+                        <h3 class="pt-3 text-center">{{ '{{budget_total.actual_expences_formated}}' }}</h3>
+
+                        <p class=" text-center pb-3 text-uppercase">Total actual</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>            
+                    </div>
+                </div>
+
+            </div>
+        </div>    
+       
+    </div>     
+          
+        
+
+    <!-- Remove contact Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                        <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+                        Remove item
+                    </h5>                
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove project named <b>"{{ '{{ budget_item.budget_name }}' }}"</b> ?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-warning" data-dismiss="modal" v-on:click="deleteBudgetModalHide()">
+                        <i class="bi bi-x-circle-fill me-1"></i>Cancel</button>
+                    <button type="button" class="btn btn-danger" v-on:click="budgetDelete()">
+                        <i class="bi bi-trash3 me-1"></i>Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+</div>
+
+{% endblock %}
+
+{% block custom_scripts %}
+ 
+    <!-- chart -->
+    <script src='/assets/components/chartjs/chart.min.js'></script>   
+    
+    <script src="/assets/js/vue/accounting/budget/index.js"></script>
+
+    <script src="/assets/components/toastr/toastr.min.js"></script>   
+
+    <script type="application/javascript">       
+
+        $(function () {          
+           // var required_height = $('#budgets_table').height();
+            // $('#canvas_line').height(required_height);
+             //$('#canvas_line').css({'height', required_height + 'px !important' });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,276 @@
+
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Vehicle Logbook {% endblock %}
+
+{% block header_scripts %}
+    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
+ {% endblock %}
+
+{% block body %}
+    
+<!-- side nav menu -->
+{# {% include 'Bookkeeping/_sidenav.twig' %} #}
+{{ include('Accounting/_sidenav.twig') }}
+
+
+<!-- page content -->
+<div class="container-fluid" id="vehiclelogbook" v-cloak>
+    
+    <!-- csrf protection -->
+    <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+
+    <div class="row border-bottom pt-4">
+        <div class="col-10">
+            <h1 class="text-dark mb-2">Vehicle Log Book</h1>   
+        </div>
+        <!-- date selection -->
+        <div class="col-2">        
+            <div class="input-group">                                       
+                <input type="date" class="form-control" placeholder="date yyyy-mm-dd" aria-label="Start date" aria-describedby="button-addon4" v-model="booklog_date" v-on:change="onYearChange()">                   
+            </div>               
+        </div>           
+    </div>        
+ 
+
+    <!-- vehicle odometer reading for selected year -->
+    <div class="row">
+         <div class="col-12">         
+            <h3 class="mt-5">
+                Odometer Readings      
+                <a href="#" v-on:click.prevent="showOdometerForm()" v-if="odometer != false">
+                    <i class="bi bi-pencil-square text-warning me-2 ms-1 fs-5" data-toggle="tooltip" data-placement="top" title="edit Odometer"></i>
+                </a>       
+                <a href="#" v-on:click.prevent="odometerDelModalShow()" v-if="odometer != false">
+                    <i class="bi bi-trash3 text-danger align-middle fs-5"
+                        data-toggle="tooltip" data-placement="top" title="remove Odometer"></i>
+                </a>                                 
+            </h3>
+        </div>
+
+        <!-- alert in case there is no odometer reading for a selected year -->
+        <div class="col-9 alert alert-warning ms-3 my-3" role="alert" v-if="odometer == false">
+            <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+            Sorry but there is no odometer reading for the selected year.
+        </div>
+    </div>
+
+    <form class="row my-2 g-0" v-if="odometer_item.is_addoredit == true">
+        <div class="col-6 my-0 py-0">
+            <label for="txt_vehicle" class="sr-only">Vehicle used</label>
+            <input type="text" class="form-control col-12" id="txt_vehicle" placeholder="Vehicle" v-model="odometer_item.vehicle_desc">
+        </div>
+        <div class="col-1 my-0 py-0">
+            <label for="txt_start_odometer" class="sr-only">Start Odometer</label>
+            <input type="text" class="form-control" id="txt_start_odometer" placeholder="Year start odometer" v-model="odometer_item.year_start_odometer">
+        </div>
+         <div class="col-1 my-0 py-0">
+            <label for="txt_end_odometer" class="sr-only">End Odometer</label>
+            <input type="text" class="form-control" id="txt_end_odometer" placeholder="Year end odometer" v-model="odometer_item.year_end_odometer">
+        </div>     
+        <div class="col-3 my-0 py-0">
+             <button type="submit" class="btn btn-success rounded-0 me-3" v-on:click.prevent="odometerAddOrEdit()" v-if="odometer_item.id == 0">
+                <i class="bi bi-check2-circle me-1"></i>
+                Add Odometer
+            </button>
+            <button type="submit" class="btn btn-success rounded-0" v-on:click.prevent="odometerAddOrEdit()" v-if="odometer_item.id > 0">
+                    <i class="bi bi-check2-circle me-1"></i>
+                Edit Odometer
+            </button>
+            <button type="submit" class="btn btn-warning rounded-0" v-on:click.prevent="hideodometerForm()" v-if="odometer_item.id > 0">
+                    <i class="bi bi-x-circle-fill me-1"></i>
+                    Cancel
+            </button>
+        </div>          
+    </form>
+
+    <div class="row">        
+
+        <!-- odometer reading display -->
+        <div class="col-3" v-if="odometer != false">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Year Start</strong> {{ '{{odometer.year_start_odometer}}' }} km</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Year End</strong> {{ '{{odometer.year_end_odometer}}' }} km</li>                         
+            </ul>
+        </div>       
+        <div class="col-3" v-if="odometer != false">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Vehicle</strong> {{ '{{odometer.vehicle_desc}}' }}</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Year</strong> {{ '{{odometer.created_at}}' }}</li>              
+            </ul>
+        </div>      
+         <div class="col-3" v-if="odometer != false">
+            <ul class="list-group shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Km</strong> {{ '{{ odometer.total_km }}'}} </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Business Km</strong> {{ '{{ odometer.total_business_km }}' }} </li>              
+            </ul>
+        </div>      
+    </div>     
+
+    <!-- vehicle log book miles -->
+    <!-- POTENTIALLY BROKEN TAKE A LOOK INTO HTML STRUCTURE -->
+    <div class="row" v-if="odometer != false">
+        <div class="col-9 ms-2">
+            <h3 class="mt-5">
+                Miles Records
+                <a href="#" v-on:click="showNewBooklogForm(true)">
+                    <i class="bi bi-plus-square text-success align-middle fs-5 ms-1"
+                        data-toggle="tooltip" data-placement="top" title="Add Miles"></i>
+                </a>                 
+            </h3>
+    </div>
+
+    <form class="row g-0 my-3" v-if="booklog_item.is_new == true">
+        <!-- vehicle add new log book miles -->                   
+        <div class="col-2 px-0">
+            <label for="txt_destination" class="sr-only">destination</label>
+            <input type="text" class="form-control" id="txt_destination" placeholder="destination" v-model="booklog_item.destination">
+        </div>
+        <div class="col-3 px-0">
+            <label for="txt_address" class="sr-only">address</label>
+            <input type="text" class="form-control" id="txt_address" placeholder="address" v-model="booklog_item.address">
+        </div>
+        <div class="col-2 px-0">
+            <label for="txt_purpose" class="sr-only">purpose</label>
+            <input type="text" class="form-control col-12" id="txt_purpose" placeholder="purpose" v-model="booklog_item.purpose">
+        </div>    
+        <div class="col-1 p-0">
+            <label for="txt_distance" class="sr-only">travel distance</label>
+            <input type="text" class="form-control col-12" id="txt_distance" placeholder="distance" v-model="booklog_item.travel_distance">
+        </div>               
+        <div class="col-2 p-0">
+            <label for="txt_purpose" class="sr-only">travel date</label>
+            <input type="date" class="form-control col-12" id="txt_date" placeholder="date yyyy-mm-dd" v-model="booklog_item.travel_date">
+        </div>                          
+        
+        <div class="col-2 p-0">
+            <button type="submit" class="btn btn-success rounded-0" v-on:click.prevent="booklogItemAdd()">
+                <i class="bi bi-check2-circle me-1"></i>
+                Add
+            </button>                   
+            <button type="submit" class="btn btn-warning rounded-0" v-on:click.prevent="showNewBooklogForm(false)">
+                <i class="bi bi-x-circle-fill me-1"></i>
+                Cancel
+            </button>                                                                    
+        </div>                 
+    </form>
+   
+    <div class="row ms-1">
+        <table class="table table-bordered bg-white">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col">Destination/Address</th>
+                    <th scope="col">Purpose</th>
+                    <th scope="col">Distance</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in booklogs">
+                    <td>
+                        {{ '{{item.destination}}' }} 
+                        {# <div><small> <i> At: {{ '{{item.address}}' }} </i> </small></div> #}
+                            <div><small> <i> {{ '{{item.address}}' }} </i> </small></div>
+                    </td>
+                    <td>{{ '{{item.purpose}}' }}</td>
+                    <td>{{ '{{item.travel_distance}}' }} km</td>
+                    <td>{{ '{{item.travel_date}}' }}</td>
+                    <td>
+                        <a href="#" v-on:click="booklogItemDelModalShow(item.id)">
+                            <i class="bi bi-trash3 text-danger align-middle" data-toggle="tooltip" data-placement="top" title="remove travel log"></i>
+                        </a>
+                    </td>
+                </tr>                                      
+            </tbody>
+        </table>
+
+        <!-- pagination for vehicle log book -->
+        <nav aria-label="vehicle log book pagination" v-if="booklogs_pager.length > 0">
+            <ul class="pagination justify-content-end">
+                <li class="page-item disabled text-dark">
+                    <a class="page-link text-dark" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link text-success" href="#">1</a></li>
+                <li class="page-item bg-dark">
+                    <a class="page-link text-white bg-dark text-bold" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link text-success" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link text-dark" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <!-- Remove odometer Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Remove item</h5>                    
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove odomoter for <b>"{{ '{{ booklog_date }}' }}"</b> year ?
+                    <div class="alert alert-warning mt-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Please be advised removing odometer will remove all travel logs for the selected year.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">
+                        <i class="bi bi-x-circle-fill me-1"></i>Cancel</button>
+                    <button type="button" class="btn btn-danger" v-on:click="odometerDelOne()">
+                        <i class="bi bi-trash3 me-1"></i>Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+       
+    
+    <!-- Remove booklog item Modal -->
+    <div class="modal fade" id="deletebooklogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Remove Booklog item</h5>                   
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove booklog for <b>"{{ '{{ booklog_date }}' }}"</b> year ?
+                    <div class="alert alert-warning mt-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Please be advised removing is irreversible operation.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">
+                        <i class="bi bi-x-circle-fill me-1"></i>Cancel</button>
+                    <button type="button" class="btn btn-danger" v-on:click="booklogItemDelOne()">
+                        <i class="bi bi-trash3 me-1"></i>Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block custom_scripts %}
+
+    <script src="/assets/components/toastr/toastr.min.js"></script>
+
+    <script src="/assets/js/vue/accounting/vehiclelogbook/index.js" defer></script>
+
+     <script type="application/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+{% endblock %}

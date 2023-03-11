@@ -1,0 +1,166 @@
+{% layout '../../Shared/_layout.liquid' %}
+
+{% block title %} Feeds {% endblock %}
+
+{% block header_scripts %} {% endblock %}
+
+{% block body %}
+<!-- side nav menu -->
+{% include '../_sidenav.liquid' %}
+    
+<div class="container-fluid" id="feed" v-cloak>               
+
+    <!-- page name and usage instructions -->
+    <div class="row mt-4">
+        <div class="col-12 border-bottom">          
+            <h2 class="text-dark">
+                Feeds Inventory
+                <a href="#" v-on:click="action.new = true">
+                    <i class="bi bi-plus-square text-success align-middle ps-1 fs-4" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Add Feeed" aria-label="Add Feed"></i>
+                </a>
+            </h2>                
+        </div>      
+    </div>  
+
+    <div class="row mt-4 mx-2" v-if="action.edit == true || action.new == true">
+        <div class="col-12 ps-1 pb-2 bg-white shadow-sm border border-secondary">
+            <div class="input-group">
+                <div class="col-2">
+                    <label for="text_heads" class="form-label">Name</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_name" placeholder="Name" v-model="feed_item.feed_name">
+                </div>
+                <div class="col-2">
+                    <label for="text_heads" class="form-label">Description</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_desc" placeholder="Description" v-model="feed_item.feed_desc">
+                </div>
+                <div class="col-1">
+                    <label for="text_heads" class="form-label">CP %</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_cp" placeholder="CP %" v-model="feed_item.feed_cp">
+                </div>
+                <div class="col-1">
+                    <label for="text_heads" class="form-label">TDN %</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_tdn" placeholder="TDN %" v-model="feed_item.feed_tdn">
+                </div>
+                <div class="col-1">
+                    <label for="text_adg" class="form-label">Feed Type</label>
+                    <select class="form-select rounded-0" v-model="feed_item.feed_type">
+                        <option value="Grain">Grain</option>     
+                        <option value="Hay">Hay</option>        
+                        <option value="Protein">Protein</option>           
+                        <option value="Mineral">Mineral</option>                          
+                        <option value="Salt">Salt</option>      
+                    </select>                    
+                </div>  
+                <div class="col-1">
+                    <label for="text_heads" class="form-label">Price</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_price" placeholder="Price" v-model="feed_item.feed_price">
+                </div> 
+                <div class="col-1">
+                    <label for="text_heads" class="form-label">Lbs</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_price_lb" placeholder="Price for lbs" v-model="feed_item.feed_price_lb">
+                </div>  
+                <div class="col-1">
+                    <label for="text_heads" class="form-label">Usage %</label>
+                    <input class="form-control rounded-0 shadow-sm" id="text_feed_usage" placeholder="Usage %" v-model="feed_item.feed_usage">
+                </div>      
+                <div class="col-2 d-flex justify-content-end pt-4">                    
+                    <a href="#" class="btn btn-success rounded-0 shadow-sm form-control mt-2" v-on:click="feedCreate()" v-if="action.new == true">                                   
+                        <i class="bi bi-check2-circle text-white ps-0"></i>
+                        Add
+                    </a>
+                    <a href="#" class="btn btn-success rounded-0 form-control shadow-sm mt-2" v-on:click="feedUpdate()" v-if="action.edit == true">                                   
+                        <i class="bi bi-check2-circle text-white ps-0"></i>
+                        Update
+                    </a>
+                    <a href="#" class="btn btn-warning rounded-0 form-control mt-2 shadow-sm" v-on:click="clearForms()">
+                        <i class="bi bi-x-circle-fill me-1"></i>
+                        Cancel           
+                    </a>  
+                </div>                                            
+            </div>
+        </div>
+    </div>    
+
+    <div class="row mt-4">
+        <div class="col-12" v-if="feeds.length > 0">           
+            
+            <table class="table table-sm table-bordered shadow-sm">
+                <thead>
+                    <tr>
+                        <th scope="col" class="bg-dark text-white ps-2">Feed</th>
+                        <th scope="col" class="bg-dark text-white">CP %</th>
+                        <th scope="col" class="bg-dark text-white">TDN %</th>                                    
+                        <th scope="col" class="bg-dark text-white">Feed Type</th>
+                        <th scope="col" class="bg-dark text-white">Usage %</th>                           
+                        <th scope="col" class="bg-dark text-white">Price</th>                                    
+                        <th scope="col" class="bg-dark text-white">Price for quantity C$</th>
+                        <th scope="col" class="bg-dark text-white">#</th>
+                    </tr>
+                </thead>
+                <tbody>                     
+                    <tr v-for="(item, index) in feeds">
+                        <td class="bg-white  ps-2">{{ '{{ item.feed_name }}' }}</td>
+                        <td class="bg-white">{{ '{{ item.feed_cp }}' }}</td>
+                        <td class="bg-white">{{ '{{ item.feed_tdn }}' }}</td>                 
+                        <td class="bg-white">{{ '{{ item.feed_type }}' }}</td>
+                          <td class="bg-white">{{ '{{ item.feed_usage }}' }}</td>
+                        <td class="bg-white">{{ '{{ item.feed_price }}' }}</td>                 
+                        <td class="bg-white">{{ '{{ item.feed_price_lb }}' }}</td>
+                        <td class="bg-white">
+                            <a href="#" class="float-right btn-sm text-small" v-on:click="updateForms(index)">
+                                <i class="bi bi-pencil-square text-warning me-1" data-toggle="tooltip" data-placement="top" title="Edit Feed"></i>
+                            </a>
+                            <a href="#">
+                                <i class="bi bi-trash3 text-danger" title="Remove from default" v-on:click="showDeleteModal(item.id, item.feed_name)"></i>
+                            </a>
+                        </td>
+                    </tr>                 
+                </tbody>
+            </table>
+        </div>       
+    </div>          
+
+     <!-- Remove transaction Modal -->   
+    <div class="modal fade" id="deleteModalRecord" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Remove item
+                    </h5>                            
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove <b>"{{ '{{ feed_item.feed_name }}' }}"</b> feed item?
+                    <div class="alert alert-warning mt-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Please be advised removing feed item is irreversable acton.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" v-on:click.prevent="hideDeleteModal()">
+                        <i class="bi bi-x-circle-fill me-1"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger" v-on:click.prevent="deleteFeed()">
+                        <i class="bi bi-trash3 me-1"></i>Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of modal -->
+ 
+</div>
+
+{% endblock %}
+
+{% block custom_scripts %}   
+
+    <!-- feeds vuejs -->
+    <script src="/js/vue/ration/feed/index.js"></script>
+
+    <script type="application/javascript">
+        $(function () {          
+
+        });
+    </script>
+{% endblock %}

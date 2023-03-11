@@ -1,0 +1,140 @@
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Livestock Groups {% endblock %}
+
+{% block header_scripts %}
+    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
+ {% endblock %}
+
+{% block body %}
+    
+<!-- side nav menu -->
+{# {% include '/Bookkeeping/_sidenav.twig' %} #}
+{{ include('Inventory/_sidenav.twig') }}
+
+<!-- page content -->
+<div class="container-fluid">
+    <div class="pt-4" id="inventoryGroups" v-cloak>      
+         <!-- csrf protection -->
+        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+
+        <!-- headline -->
+        <div class="row mb-2">
+            <div class="col-12 border-bottom">
+                <h1 class="text-dark mb-4">Livestock Groups                  
+            </div>           
+        </div>                        
+
+        <div class="row">
+            <div class="col-3 mt-4">
+                <h5>Categories  <i class="far fa-plus-square btn-sm text-success me-0 pe-0" v-on:click="newCategoryClick()"></i></h5>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
+                        v-for="(category_item, index) in inventory_cats" v-bind:key="category_item.id" v-bind:class="{ 'list-group-item-dark': category_item.is_active }" >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" v-on:click="selectCategory(index)">{{ '{{ category_item.category_name }}' }}</h5> 
+                                <span>                                   
+                                    <i class="fa fa-edit btn-sm text-warning pe-0 me-0" v-on:click="editCategoryClick(index)"></i>          
+                                    <i class="far fa-trash-alt btn-sm text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
+                                </span>                                                                 
+                            </div>
+                            <p class="mb-1" v-on:click="selectCategory(index)">{{ '{{ category_item.category_description }}' }}</p>                        
+                    </a>                  
+                </div>
+            </div>
+            <div class="col-3 mt-4" v-show="inventory_cats.length > 0">
+                <h5>Sub Categories <i class="far fa-plus-square btn-sm text-success me-0 pe-0" v-on:click="newSubCategoryClick()"></i></h5>
+                <div class="list-group" v-show="inventory_subcats.length > 0">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="category_item in inventory_subcats" v-bind:key="category_item.id" >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ '{{ category_item.category_name }}' }}</h6> 
+                                <span>                                    
+                                    <i class="fa fa-edit btn-sm text-warning pe-0 me-0" v-on:click="editSubCategoryClick(category_item)"></i>          
+                                    
+                                    <i class="far fa-trash-alt btn-sm text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
+                                </span>                                                                 
+                            </div>
+                            {# <p class="mb-1"><small>{{ '{{ subcategory_item.category_description }}' }}</small></p>                         #}
+                    </a>                  
+                </div>
+            </div>
+
+            
+            <!-- new or edit form -->
+            <div class="col-3 mt-2" v-show="cat_work_form">
+                <div class="card col-12 bg-dark text-white rounded shadow-sm">
+                    <h5 class="mt-3 mb-1 ms-3">New/Edit Category</h5>
+                    <hr class="bg-secondary" />
+                    <form class="my-3 mx-3">                       
+                        <div class="col">
+                            <label for="cat_name">Name </label><small class="text-danger float-right"> (required *)</small>
+                            <input type="text" class="form-control bg-secondary text-white border-dark" id="cat_name" aria-describedby="cat_name" v-model="work_item.category_name" required>
+                            <small id="emailHelp" class="form-text text-muted float-right">50 characters max</small>
+                        </div>
+                        <div class="col mt-4">
+                            <label for="cat_desc">Description</label>
+                            <textarea class="form-control bg-secondary text-white border-dark" id="cat_desc" rows="4" v-model="work_item.category_description"></textarea>                           
+                            <small id="cat_desc_warrning" class="form-text text-muted float-right">250 characters max</small>
+                        </div>                      
+                        <div class="col mt-3 d-flex justify-content-end">                                   
+                            <a href="#" class="btn btn-warning rounded-0" v-on:click="closeCatItemForm">
+                                <i class="fas fa-times-circle text-small me-1"></i>
+                                Cancel           
+                            </a>                                           
+                            <a href="#" class="btn btn-success rounded-0" v-on:click="saveCategory">
+                                <i class="fas fa-check btn-sm text-white ps-0" title="Save item update"></i>
+                                Save           
+                            </a>               
+                        </div>
+                    </form>
+                </div>
+            </div>    
+        </div>   
+        
+       
+        <!-- Remove category Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Remove category "<b> {{ '{{ work_item.category_name }}' }} </b>"</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove category named <b>"{{ '{{ work_item.category_name }}' }}"</b> ?
+                        <div class="alert alert-danger mt-4" role="alert">
+                            Please keep in mind if you removing main category, all sub categories will be removed as well.
+                        </div>                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <i class="fas fa-times-circle text-small me-1"></i>Cancel</button>
+                        <button type="button" class="btn btn-danger" v-on:click="deleteCategory(work_item.id)">
+                            <i class="far fa-trash-alt text-small me-1"></i>Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_scripts %}
+
+    <script src="/assets/components/toastr/toastr.min.js"></script>
+
+    <script type="module" src="/assets/js/vue/inventory/types/index.js"></script>
+
+     <script type="application/javascript">
+        $(function () {
+
+            // tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+
+        });
+    </script>
+{% endblock %}

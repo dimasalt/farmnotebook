@@ -1,158 +1,254 @@
 {% layout '../Shared/_layout.liquid' %}
 
-{% block title %} Medication {% endblock %}
-
-{% block header_scripts %} {% endblock %}
-
-{% block body %}
-<!-- side nav menu -->
-{% include './_sidenav.liquid' %}
-
-<!-- page content -->
-<div class="container-fluid">    
-
-    <div class="pt-4" id="medication" v-cloak>      
-
-         {% comment %} <!-- csrf protection -->
-        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}"> {% endcomment %}
-
-        <div class="row mb-2 border-bottom">
-            <div class="col-10">
-                <h2 class="text-dark mb-1">Medication               
-                     {% comment %} <a href="/medication/add"> {% endcomment %}
-                     <a href="#" v-on:click="setAction('new', -1)">
-                        <i class="bi bi-plus-square text-success align-middle ms-2 fs-4"
-                           data-toggle="tooltip" data-placement="top" title="Add medication"></i>
-                    </a>                 
-                </h2>            
-            </div> 
-
-            <!-- Search box -->
-            <div class="form-group has-search col-2 float-right">
-                <span class="bi bi-search form-control-feedback"></span>
-                <input type="search" class="form-control"  placeholder="Search" v-model="search_term" v-on:keyup="goSearch()">
-            </div>          
-        </div>               
-
-        <div class="w-100"></div>
-
-        <div class="card bg-dark shadow" v-if="action != ''" >
-            <div class="card-header bg-dark text-white">
-                <h5 class="card-title" v-if="action == 'new'">Add New Medication</h5>
-                <h5 class="card-title" v-if="action == 'edit'">Update "{{ '{{ medication.name }}' }}" Medication Information</h5>
-            </div>
-            <form class="row no-gutters gx-0 mt-1" v-if="action != ''">                
-                <div class="col-sm-2">
-                    <img class="card-img ms-2 shadow" v-bind:src="medication.img" alt="Suresh Dasari Card">
-                </div>
-                <div class="col-sm-7 ms-3">  
-                    <div class="row g-0">
-                        <div class="col-md-4">                     
-                            <input type="text" class="form-control shadow" id="inputName" v-model="medication.name" placeholder="Medication name">                       
-                        </div>
-                        <div class="col-md-2">             
-                            <input type="text" class="form-control rounded-0 shadow" v-model="medication.on_hand_doses" id="inputOnHand" placeholder="On hand medications"> 
-                        </div>
-                        <div class="col-md-2">              
-                            <input type="text" class="form-control shadow" id="inputPrice" v-model="medication.price" placeholder="Price">
-                        </div>
-                        <div class="col-md-8">                     
-                            <input type="text" class="form-control shadow" id="inputImg" placeholder="Link to medication image" v-model="medication.img">
-                        </div>
-                        <div class="col-8">              
-                            <textarea class="form-control w-100 rounded-0 shadow" cols="10" rows="4" placeholder="Description" v-model="medication.desc"></textarea>                
-                        </div>
-                        <div class="col-8">              
-                            <textarea class="form-control w-100 rounded-0 shadow" cols="10" rows="4" placeholder="Instructions" v-model="medication.instruction"></textarea>                
-                        </div>
-                    </div>
-                 
-                    <div class="col-8 my-2 d-flex justify-content-end">
-                        <a href="#"  class="btn btn-warning rounded-0 shadow" v-on:click="setAction('')">
-                            <i class="bi bi-x-circle-fill fs-5"></i>
-                            Cancel/Back
-                        </a>
-                        <a href="#"  class="btn btn-success rounded-0 shadow" v-on:click="addEditMedication()">
-                            <i class="bi bi-check2-circle fs-5"></i>
-                            Save Medication
-                        </a>
-                    </div>
-                </div>
-            </form>    
-        </div>
-       
-        <div class="row" v-if="meds.length > 0 && action == ''">
-            <!-- list of medication items -->
-            <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-xs-12  m-2 p-0" v-for="(item, index) in meds">            
-                <div class="card h-100 w-100">
-                    <h5 class="card-header  bg-dark text-white">
-                        <i class="bi bi-capsule-pill me-2"></i>
-                        {{ "{{ item.name }}" }}                                  
-                        <a href="#" class="float-right pe-1 ms-2">
-                            <i class="far bi bi-trash3 text-danger" data-toggle="tooltip" data-placement="top" title="Remove medication"
-                                v-on:click="deleteMedicationModal(index)"></i>
-                        </a>                               
-                        <a href="#" v-on:click="setAction('edit', index)" class="float-right ps-0">
-                            <i class="bi bi-pencil-square text-warning" data-toggle="tooltip" data-placement="top" title="Edit medication"></i>
-                        </a>                                   
-                    </h5>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <img v-bind:src='"https://picsum.photos/96/96?random=" + index' class="me-3 mt-1 ms-2 mb-3 medication_image" alt="..." v-if="item.img == null">                
-                                <img v-bind:src='item.img' class="me-3 mt-1 ms-2 mb-3" alt="..." v-else-if="item.img !== null" style="height:96px; width:96px;">    
-                                <select class="form-control-sm float-right ms-2" id="viewoption" v-model="item.selected">
-                                    <option>Description</option>
-                                    <option>Instructions</option>                    
-                                </select>           
-                            </div>
-                            <div class="col-8">
-                                <p class="pt-1 me-3" v-if="item.selected == 'Description'" v-html="item.desc"></p>      
-                                <p class="pt-1 me-3" v-if="item.selected == 'Instructions'" v-html="item.instruction"></p>        
-                            </div>               
-                        </div>
-                        
-                    </div>
-                </div>     
-            </div>  
-        </div>
-
-        
-       
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title text-white" id="exampleModalCenterTitle">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            Remove "<b> {{ '{{ medication.name }}' }} </b>" Medication</h5>                       
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to remove medication named <b>"{{ '{{ medication.name }}' }}"</b> ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-dismiss="modal" v-on:click="deleteMedicationModalHide">
-                            <i class="bi bi-x-circle-fill me-1"></i>Cancel</button>
-                        <button type="button" class="btn btn-danger" v-on:click="deleteMedication()">
-                            <i class="bi bi-trash3 me-1"></i>Remove</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
+{% block title %}
+  Medication
 {% endblock %}
 
-{% block custom_scripts %}    
+{% block header_scripts %}{% endblock %}
 
-    <script src="js/vue/medication/index.js"></script>
+{% block body %}
+  <!-- side nav menu -->
+  {% include './_sidenav.liquid' %}
 
-     <script type="application/javascript">
-        $(function () {
-            // tooltips
-            $('[data-toggle="tooltip"]').tooltip();
+  <!-- page content -->
+  <div class="container-fluid">
 
-        });
-    </script>
+    <div class="pt-4"
+      id="medication"
+      v-cloak>
+
+      {% comment %} <!-- csrf protection -->
+      <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}"> {% endcomment %}
+
+      <div class="row mb-2 border-bottom">
+        <div class="col-10">
+          <h2 class="text-dark mb-1">Medication
+            {% comment %} <a href="/medication/add"> {% endcomment %}
+            <a href="#" v-on:click="setAction('new', -1)">
+              <i
+                class="bi bi-plus-square text-success align-middle ms-2 fs-4"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Add medication"></i>
+            </a>
+          </h2>
+        </div>
+
+        <!-- Search box -->
+        <div class="form-group has-search col-2 float-right">
+          <span class="bi bi-search form-control-feedback"></span>
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search"
+            v-model="search_term"
+            v-on:keyup="goSearch()">
+        </div>
+      </div>
+
+      <div class="w-100"></div>
+
+      <div class="card bg-dark shadow" v-if="action != ''">
+        <div class="card-header bg-dark text-white">
+          <h5 class="card-title" v-if="action == 'new'">Add New Medication</h5>
+          <h5 class="card-title" v-if="action == 'edit'">Update "{{ '{{ medication.name }}' }}" Medication Information</h5>
+        </div>
+        <form class="row no-gutters gx-0 mt-1" v-if="action != ''">
+          <div class="col-sm-2">
+            <img
+              class="card-img ms-2 shadow"
+              v-bind:src="medication.img"
+              alt="Suresh Dasari Card">
+          </div>
+          <div class="col-sm-7 ms-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <input
+                  type="text"
+                  class="form-control shadow"
+                  id="inputName"
+                  v-model="medication.name"
+                  placeholder="Medication name">
+              </div>
+              <div class="col-md-2">
+                <input
+                  type="text"
+                  class="form-control rounded-0 shadow"
+                  v-model="medication.on_hand_doses"
+                  id="inputOnHand"
+                  placeholder="On hand medications">
+              </div>
+              <div class="col-md-2">
+                <input
+                  type="text"
+                  class="form-control shadow"
+                  id="inputPrice"
+                  v-model="medication.price"
+                  placeholder="Price">
+              </div>
+              <div class="col-md-8">
+                <input
+                  type="text"
+                  class="form-control shadow"
+                  id="inputImg"
+                  placeholder="Link to medication image"
+                  v-model="medication.img">
+              </div>
+              <div class="col-8">
+                <textarea
+                  class="form-control w-100 rounded-0 shadow"
+                  cols="10"
+                  rows="4"
+                  placeholder="Description"
+                  v-model="medication.desc"></textarea>
+              </div>
+              <div class="col-8">
+                <textarea
+                  class="form-control w-100 rounded-0 shadow"
+                  cols="10"
+                  rows="4"
+                  placeholder="Instructions"
+                  v-model="medication.instruction"></textarea>
+              </div>
+            </div>
+
+            <div class="col-8 my-2 d-flex justify-content-end">
+              <a
+                href="#"
+                class="btn btn-warning rounded-0 shadow"
+                v-on:click="setAction('')">
+                <i class="bi bi-x-circle-fill fs-5"></i>
+                Cancel/Back
+              </a>
+              <a
+                href="#"
+                class="btn btn-success rounded-0 shadow"
+                v-on:click="addEditMedication()">
+                <i class="bi bi-check2-circle fs-5"></i>
+                Save Medication
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="row" v-if="meds.length > 0 && action == ''">
+        <!-- list of medication items -->
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-xs-12  m-2 p-0" v-for="(item, index) in meds">
+          <div class="card h-100 w-100">
+            <h5 class="card-header  bg-dark text-white">
+              <i class="bi bi-capsule-pill me-2"></i>
+              {{ "{{ item.name }}" }}
+              <a href="#" class="float-right pe-1 ms-2">
+                <i
+                  class="far bi bi-trash3 text-danger"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Remove medication"
+                  v-on:click="deleteMedicationModal(index)"></i>
+              </a>
+              <a
+                href="#"
+                v-on:click="setAction('edit', index)"
+                class="float-right ps-0">
+                <i
+                  class="bi bi-pencil-square text-warning"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Edit medication"></i>
+              </a>
+            </h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <img
+                    v-bind:src='"https://picsum.photos/96/96?random=" + index'
+                    class="me-3 mt-1 ms-2 mb-3 medication_image"
+                    alt="..."
+                    v-if="item.img == null">
+                  <img
+                    v-bind:src='item.img'
+                    class="me-3 mt-1 ms-2 mb-3"
+                    alt="..."
+                    v-else-if="item.img !== null"
+                    style="height:96px; width:96px;">
+                  <select
+                    class="form-control-sm float-right ms-2"
+                    id="viewoption"
+                    v-model="item.selected">
+                    <option>Description</option>
+                    <option>Instructions</option>
+                  </select>
+                </div>
+                <div class="col-8">
+                  <p
+                    class="pt-1 me-3"
+                    v-if="item.selected == 'Description'"
+                    v-html="item.desc"></p>
+                  <p
+                    class="pt-1 me-3"
+                    v-if="item.selected == 'Instructions'"
+                    v-html="item.instruction"></p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Remove "<b>
+                  {{ '{{ medication.name }}' }}
+                </b>" Medication</h5>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to remove medication named
+              <b>"{{ '{{ medication.name }}' }}"</b>
+              ?
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-warning"
+                data-dismiss="modal"
+                v-on:click="deleteMedicationModalHide">
+                <i class="bi bi-x-circle-fill me-1"></i>Cancel</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                v-on:click="deleteMedication()">
+                <i class="bi bi-trash3 me-1"></i>Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block custom_scripts %}
+
+  <script src="/js/vue/medication/index.js"></script>
+
+  <script type="application/javascript">
+    $(function () {
+    // tooltips
+                $('[data-toggle="tooltip"]').tooltip();
+    
+            });</script>
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Contacts {% endblock %}
+
+{% block body %}
+
+<div class="container" id="login" v-cloak>
+
+    <div class="row">
+        <div class="col-12 d-flex align-content-center mt-5">
+
+            <form class="form-signin mt-5">
+
+                <h1 class="h3 mb-4 font-weight-normal">Dashboard sign in</h1>
+                <label for="inputusername" class="sr-only">User Name</label>
+                <input type="text" id="inputusername" class="form-control" placeholder="User Name" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control mt-2" placeholder="Password" required>
+
+                <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">
+
+                    Sign in
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block custom_scripts %}
+
+{#    <script src="https://cdn.jsdelivr.net/npm/vue"></script>#}
+
+{#    <script src="/assets/js/vue/contacts/index.js"></script>#}
+
+{#    <script type="application/javascript">#}
+{#        $(function () {#}
+{#            // tooltips#}
+{#            $('[data-toggle="tooltip"]').tooltip();#}
+
+{#            //remove contact modal#}
+{#            $('#myModal').on('shown.bs.modal', function () {#}
+{#                $('#myInput').trigger('focus')#}
+{#            });#}
+{#        })#}
+    </script>
+{% endblock %}

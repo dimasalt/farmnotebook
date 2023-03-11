@@ -1,0 +1,111 @@
+{% extends "Shared/_layout.twig" %}
+
+{% block title %} Upload {% endblock %}
+
+{% block header_scripts %}
+    <link href="/assets/toastr/toastr.min.css"  rel="stylesheet">
+    <link href="/assets/dropzone/min/dropzone.min.css"  rel="stylesheet">
+ {% endblock %}
+
+{% block body %}
+    
+    <!-- csrf protection -->
+    <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+
+
+    <div class="container" id="upload" v-cloak>      
+
+        <div class="row mb-2">
+            <div class="col-12">
+                <h1 class="text-dark mb-4">Upload</h1>            
+
+                 <div class="callout callout-info">
+                    <i class="fas fa-info-circle fa-2x mr-2 align-middle"></i>
+                    This page contains upload file information and usage instructions.
+                </div>
+            </div>           
+        </div>             
+
+        <div clas="row">
+            <div class="col">
+                <form action="/upload" class="dropzone" id="dropzone-upload"></form>
+            </div>
+        </div>
+
+        {# <!-- list of medication items -->
+        <div class="card mb-5" v-for="(item, index) in meds">
+            <h5 class="card-header bg-dark text-white">
+                <i class="fas fa-file-medical mr-2"></i>
+                {{ "{{ item.name }}" }}            
+                <a href="#" class="float-right mr-2 btn-sm text-small">
+                    <i class="far fa-trash-alt text-danger" data-toggle="tooltip" data-placement="top" title="Remove medication"
+                        v-on:click="deleteContacModal(index)"></i>
+                </a>                               
+                <a v-bind:href="'/medication/update/' + item.id" class="float-right btn-sm text-small pr-2">
+                    <i class="far fa-edit text-warning" data-toggle="tooltip" data-placement="top" title="Edit medication"></i>
+                </a>                   
+
+                <select class="form-control-sm float-right mr-2" id="viewoption" v-model="item.selected">
+                    <option>Description</option>
+                    <option>Instructions</option>                    
+                </select>
+            </h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <img v-bind:src='"https://picsum.photos/96/96?random=" + index' class="mr-3 mt-1 ml-2 mb-3" alt="..." v-if="item.img == null">                
+                        <img v-bind:src='item.img' class="mr-3 mt-1 ml-2 mb-3" alt="..." v-else-if="item.img !== null" style="height:96px; width:96px;">               
+                    </div>
+                    <div class="col-10">
+                        <p class="pt-1 mr-3" v-if="item.selected == 'Description'" v-html="item.desc"></p>      
+                        <p class="pt-1 mr-3" v-if="item.selected == 'Instructions'" v-html="item.instruction"></p>        
+                    </div>               
+                </div>
+                
+            </div>
+        </div>       
+       
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Remove "<b> {{ '{{ medication.name }}' }} </b>" Medication</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove medication named <b>"{{ '{{ medication.name }}' }}"</b> ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">
+                            <i class="fas fa-times-circle text-small mr-1"></i>Cancel</button>
+                        <button type="button" class="btn btn-danger" v-on:click="deleteMedication()">
+                            <i class="far fa-trash-alt text-small mr-1"></i>Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div> #}
+
+    </div>
+
+{% endblock %}
+
+{% block custom_scripts %}
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/assets/toastr/toastr.min.js"></script>
+    <script src="/assets/dropzone/min/dropzone.min.js"></script>
+
+    {# <script src="/assets/js/vue/medication/index.js"></script> #}
+
+     <script type="application/javascript">
+        $(function () {
+            // tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+
+        });
+    </script>
+{% endblock %}

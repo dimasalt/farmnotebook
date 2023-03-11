@@ -1,0 +1,33 @@
+<!-- side navigation -->
+<div class="container-menu border-right pe-5 pt-4 shadow-sm bg-white">                
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted border-bottom font-weight-bolder">
+        <span class=" text-uppercase"><i class="bi bi-list me-1"></i>Finances</span>               
+    </h6>            
+    <ul class="nav flex-column"> 
+        <li class="nav-item">
+             <a class="nav-link collapsed active text-dark mt-2" href="#accounting" data-bs-toggle="collapse" aria-expanded="false" aria-controls="accounting">                
+                <i class="bi bi-bank me-2"></i>Accounting <span class="sr-only">(current)</span><i class="fas fa-chevron-down mt-2 float-right"></i>
+            </a>            
+            <div class="collapsed" id="accounting" aria-expanded="false">
+                <ul class="flex-column nav">
+                    <li class="nav-item"><a class="nav-link py-0 ms-3 text-dark" href="/bookkeeping/records"><i class="bi bi-list-ul me-2"></i>Records</a></li>     
+                    <li class="nav-item"><a class="nav-link py-0 ms-3 text-dark" href="/bookkeeping/reports"><i class="bi bi-flag me-2"></i>Reports</a></li>       
+                    <li class="nav-item"><a class="nav-link py-0 ms-3 text-dark" href="/bookkeeping/categories"><i class="bi bi-tags me-2"></i>Types</a></li>                                                                 
+                </ul>
+            </div>
+        </li>                             
+       
+        <li class="nav-item">
+            <a class="nav-link active text-dark pt-0 mt-2" href="/bookkeeping/vehiclelogbook">                
+                <i class="bi bi-car-front-fill me-2"></i>Vehicle Log Book
+            </a>
+        </li>  
+        <li class="nav-item">
+            <a class="nav-link active text-dark pt-0" href="/bookkeeping/budget">                
+                <i class="bi bi-card-list me-2"></i>Budget Planning
+            </a>
+        </li>        
+
+       
+    </ul>               
+</div>      
