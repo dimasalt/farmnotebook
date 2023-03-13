@@ -1,20 +1,14 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../../Shared/_layout.liquid' %}
 
 {% block title %} Ration Calculator {% endblock %}
 
-{% block header_scripts %}
-    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
- {% endblock %}
-
+{% block header_scripts %} {% endblock %}
 
 {% block body %}
-
 <!-- side nav menu -->
-{# {% include '/Medication/_sidenav.twig' %} #}
-{{ include('Ration/_sidenav.twig') }}    
+{% include '../_sidenav.liquid' %}   
     
-<div class="container-fluid" id="ration" v-cloak>             
-    <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">    
+<div class="container-fluid" id="ration" v-cloak>               
 
     <!-- page name and usage instructions -->
     <div class="row mt-4">
@@ -185,11 +179,9 @@
 
 {% endblock %}
 
-{% block custom_scripts %}
-    
-    <script src="/assets/components/toastr/toastr.min.js"></script>
+{% block custom_scripts %}   
 
-    <script src="/assets/js/vue/ration/calculator/index.js"></script>
+    <script src="/js/vue/ration/calculator/index.js"></script>
 
      <script type="application/javascript">
         $(function () {          

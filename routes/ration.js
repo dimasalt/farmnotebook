@@ -3,6 +3,7 @@ const router = express.Router();
 
 const feedController = require('../controllers/ration/feeds/feedController');
 const feedRequirementController = require('../controllers/ration/feed_requirement/feedRequirementController');
+const feedCalculator = require('../controllers/ration/calculator/feedCalculatorController');
 
 
 const hasAccess = require('../midleware/user');
@@ -17,6 +18,12 @@ router.post("/feeds/api/delete", feedController.deleteFeed);
 
 //feed requirement page
 router.get("/feeds/required", feedRequirementController.getIndex);
+router.post("/feeds/required/api/get/all", feedRequirementController.feedsRequiredGetAll);
+router.post("/feeds/required/api/get/adgs", feedRequirementController.getADGS);
+router.post("/feeds/required/api/get/weights", feedRequirementController.getWeights);
+
+//feed and ration calculator
+router.get("/feeds/calculator", feedCalculator.getIndex);
 
 
 module.exports = router;

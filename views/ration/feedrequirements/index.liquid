@@ -1,79 +1,89 @@
 {% layout '../../Shared/_layout.liquid' %}
 
-{% block title %} Feed Requirements {% endblock %}
+{% block title %}
+  Feed Requirements
+{% endblock %}
 
-{% block header_scripts %} {% endblock %}
+{% block header_scripts %}{% endblock %}
 
 {% block body %}
-<!-- side nav menu -->
-{% include '../_sidenav.liquid' %}
-    
-<div class="container-fluid" id="feedrequired">             
+  <!-- side nav menu -->
+  {% include '../_sidenav.liquid' %}
 
-    <!-- page name and usage instructions -->
+    <div class="container-fluid" id="feedrequired">
+
+    <!-- Page name and Search and sort options -->
     <div class="row g-0 mt-5 border-bottom">
-        <div class="col-10">          
-            <h2 class="text-dark">Ration Requirements</h2>                
-        </div>
-        <!-- feed requirements per weight -->      
-        {% comment %} <div class="col-1">
-            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="group_selected">
-                <option value=""></option>
-                <option v-for="item in livestock_groups" v-bind:value="item.group_name">
-                    {{ '{{ item.group_name }}' }}
-                </option>            
-            </select>
-        </div>
-        <!-- animal selection -->
-        <div class="col-1">
-            <select class="form-select w-100 rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="group_selected">
-                <option value=""></option>
-                <option v-for="item in livestock_groups" v-bind:value="item.group_name">
-                    {{ '{{ item.group_name }}' }}
-                </option>             
-            </select>
-        </div> {% endcomment %}
-    </div>           
-  
+      <div class="col-9">
+        <h2 class="text-dark">Ration Requirements</h2>
+      </div>
+      <div class="col-1">
+        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.adg_selected" v-on:change="getFeedRequirements()">
+          <option value="0" title=""></option>
+          <option v-for="item in search_item.adgs" v-bind:value="item.adg">
+          {{ '{{ item.adg }}' }}
+          </option>            
+        </select>
+      </div>
+      <div class="col-1">
+        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.start_weight_selected" v-on:change="getFeedRequirements()">
+          {% comment %} <option value="200" title=""></option> {% endcomment %}
+          <option v-for="item in search_item.start_weights" v-bind:value="item.weight">
+          {{ '{{ item.weight }}' }}
+          </option>            
+        </select>
+      </div>
+      <div class="col-1">
+        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.end_weight_selected" v-on:change="getFeedRequirements()">
+          {% comment %} <option value="3000" title=""></option> {% endcomment %}
+          <option v-for="item in search_item.end_weights" v-bind:value="item.weight">
+          {{ '{{ item.weight }}' }}
+          </option>            
+        </select>
+      </div>
+    </div>
+
 
     <!-- table to display information -->
     <div class="row mt-4">
-        <div class="col-12">          
-            <table class="table table-striped bg-white">
-                <thead>
-                    <tr>
-                        <th scope="col" >Weight</th>
-                        <th scope="col">Animal Type</th>
-                        <th scope="col">Average Daily Gain</th>
-                        <th scope="col">CP %</th>
-                        <th scope="col">TDN %</th>
-                        <th scope="col">Dry Matter Per Day</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in requirements %}
-                         <tr>
-                            <td>{{ item.weight }}</td>
-                            <td>{{ item.animal_type }}</td>
-                            <td>{{ item.adg }}</td>
-                            <td>{{ item.cp }}</td>
-                            <td>{{ item.tdn }}</td>
-                            <td>{{ item.dm_per_day }}</td>
-                        </tr>
-                    {% endfor %}                
-                </tbody>
-            </table>
-        </div>
-    </div>    
-</div>
+      <div class="col-12">
+        <table class="table table-striped bg-white shadow">
+          <thead>
+            <tr>
+              <th scope="col" class="bg-dark text-white">Weight</th>
+              <th scope="col" class="bg-dark text-white">Animal Type</th>
+              <th scope="col" class="bg-dark text-white">Average Daily Gain</th>
+              <th scope="col" class="bg-dark text-white">CP %</th>
+              <th scope="col" class="bg-dark text-white">TDN %</th>
+              <th scope="col" class="bg-dark text-white">Dry Matter Per Day</th>
+            </tr>
+          </thead>
+          <tbody>     
+
+              <tr v-for="item in feedings">
+                <td>{{ '{{ item.weight }}' }}</td>
+                <td>{{ '{{ item.animal_type }}' }}</td>
+                <td>{{ '{{ item.adg }}' }}</td>
+                <td>{{ '{{ item.cp }}' }}</td>
+                <td>{{ '{{ item.tdn }}' }}</td>
+                <td>{{ '{{ item.dm_per_day }}' }}</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
 
-{% block custom_scripts %}   
+{% block custom_scripts %}
 
-     <script type="application/javascript">
-        $(function () {          
+  <!-- feed requirements for cattle vuejs -->
+  <script src="/js/vue/ration/feedrequirements/index.js"></script>
 
-        });
-    </script>
+  <script type="application/javascript">
+    $(function () {          
+    });
+  </script>
 {% endblock %}
