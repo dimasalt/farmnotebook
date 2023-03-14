@@ -20,13 +20,22 @@ app.set('view engine', 'liquid');       // set liquid to default
 
 const PORT = process.env.PORT || 8000;
 
-app.get("/", (req, res) => {
+//home route //controller
+const homeController = require('./controllers/home/homeController');
 
-    //let token = jwt.sign({myname : 'dmitri'}, process.env.SECRET_KEY);
-    //console.log(token);
-    //res.cookie('username', 'Dmitri', { httpOnly : true, maxAge : 900000 } ); //15 minutes expiration in milleseconds    
-    res.send("Hi");
-}); 
+app.get('/', homeController.getIndex);
+
+// app.get("/", (req, res) => {
+
+//     res.status(200).render('home/index', {});
+//     //let token = jwt.sign({myname : 'dmitri'}, process.env.SECRET_KEY);
+//     //console.log(token);
+//     //res.cookie('username', 'Dmitri', { httpOnly : true, maxAge : 900000 } ); //15 minutes expiration in milleseconds    
+    
+    
+//     //res.send("Hi");
+// }); 
+
 
 //contact pages
 const contactRoutes = require('./routes/contacts');
@@ -38,8 +47,6 @@ app.use('/medication', medicationRoutes);
 
 const rationRoutes = require('./routes/ration');
 app.use('/ration', rationRoutes);
-
-
 
 
 

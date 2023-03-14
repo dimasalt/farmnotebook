@@ -5,8 +5,8 @@ const pool = require('../../../services/mysql');
 * @route POST /ration/feeds
 * @access public // later on admin only
 */
-exports.getIndex = (req, res) => {
-    res.status(200).render('ration/feeds/index', {});
+exports.getIndex = async (req, res) => {
+    await res.status(200).render('ration/feeds/index', {});
 };
 
 
@@ -16,10 +16,10 @@ exports.getIndex = (req, res) => {
 * @route POST /feeds
 * @access public // later on admin only
 */
-exports.feedsGetAll = (req, res) => {
+exports.feedsGetAll = async (req, res) => {
 
     pool.query('call feedGetAll()', [], 
-        function(err, results, fields) {
+        await function(err, results, fields) {
               
             return res.json(results[0]);
         }
@@ -32,7 +32,7 @@ exports.feedsGetAll = (req, res) => {
  * @route /ration/feeds/api/update
  * @access private
  */
-exports.feedsUpdate = (req, res) => {
+exports.feedsUpdate = async (req, res) => {
 
     pool.query('call feedUpdate(?,?,?,?,?,?,?,?,?)', 
         [             
@@ -46,7 +46,7 @@ exports.feedsUpdate = (req, res) => {
             req.body.feed_item.feed_price_lb,
             req.body.feed_item.feed_usage       
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
             
@@ -63,7 +63,7 @@ exports.feedsUpdate = (req, res) => {
  * @route /ration/feeds/api/add
  * @access private
  */
-exports.feedsAdd = (req, res) => {
+exports.feedsAdd = async (req, res) => {
     pool.query('call feedCreate(?,?,?,?,?,?,?,?)', 
         [ 
             req.body.feed_item.feed_name, 
@@ -75,7 +75,7 @@ exports.feedsAdd = (req, res) => {
             req.body.feed_item.feed_price_lb,
             req.body.feed_item.feed_usage       
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -93,12 +93,12 @@ exports.feedsAdd = (req, res) => {
  * @route /ration/feed/api/delete
  * @access private
  */
-exports.deleteFeed = (req, res) => {
+exports.deleteFeed = async (req, res) => {
     pool.query('call feedDeleteOne(?)', 
         [ 
             req.body.id          
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;                     
 

@@ -5,8 +5,8 @@ const pool = require('../services/mysql');
 * @route POST /api/get/all
 * @access public // later on admin only
 */
-exports.getIndex = (req, res) => {
-    res.status(200).render('contacts/index', {});
+exports.getIndex = async (req, res) => {
+    await res.status(200).render('contacts/index', {});
 };
 
 
@@ -16,7 +16,7 @@ exports.getIndex = (req, res) => {
 * @route GET /contacts
 * @access public // later on admin only
 */
-exports.contactsGetAll = (req, res) => {
+exports.contactsGetAll = async (req, res) => {
 
     pool.query('call contactsGetAll(?,?,?,?,?)', 
         [
@@ -26,7 +26,7 @@ exports.contactsGetAll = (req, res) => {
             req.body.current_page,
             req.body.limit
         ], 
-        function(err, results, fields) {
+        await function(err, results, fields) {
               
             return res.json(results[0]);
         }
@@ -39,7 +39,7 @@ exports.contactsGetAll = (req, res) => {
  * @route /api/add
  * @access private
  */
-exports.contactAdd = (req, res) => {
+exports.contactAdd = async (req, res) => {
     pool.query('call contactAdd(?,?,?,?,?,?)', 
         [ 
             req.body.name, 
@@ -49,7 +49,7 @@ exports.contactAdd = (req, res) => {
             req.body.note,
             req.body.contact_type      
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -66,7 +66,7 @@ exports.contactAdd = (req, res) => {
  * @route /api/update
  * @access private
  */
-exports.contactUpdate = (req, res) => {
+exports.contactUpdate = async (req, res) => {
 
     pool.query('call contactUpdate(?,?,?,?,?,?,?)', 
         [ 
@@ -78,7 +78,7 @@ exports.contactUpdate = (req, res) => {
             req.body.note,
             req.body.contact_type      
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -95,12 +95,12 @@ exports.contactUpdate = (req, res) => {
  * @route /api/delete
  * @access private
  */
-exports.deleteContact = (req, res) => {
+exports.deleteContact = async (req, res) => {
     pool.query('call contactDeleteOne()', 
         [ 
             req.body.id          
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -117,9 +117,10 @@ exports.deleteContact = (req, res) => {
  * @params: none
  * @access: private
  */
-exports.getVendorList = (req, res) => {
+exports.getVendorList = async(req, res) => {
     pool.query('call contactVendorsGetAll()', [], 
-        function(err, results, fields) {                 
+        
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 

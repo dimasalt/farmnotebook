@@ -24,6 +24,7 @@ router.post("/feeds/required/api/get/weights", feedRequirementController.getWeig
 
 //feed and ration calculator
 router.get("/feeds/calculator", feedCalculator.getIndex);
+router.post("/feeds/calculator/api/setdefault", feedCalculator.feedSetDefault);
 
 
 module.exports = router;

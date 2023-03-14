@@ -4,9 +4,9 @@ const FeedRequirements = {
             feedings: [],
          
             search_item : {
-                adg_selected : 0,                            
-                start_weight_selected : 200,
-                end_weight_selected : 4000,       
+                adg_selected : '0',                            
+                start_weight_selected : '200',
+                end_weight_selected : '4000',       
                 adgs : [],
                 start_weights : [],
                 end_weights : []

@@ -5,8 +5,8 @@ const pool = require('../services/mysql');
 * @route POST /api/get/all
 * @access public // later on admin only
 */
-exports.getIndex = (req, res) => {
-    res.status(200).render('medication/index', {});
+exports.getIndex = async (req, res) => {
+    await res.status(200).render('medication/index', {});
 };
 
 
@@ -15,13 +15,13 @@ exports.getIndex = (req, res) => {
 * @route GET /contacts
 * @access public // later on admin only
 */
-exports.medicationGetAll = (req, res) => {
+exports.medicationGetAll = async (req, res) => {
 
     pool.query('call medicationGetAll(?)', 
         [
             req.body.search_term
         ], 
-        function(err, results, fields) {
+        await function(err, results, fields) {
               
             return res.json(results[0]);
         }
@@ -34,7 +34,7 @@ exports.medicationGetAll = (req, res) => {
  * @route /api/add
  * @access private
  */
-exports.medicationAdd = (req, res) => {
+exports.medicationAdd = async (req, res) => {
     pool.query('call medicationAdd(?,?,?,?,?)', 
         [      
             req.body.name,             
@@ -43,7 +43,7 @@ exports.medicationAdd = (req, res) => {
             req.body.price,
             req.body.on_hand_doses           
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -63,7 +63,7 @@ exports.medicationAdd = (req, res) => {
  * @route /api/add
  * @access private
  */
-exports.medicationUpdate = (req, res) => {
+exports.medicationUpdate = async (req, res) => {
     pool.query('call medicationUpdate(?,?,?,?,?,?)',
         [      
             req.body.id,
@@ -73,7 +73,7 @@ exports.medicationUpdate = (req, res) => {
             req.body.price,
             req.body.on_hand_doses           
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 
@@ -90,12 +90,12 @@ exports.medicationUpdate = (req, res) => {
  * @route /api/add
  * @access private
  */
-exports.medicationDelete = (req, res) => {
+exports.medicationDelete = async (req, res) => {
     pool.query('call medicationDeleteOne(?)', 
         [      
             req.body.id
         ], 
-        function(err, results, fields) {                 
+        await function(err, results, fields) {                 
 
             if(err) throw err;           
 

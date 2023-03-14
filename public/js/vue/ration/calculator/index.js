@@ -47,14 +47,10 @@ const Ration = {
             //reset variables
             self.feeds = [];
             self.default_feeds = [];
-           
-            //prepare data for php          
-            data = JSON.stringify(data);
 
-            var result = $.post("/ration/ration_calculator/getfeeds", data);
+            var result = $.post("/ration/feeds/api/get/all", data);
 
             result.done(function (data) {                     
-               data = JSON.parse(data);
 
                 //if successfully added 
                if(data.length > 0){  
@@ -107,15 +103,12 @@ const Ration = {
             let data = {          
                 adg : self.adg_selected,
                 start_weight : self.requirements.start_weight,
-                end_weight : self.requirements.end_weight,    
-                csrf : $('#csrf').val()
-            };  
-            data = JSON.stringify(data);
+                end_weight : self.requirements.end_weight                
+            };
 
-            var result = $.post("/ration/ration_calculator/getFeedRequirements", data);
+            var result = $.post("/ration/feeds/required/api/get/all", data);
  
-            result.done(function (data) {                     
-                data = JSON.parse(data);
+            result.done(function (data) {                                    
  
                  //if successfully added 
                 if(data.length > 0){  
@@ -138,19 +131,14 @@ const Ration = {
 
             //prepare data for php        
             let data = {};  
-            data = JSON.stringify(data);
-
-            var result = $.post("/ration/ration_calculator/FeedRequirementsAdg", data);
+            var result = $.post("/ration/feeds/required/api/get/adgs", data);
  
             result.done(function (data) {                     
-                data = JSON.parse(data);
  
                  //if successfully added 
                 if(data.length > 0){  
  
-                    self.adg = data;  
-                    
-                    //display result                   
+                    self.adg = data;                    
                 }            
             });
  
@@ -179,17 +167,12 @@ const Ration = {
             //prepare data object
             let data = {
                 id : id,
-                is_default : is_default,
-                csrf : $('#csrf').val()
+                is_default : is_default               
             };
 
-            //prepare data for php          
-            data = JSON.stringify(data);
+            var result = $.post("/ration/feeds/calculator/api/setdefault", data);
 
-            var result = $.post("/ration/ration_calculator/setDefaultFeed", data);
-
-            result.done(function (data) {                     
-                data = JSON.parse(data);
+            result.done(function (data) {                                     
  
                  //if successfully added 
                 if(data == true){  

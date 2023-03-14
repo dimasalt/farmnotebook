@@ -1,6 +1,8 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../Shared/_layout.liquid' %}
 
-{% block title %} Page Name {% endblock %}
+{% block title %} Contacts {% endblock %}
+
+{% block header_scripts %} {% endblock %}
 
 {% block body %}
 
@@ -16,10 +18,19 @@
             </div>
 
         </div>
-
-
     </div>
 
 {% endblock %}
 
-{% block custom_scripts %} {% endblock %}
+{% block custom_scripts %}
+    
+
+    <script type="application/javascript">
+        $(function () {
+            // tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+                      
+        })
+    </script>
+
+{% endblock %}
