@@ -10,6 +10,8 @@ router.use('/', hasAccess.hasAccess);
 //actual routes
 router.get("/types", typesController.getIndex);
 router.post("/types/api/get/all", typesController.getTypes);
+router.post("/types/api/add", typesController.saveTypes);
+router.post("/types/api/delete", typesController.deleteTypes);
 // router.post("/api/get/vendors", contactController.getVendorList);
 // router.post("/api/add", contactController.contactAdd);
 // router.post("/api/update", contactController.contactUpdate);

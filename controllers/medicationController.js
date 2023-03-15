@@ -47,8 +47,6 @@ exports.medicationAdd = async (req, res) => {
 
             if(err) throw err;           
 
-            console.log(results.affectedRows);
-
             let is_changed = results.affectedRows > 0 ? true : false;            
 
             return res.json({result : is_changed});

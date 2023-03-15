@@ -52,15 +52,49 @@ exports.getSubTypes = async (req, res) => {
 };
 
 
+/**
+* @desc saves selected category or adds a new one 
+* @route POST /inventory/types/add
+* @access public // later on admin only
+*/
+exports.saveTypes = async (req, res) => { 
+            
+    try {
+        const promisePool = pool.promise();
+        const [results,fields] = await promisePool.query('call livestockCatSave(?,?,?,?)', 
+            [ 
+                req.body.category_item.id,
+                req.body.category_item.parent_id,
+                req.body.category_item.category_name,
+                req.body.category_item.category_description
+            ]);            
+
+            let is_changed = results.affectedRows > 0 ? true : false;            
+
+            return res.json({result : is_changed});
+    }
+    catch (err) {  throw err; }    
+};
 
 
-  // pool.query('call livestockGetTypeAll()', [], 
-    //     await function(err, results, fields) {
-              
-    //         if (err) throw err;
 
-    //         categories = JSON.parse(JSON.stringify(results[0]));                
-    //     }
-    // );
-    
-    // console.log(categories);
+/**
+* @desc removes selected category or sub category
+* @route POST /inventory/types/delete
+* @access public // later on admin only
+*/
+exports.deleteTypes = async (req, res) => { 
+        
+    try {
+        const promisePool = pool.promise();
+        const [results,fields] = await promisePool.query('call livestockCatDelete(?)', 
+            [ 
+                req.body.category_id
+            ]);            
+
+            let is_changed = results.affectedRows > 0 ? true : false;            
+
+            return res.json({result : is_changed});
+    }
+    catch (err) {  throw err; }    
+};

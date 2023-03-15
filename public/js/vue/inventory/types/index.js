@@ -142,14 +142,14 @@ const inventoryTypes = {
 
             var data = {category_item : self.work_item};
 
-            var result = $.post("/inventory/types/save", data);
+            var result = $.post("/inventory/types/api/add", data);
 
             result.done(function (data) {               
-                if(data === true){                   
+                if(data.result === true){                   
                     //Display a success toast, with a title
                     toastr.success("New changes has been successfully added");                
                }
-               else if(data == false) {                  
+               else if(data.result == false) {                  
                     // Display an error toast, with a title
                     toastr.error("Ops! There has been problem adding new changes...");
                }
@@ -174,13 +174,19 @@ const inventoryTypes = {
              //hide modal
              $('#deleteModal').modal('show');
 
-        },        
+        },     
+        deleteCategoryModalHide(){
+            var self = this;
+
+            $('#deleteModal').modal('hide');
+
+        },
         deleteCategory(category_id){
             var self = this;
 
             var data = {category_id : category_id};
 
-            var result = $.post("/inventory/types/delete", data);
+            var result = $.post("/inventory/types/api/delete", data);
 
             result.done(function (data) {
                 if(data === true){                   
