@@ -1,22 +1,18 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../../Shared/_layout.liquid' %}
 
-{% block title %} Livestock Types {% endblock %}
+{% block title %} Inventory Types {% endblock %}
 
-{% block header_scripts %}
-    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
- {% endblock %}
+{% block header_scripts %} {% endblock %}
+
 
 {% block body %}
-    
 <!-- side nav menu -->
-{# {% include '/Bookkeeping/_sidenav.twig' %} #}
-{{ include('Inventory/_sidenav.twig') }}
+{% include '../_sidenav.liquid' %}
+
 
 <!-- page content -->
 <div class="container-fluid">
-    <div class="pt-4" id="inventoryTypes" v-cloak>      
-         <!-- csrf protection -->
-        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+    <div class="pt-4" id="inventoryTypes" v-cloak>             
 
         <!-- headline -->
         <div class="row mb-2">
@@ -25,23 +21,17 @@
             </div>           
         </div>                    
 
-        <!-- Actual search box -->
-        {# <div class="form-group has-search col-3 float-right">
-            <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" class="form-control"  placeholder="Search" v-model="search_term" v-on:keyup="goSearch()">
-        </div>  #}
-
-         <div class="row">
+        <div class="row">
             <div class="col-3 mt-4">
-                <h5>Categories  <i class="far fa-plus-square btn-sm text-success me-0 pe-0" v-on:click="newCategoryClick()"></i></h5>
+                <h5>Categories  <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newCategoryClick()"></i></h5>
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
                         v-for="(category_item, index) in inventory_cats" v-bind:key="category_item.id" v-bind:class="{ 'list-group-item-dark': category_item.is_active }" >
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1" v-on:click="selectCategory(index)">{{ '{{ category_item.category_name }}' }}</h5> 
                                 <span>                                   
-                                    <i class="fa fa-edit btn-sm text-warning pe-0 me-0" v-on:click="editCategoryClick(index)"></i>          
-                                    <i class="far fa-trash-alt btn-sm text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
+                                    <i class="bi bi-pencil-square text-warning me-2" v-on:click="editCategoryClick(index)"></i>          
+                                    <i class="bi bi-trash3 text-danger text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
                                 </span>                                                                 
                             </div>
                             <p class="mb-1" v-on:click="selectCategory(index)">{{ '{{ category_item.category_description }}' }}</p>                        
@@ -49,18 +39,16 @@
                 </div>
             </div>
             <div class="col-3 mt-4" v-show="inventory_cats.length > 0">
-                <h5>Sub Categories <i class="far fa-plus-square btn-sm text-success me-0 pe-0" v-on:click="newSubCategoryClick()"></i></h5>
+                <h5>Sub Categories <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newSubCategoryClick()"></i></h5>
                 <div class="list-group" v-show="inventory_subcats.length > 0">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="category_item in inventory_subcats" v-bind:key="category_item.id" >
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">{{ '{{ category_item.category_name }}' }}</h6> 
-                                <span>                                    
-                                    <i class="fa fa-edit btn-sm text-warning pe-0 me-0" v-on:click="editSubCategoryClick(category_item)"></i>          
-                                    
-                                    <i class="far fa-trash-alt btn-sm text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
-                                </span>                                                                 
-                            </div>
-                            {# <p class="mb-1"><small>{{ '{{ subcategory_item.category_description }}' }}</small></p>                         #}
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ '{{ category_item.category_name }}' }}</h6> 
+                            <span>                                    
+                                <i class="bi bi-pencil-square text-warning me-2" v-on:click="editSubCategoryClick(category_item)"></i>                                          
+                                <i class="bi bi-trash3 text-danger text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
+                            </span>                                                                 
+                        </div>                            
                     </a>                  
                 </div>
             </div>
@@ -129,11 +117,9 @@
 </div>
 {% endblock %}
 
-{% block custom_scripts %}
+{% block custom_scripts %} 
 
-    <script src="/assets/components/toastr/toastr.min.js"></script>
-
-    <script type="module" src="/assets/js/vue/inventory/types/index.js"></script>
+    <script type="module" src="/js/vue/inventory/types/index.js"></script>
 
      <script type="application/javascript">
         $(function () {

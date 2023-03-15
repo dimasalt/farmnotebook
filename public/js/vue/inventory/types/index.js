@@ -24,14 +24,12 @@ const inventoryTypes = {
             //gets all project items
             var self = this;           
 
-            var data = {};
-            data = JSON.stringify(data);
+            var data = {};           
 
-            var result = $.post("/inventory/types/get/all", data);
+            var result = $.post("/inventory/types/api/get/all", data);
 
             result.done(function (data) {
                 if (data.length > 0) {
-                    data = JSON.parse(data);
 
                     self.inventory_cats = data;                
 
@@ -142,16 +140,11 @@ const inventoryTypes = {
         saveCategory (){
             var self = this;
 
-            var csrf = $('#csrf').val();
-
-            var data = {category_item : self.work_item, csrf : csrf};
-            data = JSON.stringify(data);
+            var data = {category_item : self.work_item};
 
             var result = $.post("/inventory/types/save", data);
 
-            result.done(function (data) {
-
-                data = JSON.parse(data);
+            result.done(function (data) {               
                 if(data === true){                   
                     //Display a success toast, with a title
                     toastr.success("New changes has been successfully added");                
@@ -185,16 +178,11 @@ const inventoryTypes = {
         deleteCategory(category_id){
             var self = this;
 
-            var csrf = $('#csrf').val();
-
-            var data = {category_id : category_id, csrf : csrf};
-            data = JSON.stringify(data);
+            var data = {category_id : category_id};
 
             var result = $.post("/inventory/types/delete", data);
 
             result.done(function (data) {
-
-                data = JSON.parse(data);
                 if(data === true){                   
                     //Display a success toast, with a title
                     toastr.success("Category has been successfully removed");                

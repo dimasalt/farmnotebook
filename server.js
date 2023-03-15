@@ -45,8 +45,13 @@ app.use('/contacts', contactRoutes);
 const medicationRoutes = require('./routes/medication');
 app.use('/medication', medicationRoutes);
 
+//feed rations
 const rationRoutes = require('./routes/ration');
 app.use('/ration', rationRoutes);
+
+//inventory
+const inventoryRoutes = require('./routes/inventory');
+app.use('/inventory', inventoryRoutes);
 
 
 

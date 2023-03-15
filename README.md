@@ -30,3 +30,7 @@
 
 ### Contact Page 
 - Add pagination to the contact page. 
+
+### To run application on dev machine
+
+$ npm run start:dev
