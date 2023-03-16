@@ -1,4 +1,4 @@
-const pool = require('../../services/mysql');
+const pool = require('../../../services/mysql');
 
 /**
 * @desc get feeds index page 

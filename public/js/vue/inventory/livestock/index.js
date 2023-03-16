@@ -51,15 +51,13 @@ const livestock = {
             //prepare data
             var data = {
                 current_page : self.pagination.current_page,
-                records : self.pagination.records
-            };
-            data = JSON.stringify(data); // $.param({ 'id': ticket_id });
+                records : self.pagination.records,
+                is_active: 1 //temporary
+            };           
 
-            var livestockInventory = $.post( "/inventory/livestock/get/all", data);
+            var livestockInventory = $.post( "/inventory/livestock/api/get/all", data);
 
-            livestockInventory.done(function( data ) {
-
-                data = JSON.parse(data);     
+            livestockInventory.done(function( data ) {                
                 self.livestock = data;
 
                 if(self.livestock.length > 1)
@@ -88,15 +86,11 @@ const livestock = {
             var self = this;
 
             var data = {};
-            data = JSON.stringify(data);
-
-            var liveStockInventoryTypes = $.post("/inventory/types/get/all" , data);
+            var liveStockInventoryTypes = $.post("/inventory/types/api/get/all" , data);
 
             liveStockInventoryTypes.done(function (data) {
                             
                 if(data.length > 0){
-
-                    data = JSON.parse(data);     
                     self.livestock_types = data;
                     self.livestock_item.livestock_types = data;
 

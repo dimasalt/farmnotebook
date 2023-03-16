@@ -15,6 +15,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Dumping structure for table farmwork.budget
+DROP TABLE IF EXISTS `budget`;
 CREATE TABLE IF NOT EXISTS `budget` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL DEFAULT 0,
@@ -42,6 +43,7 @@ INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget
 	(83, 78, 'Butcher Fees', -1200.00, 0.00, 0, 0, '2023-03-28 00:00:00');
 
 -- Dumping structure for table farmwork.contact
+DROP TABLE IF EXISTS `contact`;
 CREATE TABLE IF NOT EXISTS `contact` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `name` varchar(100) NOT NULL,
@@ -54,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps contacts for contact book and vendors (for transactions and others)\r\n0 - normal contact\r\n1 - vendor\r\n2 - customer';
 
--- Dumping data for table farmwork.contact: ~52 rows (approximately)
+-- Dumping data for table farmwork.contact: ~49 rows (approximately)
 INSERT INTO `contact` (`id`, `name`, `address`, `phone`, `email`, `note`, `type`, `created_at`) VALUES
 	('08972545-b264-11ed-9b18-d8cb8ac0caec', 'Kathy Pietrasik', '#130 on Highway 570 Sesenika', '705-642-9180', NULL, 'wanted more ground beef', 2, '2023-02-21 22:49:59'),
 	('08fbabe8-e808-11eb-8df3-d8cb8ac0caec', 'Northern Feed & Supplies', '964027 Development Rd, Thornloe, ON P0J 1S0', '705-647-5365', '', 'supplier for bulk feed and other farm items', 1, '2021-07-18 16:37:50'),
@@ -110,19 +112,21 @@ INSERT INTO `contact` (`id`, `name`, `address`, `phone`, `email`, `note`, `type`
 	('ff82a87c-be24-11ed-a0e4-d8cb8ac0caec', 'Esso', '430 ON-11, Matheson, ON P0K 1N0', NULL, NULL, NULL, 1, '2023-03-08 21:49:17');
 
 -- Dumping structure for table farmwork.contact_type
+DROP TABLE IF EXISTS `contact_type`;
 CREATE TABLE IF NOT EXISTS `contact_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(50) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table farmwork.contact_type: ~3 rows (approximately)
+-- Dumping data for table farmwork.contact_type: ~2 rows (approximately)
 INSERT INTO `contact_type` (`id`, `type`) VALUES
 	(1, 'vendor'),
 	(2, 'customer'),
 	(3, 'contact');
 
 -- Dumping structure for table farmwork.event
+DROP TABLE IF EXISTS `event`;
 CREATE TABLE IF NOT EXISTS `event` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `ev_type_id` char(36) NOT NULL,
@@ -141,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `event` (
 -- Dumping data for table farmwork.event: ~0 rows (approximately)
 
 -- Dumping structure for table farmwork.event_type
+DROP TABLE IF EXISTS `event_type`;
 CREATE TABLE IF NOT EXISTS `event_type` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `ev_type_name` varchar(25) NOT NULL,
@@ -160,6 +165,7 @@ INSERT INTO `event_type` (`id`, `ev_type_name`, `ev_type_desc`, `created_at`) VA
 	('b1d57a36-acfb-11eb-a999-d8cb8ac0caec', 'Hoof Trimming', 'Used to report a hoof trimming performed on the animal', '2019-05-09 23:10:51');
 
 -- Dumping structure for table farmwork.event_type_bak
+DROP TABLE IF EXISTS `event_type_bak`;
 CREATE TABLE IF NOT EXISTS `event_type_bak` (
   `ev_type_id` char(36) NOT NULL DEFAULT uuid(),
   `ev_type_name` varchar(20) NOT NULL,
@@ -186,6 +192,7 @@ INSERT INTO `event_type_bak` (`ev_type_id`, `ev_type_name`, `ev_type_value`, `ev
 	('f26cb0aa-2f34-11ea-ac21-d8cb8ac0caec', 'castration', 'Castration/Banding', 'Used to report of castration or banding of livestock', 3, '2020-01-04 15:58:24');
 
 -- Dumping structure for table farmwork.feed
+DROP TABLE IF EXISTS `feed`;
 CREATE TABLE IF NOT EXISTS `feed` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `feed_name` varchar(150) NOT NULL,
@@ -201,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `feed` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Contains feed information such as CP, TDN and prices';
 
--- Dumping data for table farmwork.feed: ~4 rows (approximately)
+-- Dumping data for table farmwork.feed: ~5 rows (approximately)
 INSERT INTO `feed` (`id`, `feed_name`, `feed_desc`, `feed_cp`, `feed_tdn`, `feed_type`, `feed_price`, `feed_price_lb`, `feed_usage`, `is_default`, `feed_date`) VALUES
 	(1, 'Cracked Corn', NULL, 10, 90, 'Grain', 549.00, 2000, 100, 1, '2021-10-26 11:32:41'),
 	(2, 'Hay', NULL, 7, 55, 'Hay', 5.00, 60, 100, 1, '2021-11-08 19:48:22'),
@@ -209,6 +216,7 @@ INSERT INTO `feed` (`id`, `feed_name`, `feed_desc`, `feed_cp`, `feed_tdn`, `feed
 	(16, '40% Beef Supplement', '', 40, 0, 'Mineral', 23.00, 55, 18, 0, '2023-03-14 16:00:36');
 
 -- Dumping structure for table farmwork.feed_requirement
+DROP TABLE IF EXISTS `feed_requirement`;
 CREATE TABLE IF NOT EXISTS `feed_requirement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `weight` int(11) NOT NULL DEFAULT 0,
@@ -220,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `feed_requirement` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps information on feed requirements for animals in different stages';
 
--- Dumping data for table farmwork.feed_requirement: ~38 rows (approximately)
+-- Dumping data for table farmwork.feed_requirement: ~35 rows (approximately)
 INSERT INTO `feed_requirement` (`id`, `weight`, `animal_type`, `adg`, `dm_per_day`, `cp`, `tdn`) VALUES
 	(1, 200, 'steer/heifer', 3.0, 5.4, 22.0, 80),
 	(2, 300, 'steer/heifer', 1.0, 8.3, 11.5, 58),
@@ -262,6 +270,7 @@ INSERT INTO `feed_requirement` (`id`, `weight`, `animal_type`, `adg`, `dm_per_da
 	(38, 960, 'steer/heifer', 4.3, 20.8, 13.0, 90);
 
 -- Dumping structure for table farmwork.livestock
+DROP TABLE IF EXISTS `livestock`;
 CREATE TABLE IF NOT EXISTS `livestock` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `tag` varchar(50) NOT NULL,
@@ -278,6 +287,7 @@ INSERT INTO `livestock` (`id`, `tag`, `livestock_type`, `livestock_subtype`, `is
 	('ccc4a7d5-ad0d-11eb-a999-d8cb8ac0caec', '120333154', 'Cattle', 'steer', 1, '2021-04-09 11:41:25');
 
 -- Dumping structure for table farmwork.livestock_category
+DROP TABLE IF EXISTS `livestock_category`;
 CREATE TABLE IF NOT EXISTS `livestock_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL DEFAULT 0,
@@ -312,6 +322,7 @@ INSERT INTO `livestock_category` (`id`, `parent_id`, `category_name`, `category_
 	(27, 23, 'female puppy', NULL, '2021-11-30 14:41:04');
 
 -- Dumping structure for table farmwork.livestock_group
+DROP TABLE IF EXISTS `livestock_group`;
 CREATE TABLE IF NOT EXISTS `livestock_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(150) NOT NULL,
@@ -320,13 +331,14 @@ CREATE TABLE IF NOT EXISTS `livestock_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='contains groups of animals grouped together for the purpose of feeding or breading';
 
--- Dumping data for table farmwork.livestock_group: ~3 rows (approximately)
+-- Dumping data for table farmwork.livestock_group: ~2 rows (approximately)
 INSERT INTO `livestock_group` (`id`, `group_name`, `group_desc`, `created_at`) VALUES
 	(1, 'July Group First', NULL, '2021-12-14 00:13:33'),
 	(2, 'July Group Second', NULL, '2021-12-14 00:14:10'),
 	(3, 'August Group', NULL, '2021-12-14 00:14:19');
 
 -- Dumping structure for table farmwork.livestock_to_group
+DROP TABLE IF EXISTS `livestock_to_group`;
 CREATE TABLE IF NOT EXISTS `livestock_to_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `livestock_id` char(36) NOT NULL,
@@ -342,6 +354,7 @@ CREATE TABLE IF NOT EXISTS `livestock_to_group` (
 -- Dumping data for table farmwork.livestock_to_group: ~0 rows (approximately)
 
 -- Dumping structure for table farmwork.medication
+DROP TABLE IF EXISTS `medication`;
 CREATE TABLE IF NOT EXISTS `medication` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -354,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `medication` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='list of medication';
 
--- Dumping data for table farmwork.medication: ~5 rows (approximately)
+-- Dumping data for table farmwork.medication: ~6 rows (approximately)
 INSERT INTO `medication` (`id`, `name`, `desc`, `instruction`, `img`, `price`, `on_hand_doses`, `created_at`) VALUES
 	(1, 'Tasvax 8', '<p>For the vaccination of cattle and sheep against diseases caused by Cl. chauvoei (black leg), Cl. haemolyticum (bacillary hemoglobinuria), Cl. novyi Type B (black disease or infectious necrotic hepatitis), Cl. perfringens Type B (lamb dysentery), Type C (hemorrhagic enterotoxemia), type D (pulpy kidney), Cl. septicum (malignant edema) and Cl. tetani (tetanus).</p>', '<p>Cattle: In order that a balanced response to vaccination is obtained, a primary course of two injections of 4 mL each should be given with an interval of 6 weeks between injections. To maintain a constant high level of immunity, booster injections should be administered at intervals of 6 months, or when outbreaks are seasonal, at least 2 weeks before the anticipated outbreak. Calves vaccinated under 3 months of age should be revaccinated at 4-6 months of age. Calves vaccinated at 3 months of age or older should be revaccinated 6 weeks later. Inject subcutaneously with strict aseptic precautions.</p>', '/uploads/medication/tasvax-8.jpg', 0.00, 0, '2019-05-09 23:02:13'),
 	(2, 'Noromectin', '<p>Each mL contains 0.8 mg of ivermectin. Treated animals must not be slaughtered for use in food for at least 14 days after the latest treatment with this drug.</p>', '<p>Dosage and Administration Noromectin should be given as a single dose treatment. Administer orally at a dose of 2.5 mL of Noromectin per 10 kg of bodyweight, with any standard drenching equipment which provides a consistent dose volume. Repeat treatment may be necessary when re-exposure to parasite infection occurs. Noromectin Drench for Sheep Caution Coughing, which usually lasts for only a few minutes, may occur in a small percentage of sheep immediately after treatment; this passing response is of no consequence.</p>', 'https://images-na.ssl-images-amazon.com/images/I/81cX3tCC0tL._AC_SY879_.jpg', 0.00, 0, '2019-05-09 23:04:31'),
@@ -363,6 +376,7 @@ INSERT INTO `medication` (`id`, `name`, `desc`, `instruction`, `img`, `price`, `
 	(6, 'Bovi-Shield Gold 5', 'Bovi-Shield GOLD 5 is for vaccination of healthy cattle as an aid in preventing infectious bovine rhinotracheitis caused by infectious bovine rhinotracheitis (IBR) virus, bovine viral diarrhea caused by bovine virus diarrhea (BVD) virus Types 1 and 2, and disease caused by parainfluenza-3 (PI-3) virus and bovine respiratory syncytial (BRS) virus.', 'In accordance with Beef Quality Assurance guidelines, this product should be adminsitered 2 mL subcutaneously in the neck region.', '/uploads/medication/Bovi_Shield_Gold_5.jpg', 0.00, 0, '2020-03-08 21:44:04');
 
 -- Dumping structure for table farmwork.page_settings
+DROP TABLE IF EXISTS `page_settings`;
 CREATE TABLE IF NOT EXISTS `page_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `page_name` varchar(50) NOT NULL,
@@ -371,13 +385,14 @@ CREATE TABLE IF NOT EXISTS `page_settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains default page settings thats are being pulled during page load';
 
--- Dumping data for table farmwork.page_settings: ~3 rows (approximately)
+-- Dumping data for table farmwork.page_settings: ~2 rows (approximately)
 INSERT INTO `page_settings` (`id`, `page_name`, `setting_name`, `setting_value`) VALUES
 	(1, 'Accounting Records', 'start_date', '2021-01-01'),
 	(2, 'Accounting Records', 'end_date', '2021-12-31'),
 	(3, 'Vehicle Log Book', 'booklog_date', '2021-01-01');
 
 -- Dumping structure for table farmwork.transaction
+DROP TABLE IF EXISTS `transaction`;
 CREATE TABLE IF NOT EXISTS `transaction` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `trans_desc` varchar(250) DEFAULT NULL,
@@ -391,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='record of all transactions';
 
--- Dumping data for table farmwork.transaction: ~231 rows (approximately)
+-- Dumping data for table farmwork.transaction: ~226 rows (approximately)
 INSERT INTO `transaction` (`id`, `trans_desc`, `vendor_name`, `vendor_address`, `trans_currency`, `trans_image`, `trans_date`, `created_at`, `updated_at`) VALUES
 	('0058697e-be24-11ed-a0e4-d8cb8ac0caec', '', 'Circle K (Shell)', '565 Algonquin Blvd E, Timmins, ON P4N 7N5', 'C$', NULL, '2022-04-24 00:00:00', '2023-03-08 21:42:09', '2023-03-08 21:42:09'),
 	('01512e6a-bb63-11ed-a725-d8cb8ac0caec', '', 'Little Bit Western', '372 Algonquin Boulevard W, Timmins, On, P4N 2S2, Canada', 'C$', NULL, '2022-05-14 00:00:00', '2023-03-05 09:35:41', '2023-03-05 09:35:41'),
@@ -626,6 +641,7 @@ INSERT INTO `transaction` (`id`, `trans_desc`, `vendor_name`, `vendor_address`, 
 	('fee9e57f-c085-11ed-a0c9-d8cb8ac0caec', '', 'Circle K (Shell)', '565 Algonquin Blvd E, Timmins, ON P4N 7N5', 'C$', NULL, '2022-06-29 00:00:00', '2023-03-11 22:28:33', '2023-03-11 22:28:33');
 
 -- Dumping structure for table farmwork.transaction_category
+DROP TABLE IF EXISTS `transaction_category`;
 CREATE TABLE IF NOT EXISTS `transaction_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) NOT NULL DEFAULT 0,
@@ -635,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `transaction_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
 
--- Dumping data for table farmwork.transaction_category: ~40 rows (approximately)
+-- Dumping data for table farmwork.transaction_category: ~38 rows (approximately)
 INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `category_description`, `created_at`) VALUES
 	(1, 0, 'Feed', 'Feed, supplements, straw, and bedding', '2019-04-29 21:32:30'),
 	(5, 0, 'Livestock', 'Livestock types (cattle, chicken, horse, sheep, goats etc...)', '2019-05-03 09:30:51'),
@@ -679,6 +695,7 @@ INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `categor
 	(58, 45, 'Repairs and Maintenance', '', '2023-03-08 19:42:05');
 
 -- Dumping structure for table farmwork.transaction_item
+DROP TABLE IF EXISTS `transaction_item`;
 CREATE TABLE IF NOT EXISTS `transaction_item` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `transaction_id` char(36) NOT NULL,
@@ -697,7 +714,7 @@ CREATE TABLE IF NOT EXISTS `transaction_item` (
   CONSTRAINT `FK_transaction_item_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='A table that holds all transaction items.';
 
--- Dumping data for table farmwork.transaction_item: ~349 rows (approximately)
+-- Dumping data for table farmwork.transaction_item: ~346 rows (approximately)
 INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`, `item_category`, `item_subcategory`, `amount`, `hst_tax`, `gst_tax`, `pst_tax`, `is_expence`, `created_at`) VALUES
 	('00708ace-bb64-11ed-a725-d8cb8ac0caec', 'ebd6f0a8-bb63-11ed-a725-d8cb8ac0caec', '1 tote mixed feed', '', 'Feed', 'Feed Mix', -674.24, 0.00, 0.00, 0.00, 1, '2023-03-05 09:42:49'),
 	('00a538b4-c083-11ed-a0c9-d8cb8ac0caec', 'e1e5b547-c082-11ed-a0c9-d8cb8ac0caec', 'Gas', '', 'Vehicle', 'Gasoline and oil', -23.70, 0.00, 0.00, 0.00, 1, '2023-03-11 22:07:08'),
@@ -1050,6 +1067,7 @@ INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`
 	('ffcf0446-a7ef-11ec-ac57-d8cb8ac0caec', 'e29293e3-a7ef-11ec-ac57-d8cb8ac0caec', 'Beef Supplement - 4 bgs', '', 'Feed', 'Mineral Mix', -78.40, 0.00, 0.00, 0.00, 1, '2022-03-19 21:49:31');
 
 -- Dumping structure for table farmwork.user
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `username` varchar(15) NOT NULL,
@@ -1060,12 +1078,13 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='cattle management members.';
 
--- Dumping data for table farmwork.user: ~2 rows (approximately)
+-- Dumping data for table farmwork.user: ~1 rows (approximately)
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `is_active`, `created_at`) VALUES
 	('5e0d0d6c10096', 'farmer', '$2y$10$YxQsfaEVGMokSlb9QuKkUOkYxyLEOpM9XiuMFhrJifnTzjv9lnmze', 'dimasalt@gmail.com', 1, '2020-01-01 16:30:34'),
 	('861020da-512d-11ec-8ab6-d8cb8ac0caec', 'dmitri', '2345', 'dimasalt@yahoo.com', 1, '2021-11-29 10:59:21');
 
 -- Dumping structure for table farmwork.user_detail
+DROP TABLE IF EXISTS `user_detail`;
 CREATE TABLE IF NOT EXISTS `user_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` char(36) NOT NULL,
@@ -1080,6 +1099,7 @@ CREATE TABLE IF NOT EXISTS `user_detail` (
 -- Dumping data for table farmwork.user_detail: ~0 rows (approximately)
 
 -- Dumping structure for table farmwork.user_logins
+DROP TABLE IF EXISTS `user_logins`;
 CREATE TABLE IF NOT EXISTS `user_logins` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` char(36) NOT NULL,
@@ -1096,6 +1116,7 @@ CREATE TABLE IF NOT EXISTS `user_logins` (
 -- Dumping data for table farmwork.user_logins: ~0 rows (approximately)
 
 -- Dumping structure for table farmwork.user_role
+DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE IF NOT EXISTS `user_role` (
   `id` char(36) NOT NULL DEFAULT uuid(),
   `role` varchar(10) NOT NULL,
@@ -1110,6 +1131,7 @@ INSERT INTO `user_role` (`id`, `role`, `role_desc`, `created_at`) VALUES
 	('98534618084409346', 'user', NULL, '2020-01-04 15:24:53');
 
 -- Dumping structure for table farmwork.user_to_role
+DROP TABLE IF EXISTS `user_to_role`;
 CREATE TABLE IF NOT EXISTS `user_to_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` char(36) NOT NULL,
@@ -1125,6 +1147,7 @@ CREATE TABLE IF NOT EXISTS `user_to_role` (
 -- Dumping data for table farmwork.user_to_role: ~0 rows (approximately)
 
 -- Dumping structure for table farmwork.vehicle_log_book
+DROP TABLE IF EXISTS `vehicle_log_book`;
 CREATE TABLE IF NOT EXISTS `vehicle_log_book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `year_start_odometer` int(11) NOT NULL,
@@ -1134,11 +1157,12 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
 
--- Dumping data for table farmwork.vehicle_log_book: ~1 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book: ~0 rows (approximately)
 INSERT INTO `vehicle_log_book` (`id`, `year_start_odometer`, `year_end_odometer`, `vehicle_desc`, `created_at`) VALUES
 	(19, 215872, 247452, '2013 Chevrolet Silverado 1500', '2022-01-01 00:00:00');
 
 -- Dumping structure for table farmwork.vehicle_log_book_item
+DROP TABLE IF EXISTS `vehicle_log_book_item`;
 CREATE TABLE IF NOT EXISTS `vehicle_log_book_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `vehicle_log_book_id` int(11) NOT NULL,
@@ -1188,6 +1212,7 @@ INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`,
 	(61, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:26:30', '2022-09-09 00:00:00');
 
 -- Dumping structure for procedure farmwork.budgetCreate
+DROP PROCEDURE IF EXISTS `budgetCreate`;
 DELIMITER //
 CREATE PROCEDURE `budgetCreate`(
 	IN `parent_id` INT,
@@ -1230,6 +1255,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetDelete
+DROP PROCEDURE IF EXISTS `budgetDelete`;
 DELIMITER //
 CREATE PROCEDURE `budgetDelete`(
 	IN `id` INT
@@ -1253,6 +1279,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetGetAll
+DROP PROCEDURE IF EXISTS `budgetGetAll`;
 DELIMITER //
 CREATE PROCEDURE `budgetGetAll`(
 	IN `id` INT
@@ -1279,6 +1306,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetGetMainAll
+DROP PROCEDURE IF EXISTS `budgetGetMainAll`;
 DELIMITER //
 CREATE PROCEDURE `budgetGetMainAll`()
     COMMENT 'Gets all main items for the drop down on a budget page'
@@ -1297,6 +1325,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetUpdate
+DROP PROCEDURE IF EXISTS `budgetUpdate`;
 DELIMITER //
 CREATE PROCEDURE `budgetUpdate`(
 	IN `id` INT,
@@ -1321,6 +1350,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetUpdateDefault
+DROP PROCEDURE IF EXISTS `budgetUpdateDefault`;
 DELIMITER //
 CREATE PROCEDURE `budgetUpdateDefault`(
 	IN `id` INT,
@@ -1343,6 +1373,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.budgetUpdateStatus
+DROP PROCEDURE IF EXISTS `budgetUpdateStatus`;
 DELIMITER //
 CREATE PROCEDURE `budgetUpdateStatus`(
 	IN `id` INT,
@@ -1361,6 +1392,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.contactAdd
+DROP PROCEDURE IF EXISTS `contactAdd`;
 DELIMITER //
 CREATE PROCEDURE `contactAdd`(
 	IN `contact_name` VARCHAR(100),
@@ -1381,6 +1413,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.contactDeleteOne
+DROP PROCEDURE IF EXISTS `contactDeleteOne`;
 DELIMITER //
 CREATE PROCEDURE `contactDeleteOne`(
 	IN `contact_id` CHAR(36)
@@ -1396,6 +1429,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.contactsGetAll
+DROP PROCEDURE IF EXISTS `contactsGetAll`;
 DELIMITER //
 CREATE PROCEDURE `contactsGetAll`(
 	IN `search_term` VARCHAR(50),
@@ -1479,6 +1513,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.contactUpdate
+DROP PROCEDURE IF EXISTS `contactUpdate`;
 DELIMITER //
 CREATE PROCEDURE `contactUpdate`(
 	IN `id` CHAR(36),
@@ -1504,6 +1539,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.contactVendorsGetAll
+DROP PROCEDURE IF EXISTS `contactVendorsGetAll`;
 DELIMITER //
 CREATE PROCEDURE `contactVendorsGetAll`()
 select contact.id, 
@@ -1519,6 +1555,7 @@ select contact.id,
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedCreate
+DROP PROCEDURE IF EXISTS `feedCreate`;
 DELIMITER //
 CREATE PROCEDURE `feedCreate`(
 	IN `feed_name` VARCHAR(150),
@@ -1560,6 +1597,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedDeleteOne
+DROP PROCEDURE IF EXISTS `feedDeleteOne`;
 DELIMITER //
 CREATE PROCEDURE `feedDeleteOne`(
 	IN `id` INT
@@ -1574,6 +1612,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedGetAll
+DROP PROCEDURE IF EXISTS `feedGetAll`;
 DELIMITER //
 CREATE PROCEDURE `feedGetAll`()
     COMMENT 'gets all feeds'
@@ -1598,6 +1637,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedGetRequirements
+DROP PROCEDURE IF EXISTS `feedGetRequirements`;
 DELIMITER //
 CREATE PROCEDURE `feedGetRequirements`(
 	IN `adg` DECIMAL(19,1),
@@ -1648,6 +1688,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedGetRequirementsAdg
+DROP PROCEDURE IF EXISTS `feedGetRequirementsAdg`;
 DELIMITER //
 CREATE PROCEDURE `feedGetRequirementsAdg`()
 BEGIN
@@ -1663,6 +1704,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedGetRequirementsWeight
+DROP PROCEDURE IF EXISTS `feedGetRequirementsWeight`;
 DELIMITER //
 CREATE PROCEDURE `feedGetRequirementsWeight`()
 BEGIN
@@ -1678,6 +1720,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedSetDefault
+DROP PROCEDURE IF EXISTS `feedSetDefault`;
 DELIMITER //
 CREATE PROCEDURE `feedSetDefault`(
 	IN `id` INT,
@@ -1697,6 +1740,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.feedUpdate
+DROP PROCEDURE IF EXISTS `feedUpdate`;
 DELIMITER //
 CREATE PROCEDURE `feedUpdate`(
 	IN `id` INT,
@@ -1728,6 +1772,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockCatDelete
+DROP PROCEDURE IF EXISTS `livestockCatDelete`;
 DELIMITER //
 CREATE PROCEDURE `livestockCatDelete`(
 	IN `id` INT
@@ -1747,6 +1792,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockCatSave
+DROP PROCEDURE IF EXISTS `livestockCatSave`;
 DELIMITER //
 CREATE PROCEDURE `livestockCatSave`(
 	IN `id` INT,
@@ -1779,6 +1825,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockGetAll
+DROP PROCEDURE IF EXISTS `livestockGetAll`;
 DELIMITER //
 CREATE PROCEDURE `livestockGetAll`(
 	IN `current_page` INT,
@@ -1816,6 +1863,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockGetSubTypeAll
+DROP PROCEDURE IF EXISTS `livestockGetSubTypeAll`;
 DELIMITER //
 CREATE PROCEDURE `livestockGetSubTypeAll`(
 	IN `id` INT
@@ -1837,6 +1885,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockGetTypeAll
+DROP PROCEDURE IF EXISTS `livestockGetTypeAll`;
 DELIMITER //
 CREATE PROCEDURE `livestockGetTypeAll`()
     COMMENT 'get list of main livestock types'
@@ -1856,6 +1905,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.livestockGroupGetAll
+DROP PROCEDURE IF EXISTS `livestockGroupGetAll`;
 DELIMITER //
 CREATE PROCEDURE `livestockGroupGetAll`()
     COMMENT 'Gets livestock groups and their description'
@@ -1873,6 +1923,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.medicationAdd
+DROP PROCEDURE IF EXISTS `medicationAdd`;
 DELIMITER //
 CREATE PROCEDURE `medicationAdd`(
 	IN `med_name` VARCHAR(50),
@@ -1909,6 +1960,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.medicationDeleteOne
+DROP PROCEDURE IF EXISTS `medicationDeleteOne`;
 DELIMITER //
 CREATE PROCEDURE `medicationDeleteOne`(
 	IN `id` INT
@@ -1922,6 +1974,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.medicationGetAll
+DROP PROCEDURE IF EXISTS `medicationGetAll`;
 DELIMITER //
 CREATE PROCEDURE `medicationGetAll`(
 	IN `search_term` VARCHAR(50)
@@ -1952,6 +2005,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.medicationGetOne
+DROP PROCEDURE IF EXISTS `medicationGetOne`;
 DELIMITER //
 CREATE PROCEDURE `medicationGetOne`(
 	IN `id` INT
@@ -1972,6 +2026,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.medicationUpdate
+DROP PROCEDURE IF EXISTS `medicationUpdate`;
 DELIMITER //
 CREATE PROCEDURE `medicationUpdate`(
 	IN `id` INT,
@@ -1996,6 +2051,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.pageSettingGet
+DROP PROCEDURE IF EXISTS `pageSettingGet`;
 DELIMITER //
 CREATE PROCEDURE `pageSettingGet`(
 	IN `page_name` VARCHAR(50)
@@ -2016,6 +2072,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionCatDelete
+DROP PROCEDURE IF EXISTS `transactionCatDelete`;
 DELIMITER //
 CREATE PROCEDURE `transactionCatDelete`(
 	IN `id` INT
@@ -2035,6 +2092,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionCatGetAll
+DROP PROCEDURE IF EXISTS `transactionCatGetAll`;
 DELIMITER //
 CREATE PROCEDURE `transactionCatGetAll`()
 BEGIN
@@ -2053,6 +2111,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionCatGetAllSubs
+DROP PROCEDURE IF EXISTS `transactionCatGetAllSubs`;
 DELIMITER //
 CREATE PROCEDURE `transactionCatGetAllSubs`(
 	IN `parent_id` INT
@@ -2084,6 +2143,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionCatSave
+DROP PROCEDURE IF EXISTS `transactionCatSave`;
 DELIMITER //
 CREATE PROCEDURE `transactionCatSave`(
 	IN `id` INT,
@@ -2116,6 +2176,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionCreate
+DROP PROCEDURE IF EXISTS `transactionCreate`;
 DELIMITER //
 CREATE PROCEDURE `transactionCreate`(
 	IN `vendor_name` VARCHAR(50),
@@ -2148,6 +2209,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionDelete
+DROP PROCEDURE IF EXISTS `transactionDelete`;
 DELIMITER //
 CREATE PROCEDURE `transactionDelete`(
 	IN `id` CHAR(36)
@@ -2162,6 +2224,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionGetTotals
+DROP PROCEDURE IF EXISTS `transactionGetTotals`;
 DELIMITER //
 CREATE PROCEDURE `transactionGetTotals`(
 	IN `search_term` VARCHAR(50),
@@ -2268,6 +2331,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionItemCreate
+DROP PROCEDURE IF EXISTS `transactionItemCreate`;
 DELIMITER //
 CREATE PROCEDURE `transactionItemCreate`(
 	IN `transaction_id` CHAR(36),
@@ -2316,6 +2380,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionItemDelete
+DROP PROCEDURE IF EXISTS `transactionItemDelete`;
 DELIMITER //
 CREATE PROCEDURE `transactionItemDelete`(
 	IN `id` CHAR(36)
@@ -2329,6 +2394,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionItemsGet
+DROP PROCEDURE IF EXISTS `transactionItemsGet`;
 DELIMITER //
 CREATE PROCEDURE `transactionItemsGet`(
 	IN `transaction_id` CHAR(36),
@@ -2376,6 +2442,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionsGetAll
+DROP PROCEDURE IF EXISTS `transactionsGetAll`;
 DELIMITER //
 CREATE PROCEDURE `transactionsGetAll`(
 	IN `search_term` VARCHAR(50),
@@ -2492,6 +2559,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionsGetAll_2
+DROP PROCEDURE IF EXISTS `transactionsGetAll_2`;
 DELIMITER //
 CREATE PROCEDURE `transactionsGetAll_2`(
 	IN `search_term` VARCHAR(50),
@@ -2611,6 +2679,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionUpdate
+DROP PROCEDURE IF EXISTS `transactionUpdate`;
 DELIMITER //
 CREATE PROCEDURE `transactionUpdate`(
 	IN `id` CHAR(36),
@@ -2636,6 +2705,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.transactionUpdateImage
+DROP PROCEDURE IF EXISTS `transactionUpdateImage`;
 DELIMITER //
 CREATE PROCEDURE `transactionUpdateImage`(
 	IN `id` CHAR(36),
@@ -2660,6 +2730,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.userCreate
+DROP PROCEDURE IF EXISTS `userCreate`;
 DELIMITER //
 CREATE PROCEDURE `userCreate`(
 	IN `user_id` CHAR(16),
@@ -2676,6 +2747,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleAddOrEditOdometer
+DROP PROCEDURE IF EXISTS `vehicleAddOrEditOdometer`;
 DELIMITER //
 CREATE PROCEDURE `vehicleAddOrEditOdometer`(
 	IN `id` INT,
@@ -2718,6 +2790,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleAddTravelRecord
+DROP PROCEDURE IF EXISTS `vehicleAddTravelRecord`;
 DELIMITER //
 CREATE PROCEDURE `vehicleAddTravelRecord`(
 	IN `vehicle_log_book_id` INT,
@@ -2753,6 +2826,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleDelOdometer
+DROP PROCEDURE IF EXISTS `vehicleDelOdometer`;
 DELIMITER //
 CREATE PROCEDURE `vehicleDelOdometer`(
 	IN `id` INT
@@ -2766,6 +2840,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleDelTravelRecord
+DROP PROCEDURE IF EXISTS `vehicleDelTravelRecord`;
 DELIMITER //
 CREATE PROCEDURE `vehicleDelTravelRecord`(
 	IN `id` INT
@@ -2779,6 +2854,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleGetOdometer
+DROP PROCEDURE IF EXISTS `vehicleGetOdometer`;
 DELIMITER //
 CREATE PROCEDURE `vehicleGetOdometer`(
 	IN `select_year` VARCHAR(50)
@@ -2799,6 +2875,7 @@ END//
 DELIMITER ;
 
 -- Dumping structure for procedure farmwork.vehicleGetTravelRecords
+DROP PROCEDURE IF EXISTS `vehicleGetTravelRecords`;
 DELIMITER //
 CREATE PROCEDURE `vehicleGetTravelRecords`(
 	IN `year_id` INT

@@ -19,12 +19,22 @@
             <div class="col-12 border-bottom">
                 <h1 class="text-dark mb-4">Livestock Types                  
             </div>           
-        </div>                    
+        </div>       
+        
+        <!-- information popup -->
+        <div class="row">           
+            <div class="col-12 mt-1 mb-4">
+                <div class="alert alert-dark shadow-sm">                                
+                    <i class="bi bi-info-circle-fill fs-3 me-2 align-middle text-success"></i>
+                    Livestock types and categories.
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-3 mt-4">
                 <h5>Categories  <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newCategoryClick()"></i></h5>
-                <div class="list-group">
+                <div class="list-group shadow-sm">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
                         v-for="(category_item, index) in inventory_cats" v-bind:key="category_item.id" v-bind:class="{ 'list-group-item-dark': category_item.is_active }" >
                             <div class="d-flex w-100 justify-content-between">
@@ -40,13 +50,13 @@
             </div>
             <div class="col-3 mt-4" v-show="inventory_cats.length > 0">
                 <h5>Sub Categories <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newSubCategoryClick()"></i></h5>
-                <div class="list-group" v-show="inventory_subcats.length > 0">
+                <div class="list-group shadow-sm" v-show="inventory_subcats.length > 0">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="category_item in inventory_subcats" v-bind:key="category_item.id" >
                         <div class="d-flex w-100 justify-content-between">
                             <h6 class="mb-1">{{ '{{ category_item.category_name }}' }}</h6> 
                             <span>                                    
                                 <i class="bi bi-pencil-square text-warning me-2" v-on:click="editSubCategoryClick(category_item)"></i>                                          
-                                <i class="bi bi-trash3 text-danger text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
+                                <i class="bi bi-trash3 text-danger ps-1" v-on:click="deleteCategoryModal(category_item)"></i>         
                             </span>                                                                 
                         </div>                            
                     </a>                  

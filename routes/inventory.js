@@ -1,21 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-const typesController = require('../controllers/inventory/typesController');
+//livestock type controller
+const typesController = require('../controllers/inventory/types/typesController');
+
+//livestock
+const livestockController = require('../controllers/inventory/livestock/livestockController');
 
 
 const hasAccess = require('../midleware/user');
 router.use('/', hasAccess.hasAccess);
 
-//actual routes
+//types routes
 router.get("/types", typesController.getIndex);
 router.post("/types/api/get/all", typesController.getTypes);
 router.post("/types/api/add", typesController.saveTypes);
 router.post("/types/api/delete", typesController.deleteTypes);
-// router.post("/api/get/vendors", contactController.getVendorList);
-// router.post("/api/add", contactController.contactAdd);
-// router.post("/api/update", contactController.contactUpdate);
-// router.post("/api/delete", contactController.deleteContact);
+
+
+
+//livestock routes
+router.get("/livestock", livestockController.getIndex);
+router.post("/livestock/api/get/all", livestockController.getLivestockInventory);
 
 
 
