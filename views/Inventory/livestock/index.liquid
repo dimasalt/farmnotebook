@@ -12,9 +12,7 @@
 
 <!-- page content -->
 <div class="container-fluid" id="livestock" v-cloak>
-    <div class="pt-4" >      
-         <!-- csrf protection -->
-        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
+    <div class="pt-4" >               
 
         <div class="row mb-2">
             <div class="col-8 border-bottom">
@@ -37,9 +35,8 @@
     </div>    
 
     <!-- list of livestock -->
-    <div class="row">
-       
-            <!-- livestock stats -->
+    <div class="row">       
+        <!-- livestock stats -->
         <div class="col-3">
             <ul class="list-group shadow-sm">
                 <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light"><strong>Total Active</strong> </li>                       
@@ -70,7 +67,7 @@
                 Livestock
                     <a href="#" v-on:click="addNewShow()">
                     <i class="bi bi-plus-square text-success ms-2 align-middle"
-                        data-toggle="tooltip" data-placement="top" title="Add project"></i>
+                        data-toggle="tooltip" data-placement="top" title="Add livestock inventory"></i>
                 </a>
             </h4>        
         </div>

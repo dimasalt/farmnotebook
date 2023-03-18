@@ -19,7 +19,7 @@ const budget = {
     created() {
         var self = this;
       
-        self.getDropDownSelections();
+        self.getBudgetsList();
     },
     methods: {
         getBudget() {
@@ -29,15 +29,11 @@ const budget = {
             //clear all variables
             self.resetVariables();
 
-            var data = {id : self.budget_selected};
-            data = JSON.stringify(data);
-
-            var result = $.post("/bookkeeping/budget/get/all", data);
+            var data = {id : self.budget_selected};            
+            var result = $.post("/accounting/budget/api/get/single", data);
 
             result.done(function (data) {
                 if (data.length > 0) {                  
-
-                    data = JSON.parse(data);
 
                     //Create USD currency formatter.
                     var formatter = new Intl.NumberFormat('en-US', {
@@ -87,12 +83,13 @@ const budget = {
 
                 //assign information for the chart
                 self.chart_data = data;
-                self.chartJSLine();                        
+                //self.chartJSLine();                        
+                self.chartJSLine();
             });
 
             result.always(function () { });
         },
-        getDropDownSelections() {
+        getBudgetsList() {
             //gets all project items
             var self = this;     
 
@@ -100,14 +97,10 @@ const budget = {
             self.budget_drpdown = [];          
   
             var data = {};
-            data = JSON.stringify(data);
-  
-            var result = $.post("/bookkeeping/budget/get/getdropdownselections", data);
+            var result = $.post("/accounting/budget/api/get/all", data);
   
             result.done(function (data) {
-                if (data.length > 0) {                  
-  
-                    data = JSON.parse(data);                                         
+                if (data.length > 0) {                                                                  
   
                     let is_default = false;
                     for (var i = 0; i < data.length; i++) {  
@@ -152,17 +145,11 @@ const budget = {
             var data = self.budget_item;                        
             
             data.is_default = is_default;
-            data.csrf = $('#csrf').val();  
+            var result = $.post("/accounting/budget/api/add/new", data);
 
-            data = JSON.stringify(data);
-
-            var result = $.post("/bookkeeping/budget/add", data);
-
-            result.done(function (data) {
-                data = JSON.parse(data);             
-
+            result.done(function (data) {            
                 //if element has been added
-                if (data.id > 0) {                           
+                if (data == true) {                           
 
                     //get all the budget items from database
                     self.getBudget();
@@ -170,7 +157,7 @@ const budget = {
                     //Display a success toast, with a title
                     toastr.success("You have successfully added new budget item");                
                 }
-                else if(data == 0){ //otherwise display error
+                else { //otherwise display error
                     // Display an error toast, with a title
                     toastr.error("Ops! There appears to be an error and budget item coudln't be added");
                 }            
@@ -195,24 +182,17 @@ const budget = {
             //hide modal
             $('#deleteModal').modal('hide');
 
-            var data = { 
-                id: self.budget_item.id,
-                csrf : $('#csrf').val()
-            };
-            data = JSON.stringify(data);
+            var data = { id: self.budget_item.id };
+            var result = $.post("/accounting/budget/api/delete", data);
 
-            var result = $.post("/bookkeeping/budget/delete", data);
-
-            result.done(function (data) {
-                data = JSON.parse(data);             
-
+            result.done(function (data) {  
                 if (data == true) {
                  
                     //if main item reload all
                     if(self.budget_item.parent_id == 0){
 
                         //reload dropdown list and budgets
-                        self.getDropDownSelections();
+                        self.getBudgetsList();
                     }//otherwise reload just items
                     else self.getBudget();
 
@@ -244,21 +224,15 @@ const budget = {
             //remove one project item
             var self = this;   
             
-            var data = self.budget_item;   
-            data.csrf = $('#csrf').val();
-            
-
-            data = JSON.stringify(data);
+            var data = self.budget_item;
            
             //close any open edit forms
             for(var i = 0; i < self.budgets.length; i++)
                 self.budgets[i].is_edit = false;           
 
-            var result = $.post("/bookkeeping/budget/update", data);
+            var result = $.post("/accounting/budget/api/update", data);
 
-            result.done(function (data) {
-                data = JSON.parse(data);             
-
+            result.done(function (data) {             
                 if (data == true) {                   
                     //reset abd load budgets again                    
                     self.getBudget();
@@ -284,18 +258,13 @@ const budget = {
             //set data variable
             var data;
 
-            data = {
-                id : id,
-                csrf : $('#csrf').val()
-            };
+            data = { id : id };
 
             if(self.budgets[index].checked == true)
                 data.is_done = 1;
-            else data.is_done = 0;                                      
+            else data.is_done = 0;                                                   
 
-            data = JSON.stringify(data);                    
-
-            var result = $.post("/bookkeeping/budget/update/status", data);
+            var result = $.post("/accounting/budget/api/update/status", data);
 
             result.done(function (data) {
                 data = JSON.parse(data);             
@@ -315,9 +284,8 @@ const budget = {
             });
 
             result.always(function () { });
-        },                
+        },         
         chartJSLine (){               
-            
             var self = this;                          
                 
             /**
@@ -352,7 +320,7 @@ const budget = {
                 }
 
             }
-
+           
             var timeFormat = 'YYYY/MM/DD';
             
             var config = {

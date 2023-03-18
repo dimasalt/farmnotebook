@@ -53,6 +53,10 @@ app.use('/ration', rationRoutes);
 const inventoryRoutes = require('./routes/inventory');
 app.use('/inventory', inventoryRoutes);
 
+//accounting
+const accountingRoutes = require('./routes/accounting');
+app.use('/accounting', accountingRoutes);
+
 
 
 

@@ -1,28 +1,23 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../../Shared/_layout.liquid' %}
 
-{% block title %} Budget Planner {% endblock %}
+{% block title %} Budget {% endblock %}
 
-{% block header_scripts %}
-    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
- {% endblock %}
+{% block header_scripts %} {% endblock %}
 
-
-{% block body %}       
+{% block body %}
 <!-- side nav menu -->
-{# {% include '/Bookkeeping/_sidenav.twig' %} #}
-{{ include('Accounting/_sidenav.twig') }}
+{% include '../_sidenav.liquid' %}
 
 <!-- page content -->
 <div class="container-fluid" id="budget" v-cloak>
-    <div class=" pt-4 h-100" >                
-        <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">       
+    <div class=" pt-4 h-100" >                       
 
         <!-- planning start point -->
         <div class="row">
             <div class="col-10 border-bottom">
                    <h2 class="text-dark">Budget Planner
                     <a href="#" v-if='Object.keys(budget_start_item).length > 0' v-on:click="budgetDeleteModalShow(budget_start_item)">
-                        <i class="bi bi-trash3 text-danger ms-1 me-2 fs-4"
+                        <i class="bi bi-trash3 text-danger ms-2 me-2 fs-4"
                             data-toggle="tooltip" data-placement="top" title="remove starting finance point"></i>
                     </a>                       
                 </h2>                                     
@@ -38,7 +33,7 @@
             <!-- //end of budget dropdown -->   
         </div>
         <div class="row" >
-            <div class="col-12 mt-2" v-if='Object.keys(budget_start_item).length > 0'>
+            <div class="col-12 mt-3" v-if='Object.keys(budget_start_item).length > 0'>
                 <table class="table bg-secondary-light border-secondary rounded-1 shadow-sm">              
                     <tbody>
                         <tr v-bind:class='budget_start_item.class' >
@@ -129,7 +124,7 @@
                             <td>
                                 {{ '{{item.budget_name}}' }}
                                 <a href="#" v-on:click.stop="budgetDeleteModalShow(item)">
-                                    <i class="bi bi-trash3 text-dark align-middle me-1 ps-2 pe-0"
+                                    <i class="bi bi-trash3 text-danger align-middle me-1 ps-2 pe-0"
                                         data-toggle="tooltip" data-placement="top" title="remove expence point"></i>
                                 </a>
                                  <a href="#" v-on:click="budgetUpdateFormShow(index)">
@@ -166,8 +161,11 @@
             </div>
             
             <!-- Charts -->       
-            <div class="col-xl-4 col-lg-12" >         
-                <div class="col" id="chart_wrapper" v-show="chart_data.length > 0"></div>     
+            <div class="col-xl-4 col-lg-12" >        
+                {% comment %} v-if="chart_data.length > 0"  {% endcomment %}
+                <div class="col" id="chart_wrapper" >
+                    {% comment %} <div id="canvas_line" class="shadow-sm mt-2"  style="background-color:white; width: 100%; min-height: 400px"></div> {% endcomment %}
+                </div>                    
             
 
             <!-- final result -->
@@ -202,7 +200,6 @@
 
             </div>
         </div>    
-       
     </div>     
           
         
@@ -238,11 +235,11 @@
 {% block custom_scripts %}
  
     <!-- chart -->
-    <script src='/assets/components/chartjs/chart.min.js'></script>   
-    
-    <script src="/assets/js/vue/accounting/budget/index.js"></script>
+    <script src='/components/chartjs/chart.js'></script>   
 
-    <script src="/assets/components/toastr/toastr.min.js"></script>   
+    <script src="/libraries/echart 5.4.1/echarts.min.js"></script>
+    
+    <script src="/js/vue/accounting/budget/index.js"></script> 
 
     <script type="application/javascript">       
 

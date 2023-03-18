@@ -203,7 +203,6 @@ const livestock = {
             //current date
             const today = new Date();
 
-
             self.start_date = new Date().getFullYear()  + '-01-01'; //format yyyy + '-' + mm + '-' + dd;
             self.end_date =  new Date().getFullYear()  + '-12-31'; //format yyyy + '-' + mm + '-' + dd; 
 

@@ -1,16 +1,12 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../Shared/_layout.liquid' %}
 
 {% block title %} Transaction Types {% endblock %}
 
-{% block header_scripts %}
-    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
- {% endblock %}
+{% block header_scripts %} {% endblock %}
 
 {% block body %}
-    
 <!-- side nav menu -->
-{# {% include '/Bookkeeping/_sidenav.twig' %} #}
-{{ include('Accounting/_sidenav.twig') }}
+{% include './_sidenav.liquid' %}
 
 <!-- page content -->
 <div class="container-fluid">
@@ -127,9 +123,7 @@
 
 {% block custom_scripts %}
 
-    <script src="/assets/components/toastr/toastr.min.js"></script>
-
-    <script type="module" src="/assets/js/vue/accounting/types/index.js"></script>
+    <script type="module" src="/js/vue/accounting/types/index.js"></script>
 
      <script type="application/javascript">
         $(function () {

@@ -33,7 +33,8 @@
 
         <div class="row">
             <div class="col-3 mt-4">
-                <h5>Categories  <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newCategoryClick()"></i></h5>
+                <h5>Categories  <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newCategoryClick()"  
+                    data-toggle="tooltip" data-placement="top" title="Add livestock main type"></i></h5>
                 <div class="list-group shadow-sm">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" 
                         v-for="(category_item, index) in inventory_cats" v-bind:key="category_item.id" v-bind:class="{ 'list-group-item-dark': category_item.is_active }" >
@@ -49,7 +50,7 @@
                 </div>
             </div>
             <div class="col-3 mt-4" v-show="inventory_cats.length > 0">
-                <h5>Sub Categories <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newSubCategoryClick()"></i></h5>
+                <h5>Sub Categories <i class="bi bi-plus-square text-success align-middle ms-2 fs-4" v-on:click="newSubCategoryClick()"  data-toggle="tooltip" data-placement="top" title="Add livestock sub inventory"></i></h5>
                 <div class="list-group shadow-sm" v-show="inventory_subcats.length > 0">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start" v-for="category_item in inventory_subcats" v-bind:key="category_item.id" >
                         <div class="d-flex w-100 justify-content-between">
