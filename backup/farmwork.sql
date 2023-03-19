@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS `budget` (
   `is_default` tinyint(4) NOT NULL DEFAULT 0,
   `budget_date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps financial planning and budgeting records';
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps financial planning and budgeting records';
 
--- Dumping data for table farmwork.budget: ~11 rows (approximately)
+-- Dumping data for table farmwork.budget: ~13 rows (approximately)
 DELETE FROM `budget`;
 INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget_amount_actual`, `is_done`, `is_default`, `budget_date`) VALUES
 	(72, 0, 'Equipment expences', 0.00, 0.00, 0, 0, '2022-02-01 00:00:00'),
@@ -39,7 +39,7 @@ INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget
 	(77, 72, 'Snow Blower', -2000.00, 0.00, 0, 0, '2021-11-30 00:00:00'),
 	(78, 0, 'End Work This Year', 0.00, 0.00, 0, 1, '2023-02-07 00:00:00'),
 	(80, 78, 'German Shepherd Puppies', 3000.00, 1000.00, 0, 0, '2023-03-31 00:00:00'),
-	(81, 78, 'Beef Sales', 4800.00, 4000.00, 0, 0, '2023-03-07 00:00:00'),
+	(81, 78, 'Beef Sales', 4000.00, 4800.00, 0, 0, '2023-02-16 00:00:00'),
 	(82, 78, 'Cattle', -2800.00, 0.00, 0, 0, '2023-02-28 00:00:00'),
 	(83, 78, 'Butcher Fees', -1200.00, 0.00, 0, 0, '2023-03-28 00:00:00');
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps contacts for contact book and vendors (for transactions and others)\r\n0 - normal contact\r\n1 - vendor\r\n2 - customer';
 
--- Dumping data for table farmwork.contact: ~52 rows (approximately)
+-- Dumping data for table farmwork.contact: ~49 rows (approximately)
 DELETE FROM `contact`;
 INSERT INTO `contact` (`id`, `name`, `address`, `phone`, `email`, `note`, `type`, `created_at`) VALUES
 	('08972545-b264-11ed-9b18-d8cb8ac0caec', 'Kathy Pietrasik', '#130 on Highway 570 Sesenika', '705-642-9180', NULL, 'wanted more ground beef', 2, '2023-02-21 22:49:59'),
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `contact_type` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table farmwork.contact_type: ~3 rows (approximately)
+-- Dumping data for table farmwork.contact_type: ~2 rows (approximately)
 DELETE FROM `contact_type`;
 INSERT INTO `contact_type` (`id`, `type`) VALUES
 	(1, 'vendor'),
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `feed` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Contains feed information such as CP, TDN and prices';
 
--- Dumping data for table farmwork.feed: ~4 rows (approximately)
+-- Dumping data for table farmwork.feed: ~5 rows (approximately)
 DELETE FROM `feed`;
 INSERT INTO `feed` (`id`, `feed_name`, `feed_desc`, `feed_cp`, `feed_tdn`, `feed_type`, `feed_price`, `feed_price_lb`, `feed_usage`, `is_default`, `feed_date`) VALUES
 	(1, 'Cracked Corn', NULL, 10, 90, 'Grain', 549.00, 2000, 100, 1, '2021-10-26 11:32:41'),
@@ -235,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `feed_requirement` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps information on feed requirements for animals in different stages';
 
--- Dumping data for table farmwork.feed_requirement: ~38 rows (approximately)
+-- Dumping data for table farmwork.feed_requirement: ~35 rows (approximately)
 DELETE FROM `feed_requirement`;
 INSERT INTO `feed_requirement` (`id`, `weight`, `animal_type`, `adg`, `dm_per_day`, `cp`, `tdn`) VALUES
 	(1, 200, 'steer/heifer', 3.0, 5.4, 22.0, 80),
@@ -342,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `livestock_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='contains groups of animals grouped together for the purpose of feeding or breading';
 
--- Dumping data for table farmwork.livestock_group: ~3 rows (approximately)
+-- Dumping data for table farmwork.livestock_group: ~2 rows (approximately)
 DELETE FROM `livestock_group`;
 INSERT INTO `livestock_group` (`id`, `group_name`, `group_desc`, `created_at`) VALUES
 	(1, 'July Group First', NULL, '2021-12-14 00:13:33'),
@@ -380,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `medication` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='list of medication';
 
--- Dumping data for table farmwork.medication: ~5 rows (approximately)
+-- Dumping data for table farmwork.medication: ~6 rows (approximately)
 DELETE FROM `medication`;
 INSERT INTO `medication` (`id`, `name`, `desc`, `instruction`, `img`, `price`, `on_hand_doses`, `created_at`) VALUES
 	(1, 'Tasvax 8', '<p>For the vaccination of cattle and sheep against diseases caused by Cl. chauvoei (black leg), Cl. haemolyticum (bacillary hemoglobinuria), Cl. novyi Type B (black disease or infectious necrotic hepatitis), Cl. perfringens Type B (lamb dysentery), Type C (hemorrhagic enterotoxemia), type D (pulpy kidney), Cl. septicum (malignant edema) and Cl. tetani (tetanus).</p>', '<p>Cattle: In order that a balanced response to vaccination is obtained, a primary course of two injections of 4 mL each should be given with an interval of 6 weeks between injections. To maintain a constant high level of immunity, booster injections should be administered at intervals of 6 months, or when outbreaks are seasonal, at least 2 weeks before the anticipated outbreak. Calves vaccinated under 3 months of age should be revaccinated at 4-6 months of age. Calves vaccinated at 3 months of age or older should be revaccinated 6 weeks later. Inject subcutaneously with strict aseptic precautions.</p>', '/uploads/medication/tasvax-8.jpg', 0.00, 0, '2019-05-09 23:02:13'),
@@ -399,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `page_settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains default page settings thats are being pulled during page load';
 
--- Dumping data for table farmwork.page_settings: ~3 rows (approximately)
+-- Dumping data for table farmwork.page_settings: ~2 rows (approximately)
 DELETE FROM `page_settings`;
 INSERT INTO `page_settings` (`id`, `page_name`, `setting_name`, `setting_value`) VALUES
 	(1, 'Accounting Records', 'start_date', '2021-01-01'),
@@ -421,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='record of all transactions';
 
--- Dumping data for table farmwork.transaction: ~231 rows (approximately)
+-- Dumping data for table farmwork.transaction: ~226 rows (approximately)
 DELETE FROM `transaction`;
 INSERT INTO `transaction` (`id`, `trans_desc`, `vendor_name`, `vendor_address`, `trans_currency`, `trans_image`, `trans_date`, `created_at`, `updated_at`) VALUES
 	('0058697e-be24-11ed-a0e4-d8cb8ac0caec', '', 'Circle K (Shell)', '565 Algonquin Blvd E, Timmins, ON P4N 7N5', 'C$', NULL, '2022-04-24 00:00:00', '2023-03-08 21:42:09', '2023-03-08 21:42:09'),
@@ -667,7 +667,7 @@ CREATE TABLE IF NOT EXISTS `transaction_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
 
--- Dumping data for table farmwork.transaction_category: ~40 rows (approximately)
+-- Dumping data for table farmwork.transaction_category: ~38 rows (approximately)
 DELETE FROM `transaction_category`;
 INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `category_description`, `created_at`) VALUES
 	(1, 0, 'Feed', 'Feed, supplements, straw, and bedding', '2019-04-29 21:32:30'),
@@ -731,7 +731,7 @@ CREATE TABLE IF NOT EXISTS `transaction_item` (
   CONSTRAINT `FK_transaction_item_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='A table that holds all transaction items.';
 
--- Dumping data for table farmwork.transaction_item: ~349 rows (approximately)
+-- Dumping data for table farmwork.transaction_item: ~346 rows (approximately)
 DELETE FROM `transaction_item`;
 INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`, `item_category`, `item_subcategory`, `amount`, `hst_tax`, `gst_tax`, `pst_tax`, `is_expence`, `created_at`) VALUES
 	('00708ace-bb64-11ed-a725-d8cb8ac0caec', 'ebd6f0a8-bb63-11ed-a725-d8cb8ac0caec', '1 tote mixed feed', '', 'Feed', 'Feed Mix', -674.24, 0.00, 0.00, 0.00, 1, '2023-03-05 09:42:49'),
@@ -1096,7 +1096,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='cattle management members.';
 
--- Dumping data for table farmwork.user: ~2 rows (approximately)
+-- Dumping data for table farmwork.user: ~1 rows (approximately)
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `is_active`, `created_at`) VALUES
 	('5e0d0d6c10096', 'farmer', '$2y$10$YxQsfaEVGMokSlb9QuKkUOkYxyLEOpM9XiuMFhrJifnTzjv9lnmze', 'dimasalt@gmail.com', 1, '2020-01-01 16:30:34'),
@@ -1180,7 +1180,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
 
--- Dumping data for table farmwork.vehicle_log_book: ~1 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book: ~0 rows (approximately)
 DELETE FROM `vehicle_log_book`;
 INSERT INTO `vehicle_log_book` (`id`, `year_start_odometer`, `year_end_odometer`, `vehicle_desc`, `created_at`) VALUES
 	(19, 215872, 247452, '2013 Chevrolet Silverado 1500', '2022-01-01 00:00:00');
@@ -1274,7 +1274,7 @@ VALUES
 );
 
 -- get last insert id
--- SELECT LAST_INSERT_ID() AS 'id';
+ SELECT LAST_INSERT_ID() AS 'id';
 
 END//
 DELIMITER ;

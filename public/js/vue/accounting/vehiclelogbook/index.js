@@ -56,13 +56,11 @@ const vehiclebooklogs = {
     
              //prepare data
              var data = {booklog_date : self.booklog_date};
-             data = JSON.stringify(data);
      
-             var odometerReadings = $.post("/bookkeeping/vehiclelogbook/get/odometer", data);
+             var odometerReadings = $.post("/accounting/vehiclelogbook/api/get", data);
      
              odometerReadings.done(function (data) {
-                 if (data.length > 0) {
-                     data = JSON.parse(data);                 
+                 if (data.length > 0) {             
                      
                      self.odometer = data;
 
@@ -92,7 +90,7 @@ const vehiclebooklogs = {
             var data = {odometer_id : self.odometer.id};
             data = JSON.stringify(data);
     
-            var projectsList = $.post("/bookkeeping/vehiclelogbook/get/all", data);
+            var projectsList = $.post("/accounting/vehiclelogbook/api/get/items", data);
     
             projectsList.done(function (data) {
                 if (data.length > 0) {
@@ -121,18 +119,14 @@ const vehiclebooklogs = {
             
             var data = {odometer : self.odometer_item};
             data.created_at = self.booklog_date;
-            data.csrf = $('#csrf').val();  
 
             //prepare json
             data = JSON.stringify(data);
 
-            var odometerNew = $.post("/bookkeeping/vehiclelogbook/addoredit/odometer", data);
+            var odometerNew = $.post("/accounting/vehiclelogbook/api/save", data);
     
             odometerNew.done(function (data) {
                 if(data.length > 0){
-                    //parse json
-                    data = JSON.parse(data);
-
                     if(data == true){
                         //Display a success toast, with a title
                         toastr.success("You have successfully added new odometer to a records");      
@@ -207,18 +201,10 @@ const vehiclebooklogs = {
             $('#deleteModal').modal('hide');
             
             var data = {id : self.odometer.id};           
-            data.csrf = $('#csrf').val();  
-
-            //prepare json
-            data = JSON.stringify(data);
-
-            var odometerDel = $.post("/bookkeeping/vehiclelogbook/del/odometer", data);
+            var odometerDel = $.post("/accounting/vehiclelogbook/api/delete", data);
     
             odometerDel.done(function (data) {
-                if(data.length > 0){
-                    //parse json
-                    data = JSON.parse(data);
-
+                if(data.length > 0){  
                     if(data == true){
                         //Display a success toast, with a title
                         toastr.success("You have successfully removed an odometer from the records");      
@@ -259,7 +245,7 @@ const vehiclebooklogs = {
             //prepare json
             data = JSON.stringify(data);
 
-            var booklogAdd = $.post("/bookkeeping/vehiclelogbook/add/booklog", data);
+            var booklogAdd = $.post("/accounting/vehiclelogbook/api/add/item", data);
     
             booklogAdd.done(function (data) {
                 if(data.length > 0){
@@ -306,19 +292,11 @@ const vehiclebooklogs = {
             //show the modal
             $('#deletebooklogModal').modal('hide');
             
-            var data = {id : self.booklog_del_item_id};           
-            data.csrf = $('#csrf').val();  
-
-            //prepare json
-            data = JSON.stringify(data);
-
-            var odometerDel = $.post("/bookkeeping/vehiclelogbook/del/booklog", data);
+            var data = {id : self.booklog_del_item_id};
+            var odometerDel = $.post("/accounting/vehiclelogbook/delete/item", data);
     
             odometerDel.done(function (data) {
                 if(data.length > 0){
-                    //parse json
-                    data = JSON.parse(data);
-
                     if(data == true){
                         //Display a success toast, with a title
                         toastr.success("You have successfully removed an odometer from the records");                                                
@@ -358,17 +336,10 @@ const vehiclebooklogs = {
 
             //self.page_name
             var data = {page_name : self.page_name};           
-
-            //prepare json
-            data = JSON.stringify(data);
-
             var odometerDel = $.post("/bookkeeping/vehiclelogbook/del/booklog", data);
     
             odometerDel.done(function (data) {
                 if(data.length > 0){
-                    //parse json
-                    data = JSON.parse(data);
-
                     if(data == true){
                         //Display a success toast, with a title
                         toastr.success("You have successfully removed an odometer from the records");                                                

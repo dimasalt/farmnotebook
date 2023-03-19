@@ -1,24 +1,16 @@
-
-{% extends "Shared/_layout.twig" %}
+{% layout '../../Shared/_layout.liquid' %}
 
 {% block title %} Vehicle Logbook {% endblock %}
 
-{% block header_scripts %}
-    <link href="/assets/components/toastr/toastr.min.css"  rel="stylesheet">
- {% endblock %}
+{% block header_scripts %} {% endblock %}
 
 {% block body %}
-    
 <!-- side nav menu -->
-{# {% include 'Bookkeeping/_sidenav.twig' %} #}
-{{ include('Accounting/_sidenav.twig') }}
+{% include '../_sidenav.liquid' %}
 
 
 <!-- page content -->
 <div class="container-fluid" id="vehiclelogbook" v-cloak>
-    
-    <!-- csrf protection -->
-    <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
 
     <div class="row border-bottom pt-4">
         <div class="col-10">
@@ -263,9 +255,7 @@
 
 {% block custom_scripts %}
 
-    <script src="/assets/components/toastr/toastr.min.js"></script>
-
-    <script src="/assets/js/vue/accounting/vehiclelogbook/index.js" defer></script>
+    <script src="/js/vue/accounting/vehiclelogbook/index.js" defer></script>
 
      <script type="application/javascript">
         $(function () {

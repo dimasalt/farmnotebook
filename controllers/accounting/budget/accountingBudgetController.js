@@ -67,9 +67,13 @@ exports.addBudgetNew = async (req, res) => {
             req.body.budget_date
         ]);              
 
-        let is_changed = results.affectedRows > 0 ? true : false;            
+        // console.log('----------------------');
+        // console.log(results[0][0]['id']);
+        // console.log('----------------------');
 
-        return res.json(is_changed);
+        //let is_changed = results.affectedRows > 0 ? true : false;            
+
+        return res.json({ id : results[0][0].id });
     }
     catch (err){ res.status(500).json({ error : err}) };
 };

@@ -149,7 +149,18 @@ const budget = {
 
             result.done(function (data) {            
                 //if element has been added
-                if (data == true) {                           
+                if (data.id > 0) {                           
+
+                    self.budget_item.id = data.id;
+                    if(self.budget_item.parent_id == 0){
+                        self.budget_selected = data.id;
+                        self.budget_drpdown.push({
+                            id : self.budget_item.id,
+                            budget_name : self.budget_item.budget_name,
+                           is_default : self.budget_item.is_default,
+                           parent_id : self.budget_item.parent_id 
+                        });
+                    }
 
                     //get all the budget items from database
                     self.getBudget();

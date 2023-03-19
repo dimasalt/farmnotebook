@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
+//budget controller
 const accountingBudgetController = require('../controllers/accounting/budget/accountingBudgetController');
+
+//vehicle log book controller
+const vehicleLogBookController = require('../controllers/accounting/vehiclelogbook/vehicleLogBookController');
 
 
 const hasAccess = require('../midleware/user');
 router.use('/', hasAccess.hasAccess);
 
 //actual routes
+
+//budget page routes
 router.get("/budget", accountingBudgetController.getIndex);
 router.post("/budget/api/get/all", accountingBudgetController.getBudgetsList);
 router.post("/budget/api/get/single", accountingBudgetController.getBudgetSingle);
@@ -15,5 +21,11 @@ router.post("/budget/api/add/new", accountingBudgetController.addBudgetNew);
 router.post("/budget/api/delete", accountingBudgetController.deleteBudget);
 router.post("/budget/api/update", accountingBudgetController.updateBudget);
 router.post("/budget/api/update/status", accountingBudgetController.updateBudgetStatus);
+
+
+//vehicle log book routes
+router.get("/vehiclelogbook", vehicleLogBookController.getIndex);
+
+
 
 module.exports = router;
