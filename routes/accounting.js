@@ -7,6 +7,9 @@ const accountingBudgetController = require('../controllers/accounting/budget/acc
 //vehicle log book controller
 const vehicleLogBookController = require('../controllers/accounting/vehiclelogbook/vehicleLogBookController');
 
+//accounting types/categories
+const transactionTypesController = require('../controllers/accounting/types/accountingTypesController');
+
 
 const hasAccess = require('../midleware/user');
 router.use('/', hasAccess.hasAccess);
@@ -32,6 +35,12 @@ router.post("/vehiclelogbook/api/delete", vehicleLogBookController.deleteOdomete
 router.post("/vehiclelogbook/api/item/add", vehicleLogBookController.addVehicleTravelRecord);
 router.post("/vehiclelogbook/api/item/delete", vehicleLogBookController.deleteVehicleTravelItem);
 
+
+//transaction categories/types
+router.get("/categories", transactionTypesController.getIndex);
+router.post("/categories/api/get/all", transactionTypesController.getTransactionCategories);
+router.post("/categories/api/save", transactionTypesController.saveTransactionCategory);
+router.post("/categories/api/delete", transactionTypesController.deleteTransactionCategory);
 
 
 module.exports = router;

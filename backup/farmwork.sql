@@ -665,9 +665,9 @@ CREATE TABLE IF NOT EXISTS `transaction_category` (
   `category_description` varchar(250) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
 
--- Dumping data for table farmwork.transaction_category: ~38 rows (approximately)
+-- Dumping data for table farmwork.transaction_category: ~42 rows (approximately)
 DELETE FROM `transaction_category`;
 INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `category_description`, `created_at`) VALUES
 	(1, 0, 'Feed', 'Feed, supplements, straw, and bedding', '2019-04-29 21:32:30'),
@@ -1178,7 +1178,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book` (
   `vehicle_desc` varchar(150) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
 
 -- Dumping data for table farmwork.vehicle_log_book: ~1 rows (approximately)
 DELETE FROM `vehicle_log_book`;
@@ -1199,16 +1199,16 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book_item` (
   PRIMARY KEY (`id`),
   KEY `FK_vehicle_log_book_item_vehicle_log_book` (`vehicle_log_book_id`),
   CONSTRAINT `FK_vehicle_log_book_item_vehicle_log_book` FOREIGN KEY (`vehicle_log_book_id`) REFERENCES `vehicle_log_book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book to keep track on a business related travel';
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book to keep track on a business related travel';
 
--- Dumping data for table farmwork.vehicle_log_book_item: ~32 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book_item: ~35 rows (approximately)
 DELETE FROM `vehicle_log_book_item`;
 INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`, `address`, `purpose`, `travel_distance`, `created_at`, `travel_date`) VALUES
 	(30, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:35:05', '2022-08-03 00:00:00'),
 	(31, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:36:05', '2022-08-08 00:00:00'),
 	(32, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:48:28', '2022-07-25 00:00:00'),
 	(33, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:49:10', '2022-07-18 00:00:00'),
-	(35, 19, 'Temiskaming Livestock Exchange Ltd 1992, 883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', '883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', 'cattle sale', 320, '2023-03-08 20:02:59', '2022-01-03 00:00:00'),
+	(35, 19, 'Temiskaming Livestock Exchange Ltd 1992', '883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', 'cattle sale', 320, '2023-03-08 20:02:59', '2022-01-03 00:00:00'),
 	(36, 19, 'Temiskaming Livestock Exchange Ltd 1992', '883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', 'cattle purchace', 320, '2023-03-08 20:04:00', '2022-05-02 00:00:00'),
 	(37, 19, 'Temiskaming Livestock Exchange Ltd 1992', '883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', 'cattle sale', 320, '2023-03-08 20:04:48', '2022-02-07 00:00:00'),
 	(38, 19, 'Temiskaming Livestock Exchange Ltd 1992', '883006 ON-65 RR 3, New Liskeard, ON P0J 1P0', 'cattle sale', 320, '2023-03-08 20:05:25', '2022-01-10 00:00:00'),
@@ -1234,8 +1234,7 @@ INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`,
 	(58, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:24:45', '2022-12-13 00:00:00'),
 	(59, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:25:17', '2022-12-06 00:00:00'),
 	(60, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:25:51', '2022-09-20 00:00:00'),
-	(61, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:26:30', '2022-09-09 00:00:00'),
-	(63, 19, 'sadfasfd', 'asdfasdf', 'asdfasf', 22, '2023-03-21 00:59:50', '2023-03-21 00:00:00');
+	(61, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:26:30', '2022-09-09 00:00:00');
 
 -- Dumping structure for procedure farmwork.budgetCreate
 DROP PROCEDURE IF EXISTS `budgetCreate`;
@@ -2148,22 +2147,12 @@ BEGIN
 		transaction_category.id,
 		transaction_category.parent_id,
 		transaction_category.category_name,
-		transaction_category.category_description
+		transaction_category.category_description	
 	FROM transaction_category
 	WHERE transaction_category.parent_id = parent_id
 	ORDER BY transaction_category.category_name ASC;
-
--- 	SELECT 
--- 		transaction_subcategory.id,
--- 		transaction_subcategory.category_id,
--- 		transaction_subcategory.category_sub_name,
--- 		transaction_subcategory.category_sub_description
--- 	FROM 
--- 		transaction_subcategory
--- 	WHERE 
--- 		transaction_subcategory.category_id = id
--- 	ORDER by
--- 		transaction_subcategory.category_sub_name ASC;
+	
+		-- COALESCE(transaction_category.category_description, ' ') AS category_description
 
 END//
 DELIMITER ;
