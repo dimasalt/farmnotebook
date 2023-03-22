@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `budget` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps financial planning and budgeting records';
 
--- Dumping data for table farmwork.budget: ~13 rows (approximately)
+-- Dumping data for table farmwork.budget: ~11 rows (approximately)
 DELETE FROM `budget`;
 INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget_amount_actual`, `is_done`, `is_default`, `budget_date`) VALUES
 	(72, 0, 'Equipment expences', 0.00, 0.00, 0, 0, '2022-02-01 00:00:00'),
@@ -1178,9 +1178,9 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book` (
   `vehicle_desc` varchar(150) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book records.';
 
--- Dumping data for table farmwork.vehicle_log_book: ~0 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book: ~1 rows (approximately)
 DELETE FROM `vehicle_log_book`;
 INSERT INTO `vehicle_log_book` (`id`, `year_start_odometer`, `year_end_odometer`, `vehicle_desc`, `created_at`) VALUES
 	(19, 215872, 247452, '2013 Chevrolet Silverado 1500', '2022-01-01 00:00:00');
@@ -1199,9 +1199,9 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book_item` (
   PRIMARY KEY (`id`),
   KEY `FK_vehicle_log_book_item_vehicle_log_book` (`vehicle_log_book_id`),
   CONSTRAINT `FK_vehicle_log_book_item_vehicle_log_book` FOREIGN KEY (`vehicle_log_book_id`) REFERENCES `vehicle_log_book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book to keep track on a business related travel';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book to keep track on a business related travel';
 
--- Dumping data for table farmwork.vehicle_log_book_item: ~31 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book_item: ~32 rows (approximately)
 DELETE FROM `vehicle_log_book_item`;
 INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`, `address`, `purpose`, `travel_distance`, `created_at`, `travel_date`) VALUES
 	(30, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:35:05', '2022-08-03 00:00:00'),
@@ -1234,7 +1234,8 @@ INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`,
 	(58, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:24:45', '2022-12-13 00:00:00'),
 	(59, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:25:17', '2022-12-06 00:00:00'),
 	(60, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:25:51', '2022-09-20 00:00:00'),
-	(61, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:26:30', '2022-09-09 00:00:00');
+	(61, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 20:26:30', '2022-09-09 00:00:00'),
+	(63, 19, 'sadfasfd', 'asdfasdf', 'asdfasf', 22, '2023-03-21 00:59:50', '2023-03-21 00:00:00');
 
 -- Dumping structure for procedure farmwork.budgetCreate
 DROP PROCEDURE IF EXISTS `budgetCreate`;

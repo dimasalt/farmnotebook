@@ -25,6 +25,12 @@ router.post("/budget/api/update/status", accountingBudgetController.updateBudget
 
 //vehicle log book routes
 router.get("/vehiclelogbook", vehicleLogBookController.getIndex);
+router.post("/vehiclelogbook/api/get", vehicleLogBookController.getOdometer);
+router.post("/vehiclelogbook/api/get/items", vehicleLogBookController.getBookLogItems);
+router.post("/vehiclelogbook/api/add", vehicleLogBookController.vehicleAddOrEditOdometer);
+router.post("/vehiclelogbook/api/delete", vehicleLogBookController.deleteOdometer);
+router.post("/vehiclelogbook/api/item/add", vehicleLogBookController.addVehicleTravelRecord);
+router.post("/vehiclelogbook/api/item/delete", vehicleLogBookController.deleteVehicleTravelItem);
 
 
 

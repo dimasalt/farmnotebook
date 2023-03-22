@@ -3,11 +3,11 @@
 ---
 
 ### Transaction page
- - Replace Chart JS with ECharts from https://echarts.apache.org/en/index.html
- 
-
-### Transaction page
 - Add pagination
+
+
+### Vehicle Booklog
+- Add pagination to the page
 
 
 ### Feed Calculator Page
@@ -30,6 +30,9 @@
 
 ### Contact Page 
 - Add pagination to the contact page. 
+
+
+
 
 ### To run application on dev machine
 

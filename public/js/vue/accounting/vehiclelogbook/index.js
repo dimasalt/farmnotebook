@@ -51,8 +51,9 @@ const vehiclebooklogs = {
              //gets all project items
              var self = this;   
              
-             //reset odometer
+             //reset odometer and booklog items that belong to this odometer
              self.odometer = {};
+             self.booklogs = [];
     
              //prepare data
              var data = {booklog_date : self.booklog_date};
@@ -60,26 +61,22 @@ const vehiclebooklogs = {
              var odometerReadings = $.post("/accounting/vehiclelogbook/api/get", data);
      
              odometerReadings.done(function (data) {
-                 if (data.length > 0) {             
+                 if (JSON.stringify(data) !== '{}') {             
                      
                      self.odometer = data;
 
-                     //get all records for current odometer year
-                     if(self.odometer != false){
-                        self.bookLogsGetAll();
-                        self.odometer_item.is_addoredit = false;
+                     self.getBookLogItems();
+                     self.odometer_item.is_addoredit = false;
 
-                        //calculate total km
-                        self.odometer.total_km = parseInt(self.odometer.year_end_odometer) - parseInt(self.odometer.year_start_odometer);
-                    }
-                    else if(self.odometer == false)
-                        self.odometer_item.is_addoredit = true;
-                 }               
+                     //calculate total km
+                     self.odometer.total_km = parseInt(self.odometer.year_end_odometer) - parseInt(self.odometer.year_start_odometer);                                             
+                }
+                else self.odometer_item.is_addoredit = true;            
              });
      
              odometerReadings.always(function () { });
         },
-        bookLogsGetAll () {           
+        getBookLogItems () {           
             var self = this;          
             
             //reset booklog records and business distance totals
@@ -87,14 +84,11 @@ const vehiclebooklogs = {
             self.odometer.total_business_km = 0;
     
             //prepare data
-            var data = {odometer_id : self.odometer.id};
-            data = JSON.stringify(data);
-    
+            var data = {odometer_id : self.odometer.id};   
             var projectsList = $.post("/accounting/vehiclelogbook/api/get/items", data);
     
             projectsList.done(function (data) {
-                if (data.length > 0) {
-                    data = JSON.parse(data);                
+                if (data.length > 0) {        
                                         
                     self.booklogs = data;
 
@@ -114,31 +108,26 @@ const vehiclebooklogs = {
          * add or edit odometer reading for specific year
          * --------------------------------------------------------
          */
-        odometerAddOrEdit(){
+        vehicleAddOrEditOdometer(){
             var self = this;            
             
             var data = {odometer : self.odometer_item};
             data.created_at = self.booklog_date;
-
-            //prepare json
-            data = JSON.stringify(data);
-
-            var odometerNew = $.post("/accounting/vehiclelogbook/api/save", data);
+            var odometerNew = $.post("/accounting/vehiclelogbook/api/add", data);
     
-            odometerNew.done(function (data) {
-                if(data.length > 0){
-                    if(data == true){
-                        //Display a success toast, with a title
-                        toastr.success("You have successfully added new odometer to a records");      
-                        
-                        //pull new odometer record
-                        self.getOdometer();
-                    }
-                    else if(data == false){
-                        // Display an error toast, with a title
-                        toastr.error("Ops! There appears to be an error and odometer coudln't be added");
-                    }               
-                } 
+            odometerNew.done(function (data) {           
+                if(data == true){
+                    //Display a success toast, with a title
+                    toastr.success("You have successfully added new odometer to a records");      
+                    
+                    //pull new odometer record
+                    self.getOdometer();
+                }
+                else {
+                    // Display an error toast, with a title
+                    toastr.error("Ops! There appears to be an error and odometer coudln't be added");
+                }               
+                
                 
                 //reset odometer_item
                 self.odometer_item = {
@@ -203,27 +192,25 @@ const vehiclebooklogs = {
             var data = {id : self.odometer.id};           
             var odometerDel = $.post("/accounting/vehiclelogbook/api/delete", data);
     
-            odometerDel.done(function (data) {
-                if(data.length > 0){  
-                    if(data == true){
-                        //Display a success toast, with a title
-                        toastr.success("You have successfully removed an odometer from the records");      
-                        
-                        //select current year date 
-                        var today = new Date();                       
-                        var yyyy = today.getFullYear();
-                
-                        //format is yyyy/mm/dd
-                        self.booklog_date = yyyy + '-01-01';                     
-                
-                        //get current year odometer                   
-                        self.getOdometer();           
-                    }
-                    else if(data == false){
-                        // Display an error toast, with a title
-                        toastr.error("Ops! There appears to be an error and odometer coudln't be removed");
-                    }               
-                }                              
+            odometerDel.done(function (data) {                
+                if(data == true){
+                    //Display a success toast, with a title
+                    toastr.success("You have successfully removed an odometer from the records");      
+                    
+                    //select current year date 
+                    var today = new Date();                       
+                    var yyyy = today.getFullYear();
+            
+                    //format is yyyy/mm/dd
+                    self.booklog_date = yyyy + '-01-01';                     
+            
+                    //get current year odometer                   
+                    self.getOdometer();           
+                }
+                else {
+                    // Display an error toast, with a title
+                    toastr.error("Ops! There appears to be an error and odometer coudln't be removed");
+                }                                                     
             });
      
             odometerDel.always(function () { });
@@ -233,37 +220,27 @@ const vehiclebooklogs = {
 
             self.booklog_item.is_new = status;
         },       
-        booklogItemAdd(){
+        vehicleAddTravelRecord(){
             var self = this;          
             
             var data = {
-                vehicle_log_book_id : self.odometer.id,                
-                booklog_item : self.booklog_item,
-                csrf : $('#csrf').val()
-            };                     
-
-            //prepare json
-            data = JSON.stringify(data);
-
-            var booklogAdd = $.post("/accounting/vehiclelogbook/api/add/item", data);
+                odometer_id : self.odometer.id,                
+                booklog_item : self.booklog_item
+            };                              
+            var booklogAdd = $.post("/accounting/vehiclelogbook/api/item/add", data);
     
-            booklogAdd.done(function (data) {
-                if(data.length > 0){
-                    //parse json
-                    data = JSON.parse(data);
-
-                    if(data == true){
-                        //Display a success toast, with a title
-                        toastr.success("You have successfully added an logbook item from the records");  
-                        
-                        //load new record for display
-                        self.bookLogsGetAll();
-                    }
-                    else if(data == false){
-                        // Display an error toast, with a title
-                        toastr.error("Ops! There appears to be an error and booklog item coudln't be added");
-                    }               
-                }                          
+            booklogAdd.done(function (data) {                   
+                if(data == true){
+                    //Display a success toast, with a title
+                    toastr.success("You have successfully added an logbook item from the records");  
+                    
+                    //load new record for display
+                    self.getBookLogItems();
+                }
+                else if(data == false){
+                    // Display an error toast, with a title
+                    toastr.error("Ops! There appears to be an error and booklog item coudln't be added");
+                }                                                      
                 
                 //reset booklog item
                 self.resetVehicleBooklogItem();
@@ -274,10 +251,10 @@ const vehiclebooklogs = {
         },
         /**
          * -------------------------------------------------------
-         * remove odometer
+         * remove odometer travel item
          * --------------------------------------------------------
          */
-        booklogItemDelModalShow(id){
+        showVehicleTravelItemModal(id){
             var self = this;    
 
             //get id of item to delete
@@ -286,32 +263,30 @@ const vehiclebooklogs = {
             //show the modal
             $('#deletebooklogModal').modal('show');
         },
-        booklogItemDelOne(){
+        deleteVehicleTravelItem(){
             var self = this;    
             
             //show the modal
             $('#deletebooklogModal').modal('hide');
             
             var data = {id : self.booklog_del_item_id};
-            var odometerDel = $.post("/accounting/vehiclelogbook/delete/item", data);
+            var odometerDel = $.post("/accounting/vehiclelogbook/api/item/delete", data);
     
-            odometerDel.done(function (data) {
-                if(data.length > 0){
-                    if(data == true){
-                        //Display a success toast, with a title
-                        toastr.success("You have successfully removed an odometer from the records");                                                
-                    }
-                    else if(data == false){
-                        // Display an error toast, with a title
-                        toastr.error("Ops! There appears to be an error and odometer coudln't be removed");
-                    }    
-                    
-                    //reset delete item id
-                    self.booklog_del_item_id = 0;
+            odometerDel.done(function (data) {            
+                if(data == true){
+                    //Display a success toast, with a title
+                    toastr.success("You have successfully removed an odometer from the records");                                                
+                }
+                else if(data == false){
+                    // Display an error toast, with a title
+                    toastr.error("Ops! There appears to be an error and odometer coudln't be removed");
+                }    
+                
+                //reset delete item id
+                self.booklog_del_item_id = 0;
 
-                    //update list of displayed book log items
-                    self.bookLogsGetAll();
-                }                              
+                //update list of displayed book log items
+                self.getBookLogItems();                                          
             });
         
             odometerDel.always(function () { });
@@ -353,7 +328,7 @@ const vehiclebooklogs = {
                     self.booklog_del_item_id = 0;
 
                     //update list of displayed book log items
-                    self.bookLogsGetAll();
+                    self.getBookLogItems();
                 }                              
             });
         
