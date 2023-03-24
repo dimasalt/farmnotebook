@@ -1,24 +1,18 @@
-{% extends "Shared/_layout.twig" %}
+{% layout '../../Shared/_layout.liquid' %}
 
-{% block title %} Transaction Records {% endblock %}
+{% block title %} Transaction Categories {% endblock %}
 
-{% block header_scripts %}
-
+{% block header_scripts %} 
     <!-- file uploading -->
-    <link href="/assets/components/dropzone/min/dropzone.min.css" rel="stylesheet">
- {% endblock %}
+    <link href="/components/dropzone/min/dropzone.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
-    
 <!-- side nav menu -->
-{# {% include 'Bookkeeping/_sidenav.twig' %} #}
-{{ include('Accounting/_sidenav.twig') }}
+{% include '../_sidenav.liquid' %}
 
 <!-- page content -->
 <div class="container-fluid" id="transactions" v-cloak>
-    
-    <!-- csrf protection -->
-    <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
 
     <!-- page name and date selection -->
     <div class="row mb-2 pt-4">
@@ -102,7 +96,7 @@
         </div>
         <div class="col-1">
             <select class="form-select w-100 rounded-0 form-select-sm" aria-label="Select sub group" v-model="sub_category_selected" 
-                v-on:change="transactionsGetAll()" v-bind:disabled="transaction_sub_category_disabled">
+                v-on:change="goSearch()" v-bind:disabled="transaction_sub_category_disabled">
                 <option v-for="item in transaction_sub_category" v-bind:value="item.category_name">
                     {{ '{{ item.category_name }}' }}
                 </option>            
@@ -206,7 +200,7 @@
             </nav>
         </div>
 
-        {# ################# Right side of the page ####################### #}
+        {% comment %} ################# Right side of the page #######################  {% endcomment %}
 
         <!-- image view and removal -->
         <div class="col-3 mt-0" id="dropzone_image_view" v-show="action.image_view==true">
@@ -487,10 +481,10 @@
 {% block custom_scripts %}
 
     <!-- chart -->
-    <script src='/assets/components/chartjs/chart.min.js'></script>   
+    <script src='/components/chartjs/chart.min.js'></script>   
     <!-- file uploading -->
-    <script src="/assets/components/dropzone/min/dropzone.min.js"></script>
-    <script src="/assets/js/vue/accounting/transactions/index.js"></script>
+    <script src="/components/dropzone/min/dropzone.min.js"></script>
+    <script src="/js/vue/accounting/transactions/index.js"></script>
 
      <script type="application/javascript">
         

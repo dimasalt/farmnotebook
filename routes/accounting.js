@@ -10,6 +10,9 @@ const vehicleLogBookController = require('../controllers/accounting/vehiclelogbo
 //accounting types/categories
 const transactionTypesController = require('../controllers/accounting/types/accountingTypesController');
 
+//transaction records controller
+const transactionRecordsController = require('../controllers/accounting/records/transactionRecordsController');
+
 
 const hasAccess = require('../midleware/user');
 router.use('/', hasAccess.hasAccess);
@@ -41,6 +44,18 @@ router.get("/categories", transactionTypesController.getIndex);
 router.post("/categories/api/get/all", transactionTypesController.getTransactionCategories);
 router.post("/categories/api/save", transactionTypesController.saveTransactionCategory);
 router.post("/categories/api/delete", transactionTypesController.deleteTransactionCategory);
+
+
+//transaction records pages
+router.get("/records", transactionRecordsController.getIndex);
+router.post("/records/api/get/all", transactionRecordsController.getTransactionRecords);
+router.post("/records/api/get/totals", transactionRecordsController.getTransactionTotals);
+router.post("/records/api/add", transactionRecordsController.addTransactionRecord);
+router.post("/records/api/delete", transactionRecordsController.deleteTransactionRecord);
+router.post("/records/api/item/add", transactionRecordsController.addTransactionRecordItem);
+router.post("/records/api/item/delete", transactionRecordsController.deleteTransactionRecordItem);
+
+
 
 
 module.exports = router;
