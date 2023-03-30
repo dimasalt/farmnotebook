@@ -208,3 +208,60 @@ exports.deleteTransactionRecordItem = async (req, res) => {
 };
 
 
+/**
+* @desc uploads image or pdf file with receipt scan for transaction
+* @route POST /accounting/record/api/upload
+* @access public // later on admin only
+*/
+exports.uploadTransactionRecordReceipt = async (req, res) => {  
+
+    let fileName = req.file;
+    
+
+    // try{
+    //     const promisePool = pool.promise();
+    //     const [results,fields] = await promisePool.query('call transactionCreate(?,?,?,?,?)', 
+    //     [
+    //         req.body.vendor_name,
+    //         req.body.vendor_address,
+    //         req.body.trans_desc,
+    //         req.body.trans_currency,
+    //         req.body.trans_date                            
+    //     ]);              
+
+    //     let is_changed = results.affectedRows > 0 ? true : false;            
+
+    //     return res.json(is_changed);
+    // }
+    // catch (err){ res.status(500).json({ error : err}) };    
+    
+    console.log(req.body.transaction_date);
+};
+
+
+/**
+* @desc uploads image or pdf file with receipt scan for transaction
+* @route POST /accounting/record/api/upload
+* @access public // later on admin only
+*/
+exports.deleteTransactionRecordReceipt = async (req, res) => {  
+
+    // try{
+    //     const promisePool = pool.promise();
+    //     const [results,fields] = await promisePool.query('call transactionCreate(?,?,?,?,?)', 
+    //     [
+    //         req.body.vendor_name,
+    //         req.body.vendor_address,
+    //         req.body.trans_desc,
+    //         req.body.trans_currency,
+    //         req.body.trans_date                            
+    //     ]);              
+
+    //     let is_changed = results.affectedRows > 0 ? true : false;            
+
+    //     return res.json(is_changed);
+    // }
+    // catch (err){ res.status(500).json({ error : err}) };    
+};
+
+

@@ -1,191 +1,247 @@
 {% layout '../../Shared/_layout.liquid' %}
 
-{% block title %} Ration Calculator {% endblock %}
+{% block title %}
+  Ration Calculator
+{% endblock %}
 
-{% block header_scripts %} {% endblock %}
+{% block header_scripts %}{% endblock %}
 
 {% block body %}
-<!-- side nav menu -->
-{% include '../_sidenav.liquid' %}   
-    
-<div class="container-fluid" id="ration" v-cloak>               
+  <!-- side nav menu -->
+  {% include '../_sidenav.liquid' %}
+
+    <div class="container-fluid"
+    id="ration"
+    v-cloak>
 
     <!-- page name and usage instructions -->
     <div class="row mt-4">
-        <div class="col-12 border-bottom">          
-            <h2 class="text-dark">Ration Calculations</h2>                
-        </div>      
-    </div>           
-   
+      <div class="col-12 border-bottom">
+        <h2 class="text-dark">Ration Calculations</h2>
+      </div>
+    </div>
+
     <div class="row mt-4">
-        <div class="col-6">           
-            <!-- list of available feeds -->  
-            <div class="col-6">
-                 <h5>
-                Feed and Starting inputs 
-                <small>
-                    <a href="/ration/ration_calculator/FeedRequirements" target="_blank" class="text-success">(feed requirements table)</a>
-                </small>
-                </h5>              
-            </div>             
-           
-            <div class="input-group">                                          
-                <input class="form-control rounded-0 shadow-sm" list="feedList" id="feedListData" placeholder="Type to search feed" v-model="selected_feed">
-                <button class="btn bg-success text-white" type="button" id="button-addon1" v-on:click="setFeedAsDefault(1)" v-bind:disabled="selected_feed.length == 0">
-                    <i class="bi bi-check2-circle me-1"></i>
-                    Set Default
-                </button>
-                <datalist id="feedList">
-                    <option v-bind:value="item.feed_name" v-for="item in feeds">{{ '{{ "CP% -" + item.feed_CP + ", TDN% - " + item.feed_TDN + ", Type - " + item.feed_type  }}' }}</option>            
-                </datalist>
+      <div class="col-6">
+        <!-- list of available feeds -->
+        <div class="col-6">
+          <h5>
+            Feed and Starting inputs
+            <small>
+              <a
+                href="/ration/ration_calculator/FeedRequirements"
+                target="_blank"
+                class="text-success">(feed requirements table)</a>
+            </small>
+          </h5>
+        </div>
+
+        <div class="input-group">
+          <input
+            class="form-control rounded-0 shadow-sm"
+            list="feedList"
+            id="feedListData"
+            placeholder="Type to search feed"
+            v-model="selected_feed">
+          <button
+            class="btn bg-success text-white"
+            type="button"
+            id="button-addon1"
+            v-on:click="setFeedAsDefault(1)"
+            v-bind:disabled="selected_feed.length == 0">
+            <i class="bi bi-check2-circle me-1"></i>
+            Set Default
+          </button>
+          <datalist id="feedList">
+            <option v-bind:value="item.feed_name" v-for="item in feeds">{{ '{{ "CP% -" + item.feed_CP + ", TDN% - " + item.feed_TDN + ", Type - " + item.feed_type  }}' }}</option>
+          </datalist>
+        </div>
+
+
+        <!-- other input values -->
+        <div class="mt-4" v-if="is_feed_proper==true">
+          <div class="input-group">
+            <div class="col-2">
+              <label for="text_adg" class="form-label">ADG (lb)</label>
+              <select class="form-select rounded-0" v-model="adg_selected">
+                <option v-for="item in adg" v-bind:value="item.adg">{{ '{{ item.adg }}' }}</option>
+              </select>
+              {% comment %} <input class="form-control rounded-0 shadow-sm" id="text_adg" placeholder="Average Daily Gains" v-model="requirements.adg"> {% endcomment %}
             </div>
-           
+            <div class="col-3">
+              <label for="text_range_start" class="form-label">Weight Start</label>
+              <input
+                class="form-control rounded-0 shadow-sm"
+                id="text_range_start"
+                placeholder="Weight Range Start (lb)"
+                v-model="requirements.start_weight">
+            </div>
+            <div class="col-3">
+              <label for="text_range_end" class="form-label">Weight End</label>
+              <input
+                class="form-control rounded-0 shadow-sm"
+                id="text_range_end"
+                placeholder="Weight Range End (lb)"
+                v-model="requirements.end_weight">
+            </div>
 
-            <!-- other input values -->
-            <div class="mt-4" v-if="is_feed_proper==true">            
-                <div class="input-group">
-                    <div class="col-2">
-                        <label for="text_adg" class="form-label">ADG (lb)</label>
-                        <select class="form-select rounded-0" v-model="adg_selected">
-                            <option v-for="item in adg" v-bind:value="item.adg">{{ '{{ item.adg }}' }}</option>                            
-                        </select>
-                        {% comment %} <input class="form-control rounded-0 shadow-sm" id="text_adg" placeholder="Average Daily Gains" v-model="requirements.adg"> {% endcomment %}
-                    </div>                  
-                    <div class="col-3">
-                        <label for="text_range_start" class="form-label">Weight Start</label>
-                        <input class="form-control rounded-0 shadow-sm" id="text_range_start" placeholder="Weight Range Start (lb)" v-model="requirements.start_weight">
-                    </div>
-                    <div class="col-3">
-                        <label for="text_range_end" class="form-label">Weight End</label>
-                        <input class="form-control rounded-0 shadow-sm" id="text_range_end" placeholder="Weight Range End (lb)" v-model="requirements.end_weight">
-                    </div> 
-                     
-                    <div class="col-2">
-                        <label for="text_scoop" class="form-label">Scoop (lb)</label>
-                        <input class="form-control rounded-0 shadow-sm" id="text_scoop" placeholder="Scoop Capacity (lb)" v-model="requirements.scoop">
-                    </div>    
-                    <div class="col-2">
-                        <label for="text_heads" class="form-label"># of Heads</label>
-                        <input class="form-control rounded-0 shadow-sm" id="text_heads" placeholder="Scoop Capacity (lb)" v-model="requirements.heads">
-                    </div> 
-                </div>                                                                                       
-            </div>   
-            <div class="mt-2 d-flex justify-content-end" v-if="is_feed_proper==true">
-                <button class="btn bg-dark text-white me-1 rounded-0" type="button" id="button-addon1" v-on:click="getFeedRequirements()">
-                    <i class="bi bi-calculator"></i>
-                    Calculate Ration
-                </button>
-            </div>        
+            <div class="col-2">
+              <label for="text_scoop" class="form-label">Scoop (lb)</label>
+              <input
+                class="form-control rounded-0 shadow-sm"
+                id="text_scoop"
+                placeholder="Scoop Capacity (lb)"
+                v-model="requirements.scoop">
+            </div>
+            <div class="col-2">
+              <label for="text_heads" class="form-label"># of Heads</label>
+              <input
+                class="form-control rounded-0 shadow-sm"
+                id="text_heads"
+                placeholder="Scoop Capacity (lb)"
+                v-model="requirements.heads">
+            </div>
+          </div>
         </div>
+        <div class="mt-2 d-flex justify-content-end" v-if="is_feed_proper==true">
+          <button
+            class="btn bg-dark text-white me-1 rounded-0"
+            type="button"
+            id="button-addon1"
+            v-on:click="getFeedRequirements()">
+            <i class="bi bi-calculator"></i>
+            Calculate Ration
+          </button>
+        </div>
+      </div>
 
-        <div class="col-6" v-if="default_feeds.length > 0">
-            <h5>Default Feeds</h5>
-            <table class="table table-sm table-bordered shadow-sm">
-                <thead>
-                    <tr>
-                        <th scope="col" class="bg-dark text-white">Feed</th>
-                        <th scope="col" class="bg-dark text-white">CP %</th>
-                        <th scope="col" class="bg-dark text-white">TDN %</th>                                    
-                        <th scope="col" class="bg-dark text-white">Feed Type</th>
-                        <th scope="col" class="bg-dark text-white">#</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in default_feeds">
-                        <td class="bg-white">{{ '{{ item.feed_name }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.feed_cp }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.feed_tdn }}' }}</td>                 
-                        <td class="bg-white">{{ '{{ item.feed_type }}' }}</td>
-                        <td class="bg-white"><a href="#"><i class="bi bi-trash3 text-danger align-middle float-right" title="Remove from default" v-on:click="selected_feed=item.feed_name; setFeedAsDefault(0)"></i></a></td>
-                    </tr>                 
-                </tbody>
-            </table>
-        </div>
-    </div>    
+      <div class="col-6" v-if="default_feeds.length > 0">
+        <h5>Default Feeds</h5>
+        <table class="table table-sm table-bordered shadow-sm">
+          <thead>
+            <tr>
+              <th scope="col" class="bg-dark text-white">Feed</th>
+              <th scope="col" class="bg-dark text-white">CP %</th>
+              <th scope="col" class="bg-dark text-white">TDN %</th>
+              <th scope="col" class="bg-dark text-white">Feed Type</th>
+              <th scope="col" class="bg-dark text-white">#</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in default_feeds">
+              <td class="bg-white">{{ '{{ item.feed_name }}' }}</td>
+              <td class="bg-white">{{ '{{ item.feed_cp }}' }}</td>
+              <td class="bg-white">{{ '{{ item.feed_tdn }}' }}</td>
+              <td class="bg-white">{{ '{{ item.feed_type }}' }}</td>
+              <td class="bg-white">
+                <a href="#">
+                  <i
+                    class="bi bi-trash3 text-danger align-middle float-right"
+                    title="Remove from default"
+                    v-on:click="selected_feed=item.feed_name; setFeedAsDefault(0)"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <!-- results of calculations -->
     <div class="row mt-5" v-if="nutrition_req.length > 0">
-        <div class="col-9">
-             <h5>Calculated Feed Proportions</h5>
-            <table class="table table-sm table-bordered shadow-sm">
-                <thead>
-                    <tr>
-                        <th scope="col" class="bg-dark text-white">Weight</th>
-                        <th scope="col" class="bg-dark text-white">Animal</th>
-                          <th scope="col" class="bg-dark text-white">ADG</th>
-                        <th scope="col" class="bg-dark text-white">DM (lb)</th>
-                        <th scope="col" class="bg-dark text-white">Total Grain (lb)</th>
-                        <th scope="col" class="bg-dark text-white">Grain (lb)</th>
-                        <th scope="col" class="bg-dark text-white">Protein (lb)</th>
-                        <th scope="col" class="bg-dark text-white">Total Hay (lb)</th>                                                          
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in results">
-                        <td class="bg-white">{{ '{{ item.weight }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.animal_type }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.adg }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.dm }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.grain_tot_lb }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.grain_lb }}' }}</td>                 
-                        <td class="bg-white">{{ '{{ item.protein_lb }}' }}</td>
-                        <td class="bg-white">{{ '{{ item.hay_tot_lb }}' }}</td>
-                    </tr>                 
-                </tbody>
-            </table>
-        </div>
+      <div class="col-9">
+        <h5>Calculated Feed Proportions</h5>
+        <table class="table table-sm table-bordered shadow-sm">
+          <thead>
+            <tr>
+              <th scope="col" class="bg-dark text-white">Weight</th>
+              <th scope="col" class="bg-dark text-white">Animal</th>
+              <th scope="col" class="bg-dark text-white">ADG</th>
+              <th scope="col" class="bg-dark text-white">DM (lb)</th>
+              <th scope="col" class="bg-dark text-white">Total Grain (lb)</th>
+              <th scope="col" class="bg-dark text-white">Grain (lb)</th>
+              <th scope="col" class="bg-dark text-white">Protein (lb)</th>
+              <th scope="col" class="bg-dark text-white">Total Hay (lb)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in results">
+              <td class="bg-white">{{ '{{ item.weight }}' }}</td>
+              <td class="bg-white">{{ '{{ item.animal_type }}' }}</td>
+              <td class="bg-white">{{ '{{ item.adg }}' }}</td>
+              <td class="bg-white">{{ '{{ item.dm }}' }}</td>
+              <td class="bg-white">{{ '{{ item.grain_tot_lb }}' }}</td>
+              <td class="bg-white">{{ '{{ item.grain_lb }}' }}</td>
+              <td class="bg-white">{{ '{{ item.protein_lb }}' }}</td>
+              <td class="bg-white">{{ '{{ item.hay_tot_lb }}' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-        <!-- calculations for multiple heads for totals with price -->
-          <div class="col-3">
-            <h5>Totals for <span class="mx-2">{{ '{{ requirements.heads }}' }}</span> heads in lb</h5>
-            <ul class="list-group shadow-sm">
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Average Animal Weight</strong> {{ '{{ result_totals.average_weight }}' }}
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Daily Grain Intake</strong> {{ '{{ result_totals.grain_daily }}' }} lb
-                </li>
-                 <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Daily Hay Intake</strong> {{ '{{ result_totals.hay_daily }}' }} lb
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Twice a day grain intake</strong> {{ '{{ result_totals.grain_twice_day }}' }} lb
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Twice a day hay intake</strong> {{ '{{ result_totals.hay_twice_day }}' }} lb
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Daily grain Scoops</strong> {{ '{{ result_totals.scoops_daily }}' }}
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Twice a day grain scoops</strong> {{ '{{ result_totals.scoops_twice_day }}' }}
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Grain to finish</strong> {{ '{{ result_totals.grain_finish }}' }} lb
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Hay to finish</strong> {{ '{{ result_totals.hay_finish }}' }} lb
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Grain finish price</strong> C$ {{ '{{ result_totals.grain_finish_price }}' }}
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
-                    <strong>Hay finish price</strong> C$ {{ '{{ result_totals.hay_finish_price }}' }}
-                </li>
-            </ul>           
-        </div>
+      <!-- calculations for multiple heads for totals with price -->
+      <div class="col-3">
+        <h5>Totals for
+          <span class="mx-2">{{ '{{ requirements.heads }}' }}</span>
+          heads in lb</h5>
+        <ul class="list-group shadow-sm">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Average Animal Weight</strong>
+            {{ '{{ result_totals.average_weight }}' }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Daily Grain Intake</strong>
+            {{ '{{ result_totals.grain_daily }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Daily Hay Intake</strong>
+            {{ '{{ result_totals.hay_daily }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Twice a day grain intake</strong>
+            {{ '{{ result_totals.grain_twice_day }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Twice a day hay intake</strong>
+            {{ '{{ result_totals.hay_twice_day }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Daily grain Scoops</strong>
+            {{ '{{ result_totals.scoops_daily }}' }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Twice a day grain scoops</strong>
+            {{ '{{ result_totals.scoops_twice_day }}' }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Grain to finish</strong>
+            {{ '{{ result_totals.grain_finish }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Hay to finish</strong>
+            {{ '{{ result_totals.hay_finish }}' }} lb
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Grain finish price</strong>
+            C$ {{ '{{ result_totals.grain_finish_price }}' }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Hay finish price</strong>
+            C$ {{ '{{ result_totals.hay_finish_price }}' }}
+          </li>
+        </ul>
+      </div>
     </div>
-</div>
+  </div>
 
 {% endblock %}
 
-{% block custom_scripts %}   
+{% block custom_scripts %}
 
-    <script src="/js/vue/ration/calculator/index.js"></script>
+  <script src="/js/vue/ration/calculator/index.js" ></script>
 
-     <script type="application/javascript">
-        $(function () {          
-
-        });
-    </script>
+  <script type="application/javascript">
+    $(function () {          
+    });
+  </script>
 {% endblock %}

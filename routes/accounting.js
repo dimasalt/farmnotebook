@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const upload = require('../midleware/transactionReceiptUpload');
+
 //budget controller
 const accountingBudgetController = require('../controllers/accounting/budget/accountingBudgetController');
 
@@ -54,7 +56,8 @@ router.post("/records/api/add", transactionRecordsController.addTransactionRecor
 router.post("/records/api/delete", transactionRecordsController.deleteTransactionRecord);
 router.post("/records/api/item/add", transactionRecordsController.addTransactionRecordItem);
 router.post("/records/api/item/delete", transactionRecordsController.deleteTransactionRecordItem);
-
+router.post("/records/api/upload", upload.single('file'), transactionRecordsController.uploadTransactionRecordReceipt);
+router.post("/records/api/upload/delete", upload.single('file'), transactionRecordsController.deleteTransactionRecordReceipt);
 
 
 

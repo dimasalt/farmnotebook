@@ -18,27 +18,37 @@
         <h2 class="text-dark">Ration Requirements</h2>
       </div>
       <div class="col-1">
-        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.adg_selected" v-on:change="getFeedRequirements()">
+        <select
+          class="form-select rounded-0 form-select-sm shadow-sm"
+          aria-label="Select group"
+          v-model="search_item.adg_selected"
+          v-on:change="getFeedRequirements()">
           <option value="0" title=""></option>
           <option v-for="item in search_item.adgs" v-bind:value="item.adg">
-          {{ '{{ item.adg }}' }}
-          </option>            
+            {{ '{{ item.adg }}' }}
+          </option>
         </select>
       </div>
       <div class="col-1">
-        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.start_weight_selected" v-on:change="getFeedRequirements()">
+        <select class="form-select rounded-0 form-select-sm shadow-sm"
+          aria-label="Select group"
+          v-model="search_item.start_weight_selected"
+          v-on:change="getFeedRequirements()">
           {% comment %} <option value="200" title=""></option> {% endcomment %}
           <option v-for="item in search_item.start_weights" v-bind:value="item.weight">
-          {{ '{{ item.weight }}' }}
-          </option>            
+            {{ '{{ item.weight }}' }}
+          </option>
         </select>
       </div>
       <div class="col-1">
-        <select class="form-select rounded-0 form-select-sm shadow-sm" aria-label="Select group" v-model="search_item.end_weight_selected" v-on:change="getFeedRequirements()">
+        <select class="form-select rounded-0 form-select-sm shadow-sm"
+          aria-label="Select group"
+          v-model="search_item.end_weight_selected"
+          v-on:change="getFeedRequirements()">
           {% comment %} <option value="3000" title=""></option> {% endcomment %}
           <option v-for="item in search_item.end_weights" v-bind:value="item.weight">
-          {{ '{{ item.weight }}' }}
-          </option>            
+            {{ '{{ item.weight }}' }}
+          </option>
         </select>
       </div>
     </div>
@@ -58,17 +68,17 @@
               <th scope="col" class="bg-dark text-white">Dry Matter Per Day</th>
             </tr>
           </thead>
-          <tbody>     
+          <tbody>
 
-              <tr v-for="item in feedings">
-                <td>{{ '{{ item.weight }}' }}</td>
-                <td>{{ '{{ item.animal_type }}' }}</td>
-                <td>{{ '{{ item.adg }}' }}</td>
-                <td>{{ '{{ item.cp }}' }}</td>
-                <td>{{ '{{ item.tdn }}' }}</td>
-                <td>{{ '{{ item.dm_per_day }}' }}</td>
-              </tr>
-            
+            <tr v-for="item in feedings">
+              <td>{{ '{{ item.weight }}' }}</td>
+              <td>{{ '{{ item.animal_type }}' }}</td>
+              <td>{{ '{{ item.adg }}' }}</td>
+              <td>{{ '{{ item.cp }}' }}</td>
+              <td>{{ '{{ item.tdn }}' }}</td>
+              <td>{{ '{{ item.dm_per_day }}' }}</td>
+            </tr>
+
           </tbody>
         </table>
       </div>
@@ -80,7 +90,7 @@
 {% block custom_scripts %}
 
   <!-- feed requirements for cattle vuejs -->
-  <script src="/js/vue/ration/feedrequirements/index.js"></script>
+  <script src="/js/vue/ration/feedrequirements/index.js" ></script>
 
   <script type="application/javascript">
     $(function () {          

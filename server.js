@@ -1,15 +1,20 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 //const cookieParser = require('cookie-parser');
-const jwt = require("jsonwebtoken");
+//const jwt = require("jsonwebtoken");
 const { Liquid } = require('liquidjs');
 
 const app = express();
 
 //to use for css , javascript and other static files
+// app.use("/public", express.static(__dirname + "/public")); 
+// app.use("/uploads", express.static(__dirname + "/uploads")); 
+
+
 app.use(express.static(__dirname + "/public")); 
 app.use(express.urlencoded({ extended : true }));
 app.use(express.json()); //to use json in response
+
 //app.use(cookieParser()); //using cookies in our application
 
 // register liquid engine
