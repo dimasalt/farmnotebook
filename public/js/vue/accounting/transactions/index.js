@@ -175,17 +175,12 @@ const transactions = {
     
             var data = {
                 id : self.transaction_record.id, 
-                trans_image :  self.transaction_record.trans_image,
-                csrf : $('#csrf').val() 
-            };
-
-            data = JSON.stringify(data);
+                trans_image :  self.transaction_record.trans_image
+            };        
     
-            var result = $.post("/bookkeeping/records/receipt/remove", data);
+            var result = $.post("/accounting/records/api/upload/delete", data);
     
             result.done(function (data) {
-                data = JSON.parse(data);              
-
                 if (data == true) {   
                                                 
                     //reset transaction record and item 
@@ -466,7 +461,10 @@ const transactions = {
         delTransactionMain(){
             var self = this;
 
-            var data = {id : self.transaction_record.id };
+            var data = {
+                id : self.transaction_record.id,
+                trans_image : self.transaction_record.trans_image
+             };
             var result = $.post("/accounting/records/api/delete", data);
     
             result.done(function (data) {       
@@ -474,10 +472,7 @@ const transactions = {
 
                     //hide the modal
                     $('#deleteModalRecord').modal('hide');
-
-                    //remove transaction image receipt
-                    self.transactionImageRemove();
-
+                   
                     //get updated list of transactions
                     self.transactionsGetAll();
 

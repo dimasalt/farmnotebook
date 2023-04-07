@@ -141,7 +141,15 @@ exports.deleteTransactionRecord = async (req, res) => {
             req.body.id
         ]);              
 
-        let is_changed = results.affectedRows > 0 ? true : false;            
+        let is_changed = results.affectedRows > 0 ? true : false;
+        
+        // if database record is removed and there is image exists 
+        // then remove
+        if(is_changed && req.body.trans_image.length > 0){
+
+            let filePath = req.body.trans_image.split(path.sep).join('/');
+            deleteFileRecursive(filePath);
+        }
 
         return res.json(is_changed);
     }
@@ -242,29 +250,42 @@ exports.uploadTransactionRecordImage = async (req, res) => {
 * @route POST /accounting/record/api/upload
 * @access public // later on admin only
 */
-exports.deleteTransactionRecordImage = async (req, res) => {  
+exports.deleteTransactionRecordImage = async (req, res) => {      
 
     try{
         const promisePool = pool.promise();
         const [results,fields] = await promisePool.query('call transactionUpdateImage(?,?)', 
         [
-            req.body.transaction_id,
-            req.body.trans_image
+            req.body.id,
+            ''
         ]);              
 
-        let is_changed = results.affectedRows > 0 ? true : false;            
+        let is_changed = results.affectedRows > 0 ? true : false;       
+        
+        //remove physical file from disk
+        if(is_changed === true){
+            
+            //convert path to universal unix path separator as it works in windows too
+            let filePath = req.body.trans_image.split(path.sep).join('/');
+
+            deleteFileRecursive(filePath);
+        }
 
         return res.json(is_changed);
     }
     catch (err){ res.status(500).json({ error : err}) };    
 };
 
+/**
+ * @description  removes physical file from the disk
+ * @param filePath 
+ * @access public // later admin only
+ */
+const deleteFileRecursive = function(filePath){    
 
-const deleteFileRecursive = function(filePath){
-
-    let fullPath = path.join(__dirname, '..', '..', filePath);
+    let fullPath = path.join(__dirname, '..', '..', '..', 'public', filePath);    
     
-    //check if file
+    // check if file // if yes remove
     if(fs.lstatSync(fullPath).isFile())
     {
         fs.unlinkSync(fullPath);
@@ -272,18 +293,25 @@ const deleteFileRecursive = function(filePath){
     // otherwise if folder check if full, if not full remove
     else if(fs.lstatSync(fullPath).isDirectory())
     {
-        if(fs.statSync(fullPath).length === 0)
-            fs.rmSync(fullPath);
+        // not checking if folder has files or other folders, because folder going 
+        // to remove only empty folders
+        try {      
+            fs.rmdirSync(fullPath);
+        } catch(error) {
+            //not empty and we get an error
+            //console.log(error);
+            return;
+        }
     }
 
-    let newFilePath = '';
-    if(filePath.include('/'))
-        newFilePath = filePath.split('/').pop().join('/');
-    else if(filePath.include('\\'))
-        newFilePath = filePath.split('/').pop().join('\\');
 
-    //if()
+    // generate new path minus last item to call function again
+    let newFilePathArray = filePath.split('/');
+    let popped = newFilePathArray.pop();
 
+    // bigger than 1 because main upload folder is in the first place of array path
+    if(newFilePathArray.length > 1) 
+        deleteFileRecursive(newFilePathArray.join('/'));
     
 };
 
