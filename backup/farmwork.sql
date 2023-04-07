@@ -26,9 +26,9 @@ CREATE TABLE IF NOT EXISTS `budget` (
   `is_default` tinyint(4) NOT NULL DEFAULT 0,
   `budget_date` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps financial planning and budgeting records';
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps financial planning and budgeting records';
 
--- Dumping data for table farmwork.budget: ~11 rows (approximately)
+-- Dumping data for table farmwork.budget: ~9 rows (approximately)
 DELETE FROM `budget`;
 INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget_amount_actual`, `is_done`, `is_default`, `budget_date`) VALUES
 	(72, 0, 'Equipment expences', 0.00, 0.00, 0, 0, '2022-02-01 00:00:00'),
@@ -38,10 +38,8 @@ INSERT INTO `budget` (`id`, `parent_id`, `budget_name`, `budget_amount`, `budget
 	(76, 72, 'Box Blade', -2000.00, 0.00, 0, 0, '2021-11-30 00:00:00'),
 	(77, 72, 'Snow Blower', -2000.00, 0.00, 0, 0, '2021-11-30 00:00:00'),
 	(78, 0, 'End Work This Year', 0.00, 0.00, 0, 1, '2023-02-07 00:00:00'),
-	(80, 78, 'German Shepherd Puppies', 3000.00, 1000.00, 0, 0, '2023-03-31 00:00:00'),
-	(81, 78, 'Beef Sales', 4000.00, 4800.00, 0, 0, '2023-02-16 00:00:00'),
-	(82, 78, 'Cattle', -2800.00, 0.00, 0, 0, '2023-02-28 00:00:00'),
-	(83, 78, 'Butcher Fees', -1200.00, 0.00, 0, 0, '2023-03-28 00:00:00');
+	(80, 78, 'German Shepherd Puppies', 1000.00, 0.00, 0, 0, '2023-04-30 00:00:00'),
+	(125, 78, 'Beef Sale', 3000.00, 0.00, 0, 0, '2023-04-11 00:00:00');
 
 -- Dumping structure for table farmwork.contact
 DROP TABLE IF EXISTS `contact`;
@@ -421,7 +419,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='record of all transactions';
 
--- Dumping data for table farmwork.transaction: ~228 rows (approximately)
+-- Dumping data for table farmwork.transaction: ~235 rows (approximately)
 DELETE FROM `transaction`;
 INSERT INTO `transaction` (`id`, `trans_desc`, `vendor_name`, `vendor_address`, `trans_currency`, `trans_image`, `trans_date`, `created_at`, `updated_at`) VALUES
 	('0058697e-be24-11ed-a0e4-d8cb8ac0caec', '', 'Circle K (Shell)', '565 Algonquin Blvd E, Timmins, ON P4N 7N5', 'C$', NULL, '2022-04-24 00:00:00', '2023-03-08 21:42:09', '2023-03-08 21:42:09'),
@@ -598,6 +596,7 @@ INSERT INTO `transaction` (`id`, `trans_desc`, `vendor_name`, `vendor_address`, 
 	('b405c0cd-a7ee-11ec-ac57-d8cb8ac0caec', '', 'Railside General Supplies', '3272 Monahan Rd, Val Gagne, On, P0K 1W0, Canada', 'C$', 'uploads/transactions/2021/05/17/railside_general_supplies-b405c0cd-a7ee-11ec-ac57-d8cb8ac0caec.jpeg', '2021-05-17 00:00:00', '2022-03-19 21:40:14', '2022-03-19 21:45:06'),
 	('b626a1e1-be26-11ed-a0e4-d8cb8ac0caec', '', 'Circle K (Shell)', '565 Algonquin Blvd E, Timmins, ON P4N 7N5', 'C$', NULL, '2022-09-08 00:00:00', '2023-03-08 22:01:33', '2023-03-08 22:01:33'),
 	('b9f05c00-a8c5-11ec-ac57-d8cb8ac0caec', '', 'Thornloe Farm Supply Inc', '31 Main St, Thornloe, ON, P0J 1S0', 'C$', 'uploads/transactions/2021/03/22/thornloe_farm_supply_inc-b9f05c00-a8c5-11ec-ac57-d8cb8ac0caec.jpeg', '2021-03-22 00:00:00', '2022-03-20 23:19:17', '2022-03-20 23:20:46'),
+	('ba497eb6-cf6a-11ed-8dd1-d8cb8ac0caec', '', 'Caribou Road Farm', '', 'C$', NULL, '2022-12-30 00:00:00', '2023-03-30 22:20:50', '2023-03-30 22:20:50'),
 	('bad3281c-c28b-11ed-8038-d8cb8ac0caec', '', 'Esso', '430 ON-11, Matheson, ON P0K 1N0', 'C$', NULL, '2022-02-28 00:00:00', '2023-03-14 13:14:44', '2023-03-14 13:14:44'),
 	('baf25683-c216-11ed-8038-d8cb8ac0caec', '', 'Circle K', ' 287 Algonquin Blvd W, Timmins, ON P4N 2R9', 'C$', NULL, '2022-11-21 00:00:00', '2023-03-13 23:17:19', '2023-03-13 23:17:19'),
 	('bc107127-a8c7-11ec-ac57-d8cb8ac0caec', '', 'Railside General Supplies', '3272 Monahan Rd, Val Gagne, On, P0K 1W0, Canada', 'C$', 'uploads/transactions/2021/11/17/railside_general_supplies-bc107127-a8c7-11ec-ac57-d8cb8ac0caec.jpeg', '2021-11-17 00:00:00', '2022-03-20 23:33:39', '2022-03-20 23:35:27'),
@@ -670,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `transaction_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
 
--- Dumping data for table farmwork.transaction_category: ~43 rows (approximately)
+-- Dumping data for table farmwork.transaction_category: ~41 rows (approximately)
 DELETE FROM `transaction_category`;
 INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `category_description`, `created_at`) VALUES
 	(1, 0, 'Feed', 'Feed, supplements, straw, and bedding', '2019-04-29 21:32:30'),
@@ -736,7 +735,7 @@ CREATE TABLE IF NOT EXISTS `transaction_item` (
   CONSTRAINT `FK_transaction_item_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='A table that holds all transaction items.';
 
--- Dumping data for table farmwork.transaction_item: ~352 rows (approximately)
+-- Dumping data for table farmwork.transaction_item: ~354 rows (approximately)
 DELETE FROM `transaction_item`;
 INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`, `item_category`, `item_subcategory`, `amount`, `hst_tax`, `gst_tax`, `pst_tax`, `is_expence`, `created_at`) VALUES
 	('00708ace-bb64-11ed-a725-d8cb8ac0caec', 'ebd6f0a8-bb63-11ed-a725-d8cb8ac0caec', '1 tote mixed feed', '', 'Feed', 'Feed Mix', -674.24, 0.00, 0.00, 0.00, 1, '2023-03-05 09:42:49'),
@@ -744,6 +743,7 @@ INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`
 	('01dfde6b-b7cf-11ed-a20d-d8cb8ac0caec', 'dcea3f73-b7ce-11ed-a20d-d8cb8ac0caec', '1 soybean meal', '', 'Feed', 'Soybean meal', -29.50, 0.00, 0.00, 0.00, 1, '2023-02-28 20:18:37'),
 	('02c6eccb-be1f-11ed-a0e4-d8cb8ac0caec', 'f3dec6e1-be1e-11ed-a0e4-d8cb8ac0caec', 'Gas', '', 'Vehicle', 'Gasoline and oil', -76.65, 0.00, 0.00, 0.00, 1, '2023-03-08 21:06:26'),
 	('044255c2-b7d0-11ed-a20d-d8cb8ac0caec', 'f2b3ff5a-b7cf-11ed-a20d-d8cb8ac0caec', '1 40% beef supplement', '', 'Feed', 'Mineral Mix', -25.00, 0.00, 0.00, 0.00, 1, '2023-02-28 20:25:51'),
+	('0485813d-cf6b-11ed-8dd1-d8cb8ac0caec', 'ba497eb6-cf6a-11ed-8dd1-d8cb8ac0caec', 'Mortgage', '', 'Farm', 'Mortgage interest', -4765.14, 0.00, 0.00, 0.00, 1, '2023-03-30 22:22:54'),
 	('04bf0db5-b7cc-11ed-a20d-d8cb8ac0caec', 'f20edd62-b7cb-11ed-a20d-d8cb8ac0caec', '1 soy bean meal', '', 'Feed', 'Soybean meal', -29.50, 0.00, 0.00, 0.00, 1, '2023-02-28 19:57:14'),
 	('052158d8-a7e3-11ec-ac57-d8cb8ac0caec', '82875753-a7e2-11ec-ac57-d8cb8ac0caec', 'Beef Supplement - 1bg', '', 'Feed', 'Mineral Mix', -18.00, 0.00, 0.00, 0.00, 1, '2022-03-19 20:16:36'),
 	('065a3a78-c28c-11ed-8038-d8cb8ac0caec', 'fab3fb94-c28b-11ed-8038-d8cb8ac0caec', 'Gas', '', 'Vehicle', 'Gasoline and oil', -140.00, 0.00, 0.00, 0.00, 1, '2023-03-14 13:16:50'),
@@ -1040,6 +1040,7 @@ INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`
 	('d1a5f12b-a95c-11ec-ac57-d8cb8ac0caec', '9c47eefc-a95c-11ec-ac57-d8cb8ac0caec', 'Black Calf - 95 lb', '', 'Livestock', 'Cattle', -351.50, 0.00, 0.00, 0.00, 1, '2022-03-21 17:20:45'),
 	('d22fcbe3-a8c6-11ec-ac57-d8cb8ac0caec', 'bc3827b2-a8c6-11ec-ac57-d8cb8ac0caec', 'Straw - 3 bales', '', 'Feed', 'Straw', -35.25, 0.00, 0.00, 0.00, 1, '2022-03-20 23:27:07'),
 	('d23e2a68-a8c5-11ec-ac57-d8cb8ac0caec', 'b9f05c00-a8c5-11ec-ac57-d8cb8ac0caec', 'Milk Replacer - 2bgs', '', 'Feed', 'Milk Replacer', -180.00, 0.00, 0.00, 0.00, 1, '2022-03-20 23:19:58'),
+	('d28ef484-cf6a-11ed-8dd1-d8cb8ac0caec', 'ba497eb6-cf6a-11ed-8dd1-d8cb8ac0caec', 'Hydro', '', 'Property', 'Electricity', -1230.80, 0.00, 0.00, 0.00, 1, '2023-03-30 22:21:31'),
 	('d35a663f-c214-11ed-8038-d8cb8ac0caec', 'c309a413-c214-11ed-8038-d8cb8ac0caec', 'Gas', '', 'Vehicle', 'Gasoline and oil', -130.07, 0.00, 0.00, 0.00, 1, '2023-03-13 23:03:41'),
 	('d657eb72-a958-11ec-ac57-d8cb8ac0caec', 'a23361fc-a958-11ec-ac57-d8cb8ac0caec', 'Calf Starter - 2 bgs', '', 'Feed', 'Calf Starter', -45.00, 0.00, 0.00, 0.00, 1, '2022-03-21 16:52:14'),
 	('d856f454-a8ce-11ec-ac57-d8cb8ac0caec', 'a2a91f84-a8ce-11ec-ac57-d8cb8ac0caec', 'Black Calf - 2 heads ', '', 'Livestock', 'Cattle', 1556.85, 0.00, 0.00, 0.00, 0, '2022-03-21 00:24:33'),

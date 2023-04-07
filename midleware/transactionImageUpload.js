@@ -10,11 +10,21 @@ const fileStorageEngine = multer.diskStorage({
          let dateSplit = req.body.transaction_date.split('T');
          let year = dateSplit[0].split('-')[0];
          let month = dateSplit[0].split('-')[1];
-         let day = dateSplit[0].split('-')[2];
+         let day = dateSplit[0].split('-')[2];         
  
          let filePath = path.join(__dirname, '..', 'public', 'uploads', 'transactions', year, month, day);
-         if(!fs.existsSync(filePath)) 
-             fs.mkdirSync(filePath, {recursive: true});
+
+         //create a path for the uploaded file
+         try {
+            if(!fs.existsSync(filePath))
+                fs.mkdirSync(filePath, {recursive: true});             
+
+               //assign date path part for the file 
+               req.body.year = year;
+               req.body.month = month;
+               req.body.day = day;
+        }
+        catch (err) {}
 
         cb(null, filePath);
     },
@@ -22,7 +32,13 @@ const fileStorageEngine = multer.diskStorage({
 
         //get extention and create new file name
         let fileExtentionName = path.extname(file.originalname);        
-        let newFileName = req.body.vendor_name.split(' ').join('_') + '-' + req.body.transaction_id + fileExtentionName;              
+        let newFileName = req.body.vendor_name.split(' ').join('_') + '-' + req.body.transaction_id + fileExtentionName;    
+        
+        //convert to lower case
+        newFileName = newFileName.toLowerCase();  
+        
+        //preping full path for transaction image to be sent to receipt upload controller
+        req.body.trans_image = path.join('uploads', 'transactions', req.body.year, req.body.month, req.body.day, newFileName);               
          
         cb(null, newFileName);
     }                            

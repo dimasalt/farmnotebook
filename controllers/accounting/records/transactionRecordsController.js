@@ -1,4 +1,6 @@
 const pool = require('../../../services/mysql');
+const fs = require('fs');
+const path = require('path');
 
 
 /**
@@ -213,29 +215,25 @@ exports.deleteTransactionRecordItem = async (req, res) => {
 * @route POST /accounting/record/api/upload
 * @access public // later on admin only
 */
-exports.uploadTransactionRecordReceipt = async (req, res) => {  
-
-    let fileName = req.file;
+exports.uploadTransactionRecordImage = async (req, res) => {  
     
+    let fileName = req.file;    
 
-    // try{
-    //     const promisePool = pool.promise();
-    //     const [results,fields] = await promisePool.query('call transactionCreate(?,?,?,?,?)', 
-    //     [
-    //         req.body.vendor_name,
-    //         req.body.vendor_address,
-    //         req.body.trans_desc,
-    //         req.body.trans_currency,
-    //         req.body.trans_date                            
-    //     ]);              
+    try{
+        const promisePool = pool.promise();
+        const [results,fields] = await promisePool.query('call transactionUpdateImage(?,?)', 
+        [
+            req.body.transaction_id,
+            req.body.trans_image                       
+        ]);              
 
-    //     let is_changed = results.affectedRows > 0 ? true : false;            
-
-    //     return res.json(is_changed);
-    // }
-    // catch (err){ res.status(500).json({ error : err}) };    
-    
-    console.log(req.body.transaction_date);
+        let is_changed = results.affectedRows > 0 ? true : false;            
+        
+        // return path for an transaction image 
+        // (code already has an id and upload status in dropzone script)
+        return res.json({ trans_image: req.body.trans_image });
+    }
+    catch (err){ res.status(500).json({ error : err}) };      
 };
 
 
@@ -244,24 +242,49 @@ exports.uploadTransactionRecordReceipt = async (req, res) => {
 * @route POST /accounting/record/api/upload
 * @access public // later on admin only
 */
-exports.deleteTransactionRecordReceipt = async (req, res) => {  
+exports.deleteTransactionRecordImage = async (req, res) => {  
 
-    // try{
-    //     const promisePool = pool.promise();
-    //     const [results,fields] = await promisePool.query('call transactionCreate(?,?,?,?,?)', 
-    //     [
-    //         req.body.vendor_name,
-    //         req.body.vendor_address,
-    //         req.body.trans_desc,
-    //         req.body.trans_currency,
-    //         req.body.trans_date                            
-    //     ]);              
+    try{
+        const promisePool = pool.promise();
+        const [results,fields] = await promisePool.query('call transactionUpdateImage(?,?)', 
+        [
+            req.body.transaction_id,
+            req.body.trans_image
+        ]);              
 
-    //     let is_changed = results.affectedRows > 0 ? true : false;            
+        let is_changed = results.affectedRows > 0 ? true : false;            
 
-    //     return res.json(is_changed);
-    // }
-    // catch (err){ res.status(500).json({ error : err}) };    
+        return res.json(is_changed);
+    }
+    catch (err){ res.status(500).json({ error : err}) };    
+};
+
+
+const deleteFileRecursive = function(filePath){
+
+    let fullPath = path.join(__dirname, '..', '..', filePath);
+    
+    //check if file
+    if(fs.lstatSync(fullPath).isFile())
+    {
+        fs.unlinkSync(fullPath);
+    }
+    // otherwise if folder check if full, if not full remove
+    else if(fs.lstatSync(fullPath).isDirectory())
+    {
+        if(fs.statSync(fullPath).length === 0)
+            fs.rmSync(fullPath);
+    }
+
+    let newFilePath = '';
+    if(filePath.include('/'))
+        newFilePath = filePath.split('/').pop().join('/');
+    else if(filePath.include('\\'))
+        newFilePath = filePath.split('/').pop().join('\\');
+
+    //if()
+
+    
 };
 
 
