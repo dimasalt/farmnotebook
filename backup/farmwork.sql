@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `contact` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps contacts for contact book and vendors (for transactions and others)\r\n0 - normal contact\r\n1 - vendor\r\n2 - customer';
 
--- Dumping data for table farmwork.contact: ~52 rows (approximately)
+-- Dumping data for table farmwork.contact: ~49 rows (approximately)
 DELETE FROM `contact`;
 INSERT INTO `contact` (`id`, `name`, `address`, `phone`, `email`, `note`, `type`, `created_at`) VALUES
 	('08972545-b264-11ed-9b18-d8cb8ac0caec', 'Kathy Pietrasik', '#130 on Highway 570 Sesenika', '705-642-9180', NULL, 'wanted more ground beef', 2, '2023-02-21 22:49:59'),
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `contact_type` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table farmwork.contact_type: ~3 rows (approximately)
+-- Dumping data for table farmwork.contact_type: ~2 rows (approximately)
 DELETE FROM `contact_type`;
 INSERT INTO `contact_type` (`id`, `type`) VALUES
 	(1, 'vendor'),
@@ -167,34 +167,6 @@ INSERT INTO `event_type` (`id`, `ev_type_name`, `ev_type_desc`, `created_at`) VA
 	('88f7cc5e-acfb-11eb-a999-d8cb8ac0caec', 'Medicated', 'Used to report medication use on a livestock', '2019-05-05 21:19:43'),
 	('b1d57a36-acfb-11eb-a999-d8cb8ac0caec', 'Hoof Trimming', 'Used to report a hoof trimming performed on the animal', '2019-05-09 23:10:51');
 
--- Dumping structure for table farmwork.event_type_bak
-DROP TABLE IF EXISTS `event_type_bak`;
-CREATE TABLE IF NOT EXISTS `event_type_bak` (
-  `ev_type_id` char(36) NOT NULL DEFAULT uuid(),
-  `ev_type_name` varchar(20) NOT NULL,
-  `ev_type_value` varchar(25) NOT NULL,
-  `ev_type_desc` varchar(300) DEFAULT NULL,
-  `place` tinyint(4) NOT NULL DEFAULT 100,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`ev_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Types of events for a farm livestock. Space column used selection order when displayed in the list on website.';
-
--- Dumping data for table farmwork.event_type_bak: ~12 rows (approximately)
-DELETE FROM `event_type_bak`;
-INSERT INTO `event_type_bak` (`ev_type_id`, `ev_type_name`, `ev_type_value`, `ev_type_desc`, `place`, `created_at`) VALUES
-	('09ef9b47-6f9d-11e9-992e-d8cb8ac0caec', 'medicated', 'Medicated', 'Used to report medication use on a livestock', 2, '2019-05-05 21:19:43'),
-	('37a81ef3-72d1-11e9-9f5d-d8cb8ac0caec', 'hoof_trim', 'Hoof Trimming', 'Used to report a hoof trimming performed on the animal', 10, '2019-05-09 23:10:51'),
-	('5060a862-6f9a-11e9-992e-d8cb8ac0caec', 'birth_date', 'Birth Date', 'Used to associate an animal’s birth date with its unique approved tag number.', 11, '2019-05-05 21:00:17'),
-	('5067e8aa-6f9a-11e9-992e-d8cb8ac0caec', 'cross_reference', 'Cross Reference', 'Used to associate a newly applied approved tag number on a previously tagged animal where the lost tag number is known.', 6, '2019-05-05 21:00:17'),
-	('62349b96-2f35-11ea-ac21-d8cb8ac0caec', 'weight', 'Weight', 'Used to report the weight of livestock.', 1, '2020-01-04 16:01:31'),
-	('869c59ed-6f9b-11e9-992e-d8cb8ac0caec', 'replaced', 'Replaced', 'Used to associate a newly applied approved tag number on a previously tagged animal where the lost tag number is not known.', 7, '2019-05-05 21:08:58'),
-	('86a29041-6f9b-11e9-992e-d8cb8ac0caec', 'move_in', 'Move In', 'Report the identification of an approved tag applied to an individual animal, or report a group of animals based on species, that have been received at a defined location on a defined day.', 4, '2019-05-05 21:08:58'),
-	('86aa2637-6f9b-11e9-992e-d8cb8ac0caec', 'move_out', 'Move Out', 'Report the identification of an approved tag applied to an individual animal, or report a group of animals based on species, that have departed from a defined location on a defined day.', 5, '2019-05-05 21:08:58'),
-	('86b48a38-6f9b-11e9-992e-d8cb8ac0caec', 'sighted', 'Sighted', 'Used to report the identification of an approved tag applied to an animal that has been observed at a defined location on a defined day. (e.g., livestock operation, veterinary clinic, etc.)', 8, '2019-05-05 21:08:58'),
-	('86db3a93-6f9b-11e9-992e-d8cb8ac0caec', 'retired', 'Retired', 'Used to report the identification of an approved tag applied to an animal that has died or was slaughtered.', 9, '2019-05-05 21:08:58'),
-	('86e328da-6f9b-11e9-992e-d8cb8ac0caec', 'disposed', 'Disposed', 'Used to report the identification of an approved tag applied to an animal, or an animal based on carcass details, that has died and has been disposed of by a producer or dead stock operator.', 12, '2019-05-05 21:08:58'),
-	('f26cb0aa-2f34-11ea-ac21-d8cb8ac0caec', 'castration', 'Castration/Banding', 'Used to report of castration or banding of livestock', 3, '2020-01-04 15:58:24');
-
 -- Dumping structure for table farmwork.feed
 DROP TABLE IF EXISTS `feed`;
 CREATE TABLE IF NOT EXISTS `feed` (
@@ -212,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `feed` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Contains feed information such as CP, TDN and prices';
 
--- Dumping data for table farmwork.feed: ~4 rows (approximately)
+-- Dumping data for table farmwork.feed: ~5 rows (approximately)
 DELETE FROM `feed`;
 INSERT INTO `feed` (`id`, `feed_name`, `feed_desc`, `feed_cp`, `feed_tdn`, `feed_type`, `feed_price`, `feed_price_lb`, `feed_usage`, `is_default`, `feed_date`) VALUES
 	(1, 'Cracked Corn', NULL, 10, 90, 'Grain', 549.00, 2000, 100, 1, '2021-10-26 11:32:41'),
@@ -233,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `feed_requirement` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Keeps information on feed requirements for animals in different stages';
 
--- Dumping data for table farmwork.feed_requirement: ~38 rows (approximately)
+-- Dumping data for table farmwork.feed_requirement: ~35 rows (approximately)
 DELETE FROM `feed_requirement`;
 INSERT INTO `feed_requirement` (`id`, `weight`, `animal_type`, `adg`, `dm_per_day`, `cp`, `tdn`) VALUES
 	(1, 200, 'steer/heifer', 3.0, 5.4, 22.0, 80),
@@ -340,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `livestock_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='contains groups of animals grouped together for the purpose of feeding or breading';
 
--- Dumping data for table farmwork.livestock_group: ~3 rows (approximately)
+-- Dumping data for table farmwork.livestock_group: ~2 rows (approximately)
 DELETE FROM `livestock_group`;
 INSERT INTO `livestock_group` (`id`, `group_name`, `group_desc`, `created_at`) VALUES
 	(1, 'July Group First', NULL, '2021-12-14 00:13:33'),
@@ -378,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `medication` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='list of medication';
 
--- Dumping data for table farmwork.medication: ~5 rows (approximately)
+-- Dumping data for table farmwork.medication: ~6 rows (approximately)
 DELETE FROM `medication`;
 INSERT INTO `medication` (`id`, `name`, `desc`, `instruction`, `img`, `price`, `on_hand_doses`, `created_at`) VALUES
 	(1, 'Tasvax 8', '<p>For the vaccination of cattle and sheep against diseases caused by Cl. chauvoei (black leg), Cl. haemolyticum (bacillary hemoglobinuria), Cl. novyi Type B (black disease or infectious necrotic hepatitis), Cl. perfringens Type B (lamb dysentery), Type C (hemorrhagic enterotoxemia), type D (pulpy kidney), Cl. septicum (malignant edema) and Cl. tetani (tetanus).</p>', '<p>Cattle: In order that a balanced response to vaccination is obtained, a primary course of two injections of 4 mL each should be given with an interval of 6 weeks between injections. To maintain a constant high level of immunity, booster injections should be administered at intervals of 6 months, or when outbreaks are seasonal, at least 2 weeks before the anticipated outbreak. Calves vaccinated under 3 months of age should be revaccinated at 4-6 months of age. Calves vaccinated at 3 months of age or older should be revaccinated 6 weeks later. Inject subcutaneously with strict aseptic precautions.</p>', '/uploads/medication/tasvax-8.jpg', 0.00, 0, '2019-05-09 23:02:13'),
@@ -386,23 +358,6 @@ INSERT INTO `medication` (`id`, `name`, `desc`, `instruction`, `img`, `price`, `
 	(4, 'Tetanus Toxoid', 'Anti-toxing vaccination. Takes 2-3 weeks to take effect.', 'Inject intromascularly 1cc/ml. Repeat vaccination in 3-4 weeks again', 'https://www.valleyvet.com/swatches/40277_L_vvs_000.jpg', 0.00, 0, '2020-01-04 22:52:43'),
 	(5, 'Ivomec', '<p>IVOMEC Pour-On for Cattle is a clear, blue colored liquid containing 5 mg of ivermectin per mL (0.5% w/v). IVOMEC Pour-On for Cattle is formulated to deliver the recommended dose level of 500 &micro;g of ivermectin per kg of body weight in cattle when applied along the top line from the withers to the tail head at the rate of 1 mL per 10 kg.</p>', '<p>Apply along the top line from the withers to the tail head at the rate of 1 mL per 10 kg (or per 22 lb).</p>', '/uploads/medication/ivomec.jpg', 0.00, 0, '2020-02-27 10:11:31'),
 	(6, 'Bovi-Shield Gold 5', 'Bovi-Shield GOLD 5 is for vaccination of healthy cattle as an aid in preventing infectious bovine rhinotracheitis caused by infectious bovine rhinotracheitis (IBR) virus, bovine viral diarrhea caused by bovine virus diarrhea (BVD) virus Types 1 and 2, and disease caused by parainfluenza-3 (PI-3) virus and bovine respiratory syncytial (BRS) virus.', 'In accordance with Beef Quality Assurance guidelines, this product should be adminsitered 2 mL subcutaneously in the neck region.', '/uploads/medication/Bovi_Shield_Gold_5.jpg', 0.00, 0, '2020-03-08 21:44:04');
-
--- Dumping structure for table farmwork.page_settings
-DROP TABLE IF EXISTS `page_settings`;
-CREATE TABLE IF NOT EXISTS `page_settings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page_name` varchar(50) NOT NULL,
-  `setting_name` varchar(50) NOT NULL,
-  `setting_value` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains default page settings thats are being pulled during page load';
-
--- Dumping data for table farmwork.page_settings: ~3 rows (approximately)
-DELETE FROM `page_settings`;
-INSERT INTO `page_settings` (`id`, `page_name`, `setting_name`, `setting_value`) VALUES
-	(1, 'Accounting Records', 'start_date', '2021-01-01'),
-	(2, 'Accounting Records', 'end_date', '2021-12-31'),
-	(3, 'Vehicle Log Book', 'booklog_date', '2021-01-01');
 
 -- Dumping structure for table farmwork.transaction
 DROP TABLE IF EXISTS `transaction`;
@@ -669,7 +624,7 @@ CREATE TABLE IF NOT EXISTS `transaction_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Table contains all income and expence types of the farm';
 
--- Dumping data for table farmwork.transaction_category: ~42 rows (approximately)
+-- Dumping data for table farmwork.transaction_category: ~41 rows (approximately)
 DELETE FROM `transaction_category`;
 INSERT INTO `transaction_category` (`id`, `parent_id`, `category_name`, `category_description`, `created_at`) VALUES
 	(1, 0, 'Feed', 'Feed, supplements, straw, and bedding', '2019-04-29 21:32:30'),
@@ -735,7 +690,7 @@ CREATE TABLE IF NOT EXISTS `transaction_item` (
   CONSTRAINT `FK_transaction_item_transaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='A table that holds all transaction items.';
 
--- Dumping data for table farmwork.transaction_item: ~354 rows (approximately)
+-- Dumping data for table farmwork.transaction_item: ~346 rows (approximately)
 DELETE FROM `transaction_item`;
 INSERT INTO `transaction_item` (`id`, `transaction_id`, `item_name`, `item_desc`, `item_category`, `item_subcategory`, `amount`, `hst_tax`, `gst_tax`, `pst_tax`, `is_expence`, `created_at`) VALUES
 	('00708ace-bb64-11ed-a725-d8cb8ac0caec', 'ebd6f0a8-bb63-11ed-a725-d8cb8ac0caec', '1 tote mixed feed', '', 'Feed', 'Feed Mix', -674.24, 0.00, 0.00, 0.00, 1, '2023-03-05 09:42:49'),
@@ -1105,7 +1060,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='cattle management members.';
 
--- Dumping data for table farmwork.user: ~2 rows (approximately)
+-- Dumping data for table farmwork.user: ~1 rows (approximately)
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `is_active`, `created_at`) VALUES
 	('5e0d0d6c10096', 'farmer', '$2y$10$YxQsfaEVGMokSlb9QuKkUOkYxyLEOpM9XiuMFhrJifnTzjv9lnmze', 'dimasalt@gmail.com', 1, '2020-01-01 16:30:34'),
@@ -1210,7 +1165,7 @@ CREATE TABLE IF NOT EXISTS `vehicle_log_book_item` (
   CONSTRAINT `FK_vehicle_log_book_item_vehicle_log_book` FOREIGN KEY (`vehicle_log_book_id`) REFERENCES `vehicle_log_book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='vehicle log book to keep track on a business related travel';
 
--- Dumping data for table farmwork.vehicle_log_book_item: ~31 rows (approximately)
+-- Dumping data for table farmwork.vehicle_log_book_item: ~35 rows (approximately)
 DELETE FROM `vehicle_log_book_item`;
 INSERT INTO `vehicle_log_book_item` (`id`, `vehicle_log_book_id`, `destination`, `address`, `purpose`, `travel_distance`, `created_at`, `travel_date`) VALUES
 	(30, 19, 'Railside General Supplies', '3272 Monahan Rd, Val Gagne , On, Canada, P0K 1W0', 'cattle feed purchase', 30, '2023-03-08 19:35:05', '2022-08-03 00:00:00'),
@@ -2084,24 +2039,85 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure farmwork.pageSettingGet
-DROP PROCEDURE IF EXISTS `pageSettingGet`;
+-- Dumping structure for procedure farmwork.reportsGetMonthly
+DROP PROCEDURE IF EXISTS `reportsGetMonthly`;
 DELIMITER //
-CREATE PROCEDURE `pageSettingGet`(
-	IN `page_name` VARCHAR(50)
-)
+CREATE PROCEDURE `reportsGetMonthly`()
 BEGIN
 
-	SELECT 
-		page_settings.id,
-		page_settings.page_name,
-		page_settings.setting_name,
-		page_settings.setting_value
-	FROM 
-		page_settings
-	WHERE 
-		page_settings.page_name = page_name;
+	-- monthly totals
+	-- drop temporary table if exists
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_total;
+
+	-- create temporary table for all required information
+	CREATE TEMPORARY TABLE reports_monthly_total
+	(
+		SELECT 
+			DATE_FORMAT(transaction.trans_date, '%M %Y') AS 'trans_date',
+			SUM(transaction_item.amount) AS 'monthly_total'
+		FROM 
+			transaction 
+		LEFT JOIN transaction_item	ON transaction_item.transaction_id = transaction.id
+		GROUP BY Month(transaction.trans_date), YEAR(transaction.trans_date)
+		ORDER BY transaction.trans_date DESC
+	);
 	
+
+	-- monthly expences
+	-- drop temporary table if exists
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_expences;
+
+	-- create temporary table for all required information
+	CREATE TEMPORARY TABLE reports_monthly_expences
+	(
+		SELECT 
+			DATE_FORMAT(transaction.trans_date, '%M %Y') AS 'trans_date',
+			SUM(transaction_item.amount) AS 'expences_total'
+		FROM 
+			transaction 
+		LEFT JOIN transaction_item	ON transaction_item.transaction_id = transaction.id
+		WHERE transaction_item.is_expence = 1
+		GROUP BY Month(transaction.trans_date), YEAR(transaction.trans_date)
+		ORDER BY transaction.trans_date DESC
+	);
+	
+	
+	-- monthly expences
+	-- drop temporary table if exists
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_income;
+
+	-- create temporary table for all required information
+	CREATE TEMPORARY TABLE reports_monthly_income
+	(
+		SELECT 
+			DATE_FORMAT(transaction.trans_date, '%M %Y') AS 'trans_date',
+			SUM(transaction_item.amount) AS 'income_total'
+		FROM 
+			transaction 
+		LEFT JOIN transaction_item	ON transaction_item.transaction_id = transaction.id
+		WHERE transaction_item.is_expence = 0
+		GROUP BY Month(transaction.trans_date), YEAR(transaction.trans_date)
+		ORDER BY transaction.trans_date DESC
+	);
+	
+	
+	SELECT 
+		reports_monthly_expences.expences_total,
+		reports_monthly_income.income_total,
+		reports_monthly_total.monthly_total
+	FROM 
+		reports_monthly_total 
+	LEFT JOIN reports_monthly_expences ON reports_monthly_expences.trans_date = reports_monthly_total.trans_date
+	LEFT JOIN reports_monthly_income ON reports_monthly_income.trans_date = reports_monthly_expences.trans_date;
+	
+	
+	
+	
+	-- drop temporary table if exists
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_total;			
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_expences;
+	DROP TEMPORARY TABLE IF EXISTS reports_monthly_income;
+
 END//
 DELIMITER ;
 

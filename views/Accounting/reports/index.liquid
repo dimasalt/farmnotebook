@@ -1,0 +1,207 @@
+{% layout '../../Shared/_layout.liquid' %}
+
+{% block title %}
+  Budget
+{% endblock %}
+
+{% block header_scripts %}{% endblock %}
+
+{% block body %}
+  <!-- side nav menu -->
+  {% include '../_sidenav.liquid' %}
+
+
+  <!-- page content -->
+  <div class="container-fluid" id="reports" v-cloak>
+
+    <!-- page name and date selection -->
+    <div class="row mb-2 pt-4">
+      <div class="col-8 border-bottom">
+        <h1 class="text-dark mb-4">Reports</h1>
+      </div>
+
+      <!-- date selection -->
+      <div class="col-2 border-bottom p-1">
+        <div class="input-group">
+          <input
+            type="date"
+            class="form-control"
+            placeholder="date yyyy-mm-dd"
+            aria-label="Start date"
+            aria-describedby="button-addon4"
+            v-model="start_date"
+            v-on:change="goSearch()">
+        </div>
+      </div>
+      <div class="col-2 border-bottom p-1">
+        <div class="input-group">
+          <input
+            type="date"
+            class="form-control"
+            placeholder="date yyyy-mm-dd"
+            aria-label="End date"
+            aria-describedby="button-addon4"
+            v-model="end_date"
+            v-on:change="goSearch()">
+        </div>
+      </div>
+    </div>
+
+    <!-- transaction totals -->
+    <div class="row">
+      <div class="col-12">
+        <h3 class="mt-3">Totals</h3>
+      </div>
+
+      <!-- Transaction totals -->
+      <div class="col-3">
+        <ul class="list-group shadow-sm">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Exprences Total</strong>            
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Income Total</strong>            
+          </li>
+        </ul>
+      </div>
+      <div class="col-3">
+        <ul class="list-group shadow-sm">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Feed Expences</strong>            
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Cattle Purchace Expences</strong></li>
+        </ul>
+      </div>
+      <div class="col-3">
+        <ul class="list-group shadow-sm">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Veterinary
+            </strong>{% comment %} {{ '{{ transaction_totals.total_veterinary_expences }}' }} {% endcomment %}</li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Fuel</strong>{% comment %}{{ '{{ transaction_totals.total_gasoline_expences }}' }}{% endcomment %}</li>
+        </ul>
+      </div>
+      <div class="col-3">
+        <ul class="list-group shadow-sm">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Repairs
+            </strong>{% comment %}{{ '{{ transaction_totals.total_equipment }}' }}{% endcomment %}</li>
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary-light">
+            <strong>Profit</strong>{% comment %}{{ '{{ transaction_totals.total_profit }}' }}{% endcomment %}</li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- header and search form inputs -->
+    <div class="row mt-3"></div>
+    <div class="row g-0 mt-5">
+      <div class="col-5">
+        <h3>Monthly Totals</h3>
+      </div>
+
+
+      <!-- transaction category and other search parameters -->
+      <div class="col-1" v-if="monthlyReports.length > 0">
+        <select
+          class="form-select w-100 rounded-0 form-select-sm"
+          aria-label="Select group"
+          v-model="category_selected"
+          v-on:change="categoryChanged()">
+          <option v-for="item in transaction_category" v-bind:value="item.category_name">{{ '{{ item.category_name }}' }} 
+          </option>
+        </select>
+      </div>
+      <div class="col-1" v-if="monthlyReports.length > 0">
+        <select
+          class="form-select w-100 rounded-0 form-select-sm"
+          aria-label="Select sub group"
+          v-model="sub_category_selected"
+          v-on:change="goSearch()"
+          v-bind:disabled="transaction_sub_category_disabled">
+          <option v-for="item in transaction_sub_category" v-bind:value="item.category_name">{{ '{{ item.category_name }}' }} 
+          </option>
+        </select>
+      </div>
+      <div class="col-2 pe-2" v-if="monthlyReports.length > 0">
+        <div class="has-search rounded-0 w-100">
+          <span class="bi bi-search form-control-feedback"></span>
+          <input
+            type="text"
+            class="form-control w-100 form-control-sm rounded-0"
+            placeholder="Search"
+            v-model="search_term"
+            v-on:keyup="goSearch()">
+        </div>
+      </div>
+    </div> 
+    
+
+     <!-- transaction display table -->
+     <div class="row mt-2" v-if="monthlyReports.length > 0">           
+      <div class="col-5">                    
+          <table class="table table-sm bg-white table-borderless shadow-sm w-100">                               
+              <tbody>
+                <tr class="border">                     
+                    <td class="ps-4 w-15 bg-dark text-white">                          
+                       Date             
+                    </td>                                                          
+                    <td class="ps-4 w-15 bg-dark text-white">
+                      Monthly Expence
+                    </td>   
+                    <td class="ps-4 w-15 bg-dark text-white">
+                      Monthly Income
+                    </td>           
+                    <td class="ps-4 w-15 bg-dark text-white">
+                      Monthly Total
+                    </td>                                                
+                  </tr>                  
+                  <tr class="border" v-for="(item, index) in monthlyReports">                     
+                      <td class="ps-4 w-15 bg-light">                          
+                          <strong>{{ '{{ item.trans_date_formated }}' }}</strong>                              
+                      </td>                                                          
+                      <td class="ps-4 w-10 bg-light">
+                        {{ '{{ item.expences_total }}' }}
+                      </td>   
+                      <td  class="ps-4 w-10 bg-light">
+                        {{ '{{ item.income_total }}' }}
+                      </td>           
+                      <td  class="ps-4 w-10 bg-light">
+                        {{ '{{ item.monthly_total }}' }}
+                      </td>                                                
+                  </tr>                  
+              </tbody>
+          </table>
+        </div>
+      </div>
+
+    <!-- if no transactions found display alert about it -->
+    <div class="row mt-2" v-if="monthlyReports.length == 0">
+      <div class="col-9">
+        <div class="alert alert-warning shadow-sm" role="alert">
+          <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+          No <strong>totals</strong> found for the selected time range. Please try another time range.
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+{% endblock %}
+
+{% block custom_scripts %}
+
+  <!-- chart -->
+  {% comment %} <script src='/components/chartjs/chart.js'></script> {% endcomment %}
+
+  <script src="/js/vue/accounting/reports/index.js"></script>
+
+  <script type="application/javascript">
+
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip();                        
+            });</script>
+
+{% endblock %}

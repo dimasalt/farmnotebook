@@ -15,6 +15,9 @@ const transactionTypesController = require('../controllers/accounting/types/acco
 //transaction records controller
 const transactionRecordsController = require('../controllers/accounting/records/transactionRecordsController');
 
+//reports page and functionality
+const reportsController = require('../controllers/accounting/reports/reportsController');
+
 
 const hasAccess = require('../midleware/user');
 router.use('/', hasAccess.hasAccess);
@@ -58,6 +61,10 @@ router.post("/records/api/item/add", transactionRecordsController.addTransaction
 router.post("/records/api/item/delete", transactionRecordsController.deleteTransactionRecordItem);
 router.post("/records/api/upload", upload.single('file'), transactionRecordsController.uploadTransactionRecordImage);
 router.post("/records/api/upload/delete", transactionRecordsController.deleteTransactionRecordImage);
+
+// reports
+router.get("/reports", reportsController.getIndex);
+router.post("/reports/api/get/monthly", reportsController.getMonthlyReports);
 
 
 

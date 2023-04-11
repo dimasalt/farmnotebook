@@ -309,7 +309,7 @@ const deleteFileRecursive = function(filePath){
     let newFilePathArray = filePath.split('/');
     let popped = newFilePathArray.pop();
 
-    // bigger than 1 because main upload folder is in the first place of array path
+    // bigger than 1 because main "/upload" folder is in the first place of array path
     if(newFilePathArray.length > 1) 
         deleteFileRecursive(newFilePathArray.join('/'));
     
