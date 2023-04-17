@@ -2,24 +2,38 @@ const reports = {
     data() {
         return {
             monthlyReports: [],
-            start_date : new Date().getFullYear()  + '-01-01', //format yyyy + '-' + mm + '-' + dd;
-            end_date:  new Date().getFullYear()  + '-12-31', //format yyyy + '-' + mm + '-' + dd;
+            // temporary commented out for development
+            // start_date : new Date().getFullYear()  + '-01-01', //format yyyy + '-' + mm + '-' + dd;
+            // end_date:  new Date().getFullYear()  + '-12-31', //format yyyy + '-' + mm + '-' + dd;
+            
+            // just for development
+            start_date : '2022-01-01', //format yyyy + '-' + mm + '-' + dd;
+            end_date:  '2022-12-31', //format yyyy + '-' + mm + '-' + dd;
+            // -- end just for development
+
             category_selected : '',
             sub_category_selected : '',
             transaction_category : [],
             transaction_sub_category : [],
             transaction_sub_category_disabled : true,
-            search_term : ''
+            search_term : '',
+            transaction_item : {
+                item_category: '',
+                item_subcategory : ''
+            }
         }
     },   
     created () { 
         var self = this;
 
-        //get categories
-        self.getCategories();
+        // get categories
+        self.getCategories();      
+
+        self.getMonths();
 
 
-        self.reportsGetAll ();
+        //get reports
+        self.reportsGetAll();       
 
         //reset transaction record and item 
         //self.resetVariables();        
@@ -31,6 +45,7 @@ const reports = {
         goSearch() {
             var self = this;
            
+            self.getMonths();
             self.reportsGetAll();
         },
         reportsGetAll () {
@@ -93,7 +108,9 @@ const reports = {
                     
                         
                     self.transaction_category_selected = self.transaction_category[0].id;
-                }                
+                }   
+                
+                console.log(self.transaction_category);
             });
     
             result.always(function () { });
@@ -103,7 +120,7 @@ const reports = {
          * when selected category in drop down has changed
          * -----------------------------------------------------------------------------------
          */
-           categoryChanged() {
+        categoryChanged() {
             var self = this;
 
             for(var i = 0; i < self.transaction_category.length; i++)
@@ -132,8 +149,28 @@ const reports = {
             else self.transaction_sub_category_disabled = false;
 
             //initiate records pulling in accordance to the changed parameters
-            self.transactionsGetAll();
+            self.reportsGetAll();
         },
+        getMonths(){
+            var self = this;
+
+            const fromYear = (new Date(self.start_date + "T00:00:00")).getFullYear();
+            const fromMonth = (new Date(self.start_date + "T00:00:00")).getMonth();
+            const toYear = (new Date(self.end_date + "T00:00:00")).getFullYear();
+            const toMonth = (new Date(self.end_date + "T00:00:00")).getMonth();
+            const months = [];
+        
+            for(let year = fromYear; year <= toYear; year++) {
+                let monthNum = year === fromYear ? fromMonth : 0;
+                const monthLimit = year === toYear ? toMonth : 11;
+        
+                for(; monthNum <= monthLimit; monthNum++) {
+                    let month = monthNum + 1;
+                    months.push({ year, month });
+                }
+            }
+            //console.log(months);
+        },       
         /**
          * ------------------------------------------------------
          * reset for transaction and transaction item

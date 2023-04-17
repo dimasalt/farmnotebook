@@ -96,34 +96,14 @@
 
     <!-- header and search form inputs -->
     <div class="row mt-3"></div>
+
     <div class="row g-0 mt-5">
-      <div class="col-5">
+      <div class="col-10">
         <h3>Monthly Totals</h3>
       </div>
 
 
       <!-- transaction category and other search parameters -->
-      <div class="col-1" v-if="monthlyReports.length > 0">
-        <select
-          class="form-select w-100 rounded-0 form-select-sm"
-          aria-label="Select group"
-          v-model="category_selected"
-          v-on:change="categoryChanged()">
-          <option v-for="item in transaction_category" v-bind:value="item.category_name">{{ '{{ item.category_name }}' }} 
-          </option>
-        </select>
-      </div>
-      <div class="col-1" v-if="monthlyReports.length > 0">
-        <select
-          class="form-select w-100 rounded-0 form-select-sm"
-          aria-label="Select sub group"
-          v-model="sub_category_selected"
-          v-on:change="goSearch()"
-          v-bind:disabled="transaction_sub_category_disabled">
-          <option v-for="item in transaction_sub_category" v-bind:value="item.category_name">{{ '{{ item.category_name }}' }} 
-          </option>
-        </select>
-      </div>
       <div class="col-2 pe-2" v-if="monthlyReports.length > 0">
         <div class="has-search rounded-0 w-100">
           <span class="bi bi-search form-control-feedback"></span>
@@ -136,11 +116,20 @@
         </div>
       </div>
     </div> 
-    
+  
+    <!-- if no transactions found display alert about it -->
+    <div class="row mt-2" v-if="monthlyReports.length == 0">
+      <div class="col-9">
+        <div class="alert alert-warning shadow-sm" role="alert">
+          <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+          No <strong>totals</strong> found for the selected time range. Please try another time range.
+        </div>
+      </div>
+    </div>
 
      <!-- transaction display table -->
      <div class="row mt-2" v-if="monthlyReports.length > 0">           
-      <div class="col-5">                    
+      <div class="col-6">                    
           <table class="table table-sm bg-white table-borderless shadow-sm w-100">                               
               <tbody>
                 <tr class="border">                     
@@ -174,20 +163,35 @@
               </tbody>
           </table>
         </div>
+        <!-- image view and removal -->
+        <div class="col-3 mt-0" id="dropzone_image_view" >
+          <div class="card col-12 bg-dark text-white rounded shadow-sm">
+            <h5 class="mt-3 mb-1 ms-3">Report Parameters<h5 />
+            <hr class="bg-secondary" />
+
+            <div class="mx-2 font-16">
+              <div class="col mt-4">
+                <label for="trans_addr_name">Category</label>                       
+                <select class="form-select w-95 rounded-0 bg-secondary text-white border-dark" aria-label="Select group" v-model="category_selected" v-on:change="categoryChanged()" id="trans_category">
+                  <option v-for="item in transaction_category" v-bind:value="item.category_name">
+                      {{ '{{ item.category_name }}' }}
+                  </option>            
+                </select>
+              </div> 
+              <div class="col mt-4">  
+                <label for="trans_address">Sub Category</label>                                
+                <select class="form-select w-95 rounded-0 bg-secondary text-white border-dark" aria-label="Select sub group" v-model="sub_category_selected" id="trans_subcategory">
+                    <option v-for="item in transaction_sub_category" v-bind:value="item.category_name">
+                        {{ '{{ item.category_name }}' }}
+                    </option>            
+                </select>
+              </div>     
+              
+            </div>   
+            <hr class="bg-secondary" />                              
+          </div>
+        </div>     
       </div>
-
-    <!-- if no transactions found display alert about it -->
-    <div class="row mt-2" v-if="monthlyReports.length == 0">
-      <div class="col-9">
-        <div class="alert alert-warning shadow-sm" role="alert">
-          <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
-          No <strong>totals</strong> found for the selected time range. Please try another time range.
-        </div>
-      </div>
-    </div>
-
-
-
   </div>
 {% endblock %}
 
