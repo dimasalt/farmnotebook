@@ -1,7 +1,7 @@
 {% layout '../../Shared/_layout.liquid' %}
 
 {% block title %}
-  Budget
+  Reports
 {% endblock %}
 
 {% block header_scripts %}{% endblock %}
@@ -127,24 +127,24 @@
       </div>
     </div>
 
-     <!-- transaction display table -->
-     <div class="row mt-2" v-if="monthlyReports.length > 0">           
-      <div class="col-6">                    
+    <!-- transaction display table -->
+    <div class="row mt-2" v-if="monthlyReports.length > 0">           
+      <div class="col-7">                    
           <table class="table table-sm bg-white table-borderless shadow-sm w-100">                               
               <tbody>
                 <tr class="border">                     
-                    <td class="ps-4 w-15 bg-dark text-white">                          
-                       Date             
-                    </td>                                                          
-                    <td class="ps-4 w-15 bg-dark text-white">
-                      Monthly Expence
-                    </td>   
-                    <td class="ps-4 w-15 bg-dark text-white">
-                      Monthly Income
-                    </td>           
-                    <td class="ps-4 w-15 bg-dark text-white">
-                      Monthly Total
-                    </td>                                                
+                    <th scope="col" class="w-15 bg-dark text-white">                          
+                       <div class="ms-2 my-1">Date</div>             
+                    </th>                                                          
+                    <th scope="col" class="ps-4 w-15 bg-dark text-white">
+                      <div class="ms-2 my-1">Monthly Expence</div>
+                    </th>   
+                    <th scope="col" class="ps-4 w-15 bg-dark text-white">
+                      <div class="ms-2 my-1">Monthly Income</div>
+                    </th>           
+                    <th scope="col" class="ps-4 w-15 bg-dark text-white">
+                      <div class="ms-2 my-1">Monthly Total</div>
+                    </th>                                                
                   </tr>                  
                   <tr class="border" v-for="(item, index) in monthlyReports">                     
                       <td class="ps-4 w-15 bg-light">                          
@@ -163,6 +163,26 @@
               </tbody>
           </table>
         </div>
+
+        <!-- fuel stats -->
+        <div class="col-2">                    
+          <table class="table table-sm bg-white table-borderless shadow-sm w-100">                               
+              <tbody>
+                <tr class="border">                                         
+                    <th scope="col" class="ps-4 w-15 bg-dark text-white">                          
+                      <div class="ms-2 my-1">Fuel</div>             
+                    </th>                                                                                        
+                  </tr>                  
+                  <tr class="border" v-for="(item, index) in monthlyFuelReports">                                 
+                      <td class="ps-4 w-15 bg-light">                          
+                          {{ '{{ item.monthly_total }}' }}                
+                      </td>                                                                                     
+                  </tr>                  
+              </tbody>
+          </table>
+        </div>
+
+
         <!-- image view and removal -->
         <div class="col-3 mt-0" id="dropzone_image_view" >
           <div class="card col-12 bg-dark text-white rounded shadow-sm">
@@ -205,7 +225,9 @@
   <script type="application/javascript">
 
     $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip();                        
-            });</script>
+      $('[data-bs-toggle="tooltip"]').tooltip();                        
+    });
+  
+  </script>
 
 {% endblock %}

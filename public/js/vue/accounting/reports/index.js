@@ -2,6 +2,7 @@ const reports = {
     data() {
         return {
             monthlyReports: [],
+            monthlyFuelReports: [],
             // temporary commented out for development
             // start_date : new Date().getFullYear()  + '-01-01', //format yyyy + '-' + mm + '-' + dd;
             // end_date:  new Date().getFullYear()  + '-12-31', //format yyyy + '-' + mm + '-' + dd;
@@ -17,10 +18,8 @@ const reports = {
             transaction_sub_category : [],
             transaction_sub_category_disabled : true,
             search_term : '',
-            transaction_item : {
-                item_category: '',
-                item_subcategory : ''
-            }
+
+            months : []
         }
     },   
     created () { 
@@ -29,8 +28,11 @@ const reports = {
         // get categories
         self.getCategories();      
 
+        // getting months for reports
         self.getMonths();
 
+        // get reports for monthly fuel cost
+        self.reportsGetFuell();
 
         //get reports
         self.reportsGetAll();       
@@ -47,6 +49,9 @@ const reports = {
            
             self.getMonths();
             self.reportsGetAll();
+
+            //get fuel expences
+            self.reportsGetFuell();
         },
         reportsGetAll () {
             //gets all project items
@@ -56,17 +61,16 @@ const reports = {
             //includes search term, date and selected categories and sub categories
             var data = {
                 // search_term : self.search_term, 
-                // category_selected : self.category_selected,
-                // sub_category_selected: self.sub_category_selected,
-                start_date: self.start_date, 
-                end_date :  self.end_date 
+                category_selected : self.category_selected,
+                sub_category_selected: self.sub_category_selected,
+                months : self.months
             };          
     
             var result = $.post("/accounting/reports/api/get/monthly", data);
     
             result.done(function (data) {
                 if (data.length > 0) {                                     
-                    self.monthlyReports = data;              
+                    self.monthlyReports = data;  
                 }
                 else {
                     // //reset transaction records
@@ -84,6 +88,25 @@ const reports = {
                     //     total_profit : 0
                     // };
                 }
+            });
+    
+            result.always(function () { });
+        },
+        /**
+         * -------------------------------------------------------------
+         *  Get fuel
+         * -------------------------------------------------------------
+         */
+        reportsGetFuell (){
+            var self = this;
+
+            var data = { months : self.months };
+            var result = $.post("/accounting/reports/api/get/monthly/fuel", data);
+    
+            result.done(function (data) {
+                if (data.length > 0) {                                
+                    self.monthlyFuelReports = data;                   
+                }                   
             });
     
             result.always(function () { });
@@ -109,8 +132,6 @@ const reports = {
                         
                     self.transaction_category_selected = self.transaction_category[0].id;
                 }   
-                
-                console.log(self.transaction_category);
             });
     
             result.always(function () { });
@@ -154,11 +175,14 @@ const reports = {
         getMonths(){
             var self = this;
 
+            //reset months to construct new range
+            const months = [];
+
             const fromYear = (new Date(self.start_date + "T00:00:00")).getFullYear();
             const fromMonth = (new Date(self.start_date + "T00:00:00")).getMonth();
             const toYear = (new Date(self.end_date + "T00:00:00")).getFullYear();
             const toMonth = (new Date(self.end_date + "T00:00:00")).getMonth();
-            const months = [];
+            //const months = [];
         
             for(let year = fromYear; year <= toYear; year++) {
                 let monthNum = year === fromYear ? fromMonth : 0;
@@ -170,6 +194,8 @@ const reports = {
                 }
             }
             //console.log(months);
+
+            self.months = months;
         },       
         /**
          * ------------------------------------------------------

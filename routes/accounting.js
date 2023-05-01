@@ -62,9 +62,12 @@ router.post("/records/api/item/delete", transactionRecordsController.deleteTrans
 router.post("/records/api/upload", upload.single('file'), transactionRecordsController.uploadTransactionRecordImage);
 router.post("/records/api/upload/delete", transactionRecordsController.deleteTransactionRecordImage);
 
+
+
 // reports
 router.get("/reports", reportsController.getIndex);
 router.post("/reports/api/get/monthly", reportsController.getMonthlyReports);
+router.post("/reports/api/get/monthly/fuel", reportsController.getMonthlyReportsFuel);
 
 
 
