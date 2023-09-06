@@ -23,7 +23,7 @@ app.engine('liquid', engine.express());
 app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set liquid to default
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 //home route //controller
 const homeController = require('./controllers/home/homeController');
